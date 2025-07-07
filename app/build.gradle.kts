@@ -59,9 +59,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     //Room database
-    implementation ("androidx.room:room-runtime:2.7.2")
-    annotationProcessor ("androidx.room:room-compiler:2.7.2")
-    implementation ("androidx.room:room-ktx:2.6.1")
-    implementation ("androidx.compose.runtime:runtime-livedata:1.8.3")
-    ksp ("androidx.room:room-compiler:2.7.2")
+    implementation (libs.androidx.room.runtime)
+    annotationProcessor (libs.androidx.room.compiler)
+    implementation (libs.androidx.room.ktx)
+    implementation (libs.androidx.runtime.livedata)
+    ksp (libs.androidx.room.compiler)
 }
