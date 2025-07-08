@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -12,36 +13,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.tt.invoicecreator.ui.theme.InvoiceCreatorTheme
+import com.tt.invoicecreator.viewmodel.AppViewModel
+import com.tt.invoicecreator.viewmodel.AppViewModelFactory
 
 class MainActivity : ComponentActivity() {
+
+    private val viewModel:AppViewModel by viewModels {
+        AppViewModelFactory(
+            (this.application as InvoiceCreatorApplication).database.getItemDao()
+        )
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+//        enableEdgeToEdge()
         setContent {
             InvoiceCreatorTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                InvoiceCreatorApp(
+                    viewModel = viewModel
+                )
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    InvoiceCreatorTheme {
-        Greeting("Android")
     }
 }

@@ -7,7 +7,7 @@ import androidx.room.OnConflictStrategy
 @Dao
 interface ItemDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(item: Item)
 
 

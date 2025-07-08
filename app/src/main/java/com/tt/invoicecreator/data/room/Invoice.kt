@@ -7,9 +7,11 @@ import androidx.room.PrimaryKey
 @Entity
 data class Invoice(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    val invoiceId: Int = 0,
     @Embedded
     val client: Client?,
     @Embedded
-    val item: Item?
+    val item: Item?,
+    var time:Long = 0L,
+    var invoiceNumber:Int = 0
 )
