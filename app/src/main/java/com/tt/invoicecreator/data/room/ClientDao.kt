@@ -8,16 +8,14 @@ import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface ItemDao {
+interface ClientDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(item: Item)
+    suspend fun insert(client: Client)
 
-    @Query("Select * from item")
-    fun getItem() : Flow<List<Item>>
+    @Query("Select * from client")
+    fun getClients() : Flow<List<Client>>
 
     @Delete
-    suspend fun deleteItem(item: Item)
-
-
+    suspend fun deleteClient(client: Client)
 }
