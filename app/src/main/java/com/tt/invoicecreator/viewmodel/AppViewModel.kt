@@ -1,9 +1,30 @@
 package com.tt.invoicecreator.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import com.tt.invoicecreator.data.room.Client
+import com.tt.invoicecreator.data.room.ClientDao
+import com.tt.invoicecreator.data.room.Invoice
+import com.tt.invoicecreator.data.room.InvoiceDao
+import com.tt.invoicecreator.data.room.Item
 import com.tt.invoicecreator.data.room.ItemDao
+import com.tt.invoicecreator.data.room.OfflineClientRepository
+import com.tt.invoicecreator.data.room.OfflineInvoiceRepository
+import com.tt.invoicecreator.data.room.OfflineItemRepository
 
 class AppViewModel(
-    private val itemDao: ItemDao
+    private val itemDao: ItemDao,
+    private val clientDao: ClientDao,
+    private val invoiceDao: InvoiceDao
 ) : ViewModel() {
+    private val itemRepository:OfflineItemRepository = OfflineItemRepository(itemDao)
+    private val clientRepository: OfflineClientRepository = OfflineClientRepository(clientDao)
+    private val invoiceRepository: OfflineInvoiceRepository = OfflineInvoiceRepository(invoiceDao)
+
+    val itemList : LiveData<List<Item>> = itemRepository.getAllItems().asLiveData()
+    val clientList : LiveData<List<Client>> = clientRepository.getAllClients().asLiveData()
+    val invoiceList : LiveData<List<Invoice>> = invoiceRepository.getAllInvoices().asLiveData()
+
+
 }
