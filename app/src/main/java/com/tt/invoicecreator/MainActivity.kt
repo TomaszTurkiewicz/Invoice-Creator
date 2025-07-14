@@ -12,7 +12,9 @@ class MainActivity : ComponentActivity() {
 
     private val viewModel:AppViewModel by viewModels {
         AppViewModelFactory(
-            (this.application as InvoiceCreatorApplication).database.getItemDao()
+            (this.application as InvoiceCreatorApplication).database.getItemDao(),
+            (this.application as InvoiceCreatorApplication).database.getClientDao(),
+            (this.application as InvoiceCreatorApplication).database.getInvoiceDao()
         )
     }
 

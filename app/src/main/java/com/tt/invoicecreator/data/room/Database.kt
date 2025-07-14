@@ -17,6 +17,8 @@ import com.tt.invoicecreator.R
 )
 abstract class Database : RoomDatabase() {
     abstract fun getItemDao(): ItemDao
+    abstract fun getClientDao(): ClientDao
+    abstract fun getInvoiceDao(): InvoiceDao
 
     companion object{
         @Volatile

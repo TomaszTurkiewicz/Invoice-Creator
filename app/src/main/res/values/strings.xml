@@ -2,5 +2,6 @@
     <string name="app_name">invoice creator</string>
 
     <string name="database">database</string>
-    <string name="welcome">WELCOME</string>
+    <string name="invoices">INVOICES</string>
+
 </resources>
