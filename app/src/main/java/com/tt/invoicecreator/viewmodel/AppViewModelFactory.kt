@@ -2,7 +2,6 @@ package com.tt.invoicecreator.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.tt.invoicecreator.data.room.Client
 import com.tt.invoicecreator.data.room.ClientDao
 import com.tt.invoicecreator.data.room.InvoiceDao
 import com.tt.invoicecreator.data.room.ItemDao
