@@ -31,5 +31,4 @@ class AppViewModel(
     fun getInvoice(): Invoice{
         return this.invoice
     }
-
 }
