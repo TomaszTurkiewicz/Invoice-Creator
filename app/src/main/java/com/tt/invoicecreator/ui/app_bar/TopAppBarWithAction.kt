@@ -1,6 +1,6 @@
 package com.tt.invoicecreator.ui.app_bar
 
-import androidx.compose.foundation.content.MediaType.Companion.Text
+
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -25,6 +25,7 @@ fun TopAppBarWithAction(
             Text(
                 text = when(currentScreen){
                     InvoiceCreatorScreen.Invoices -> currentScreen.name
+                    InvoiceCreatorScreen.AddItem -> currentScreen.name
                 },
                 style = MaterialTheme.typography.labelLarge,
                 modifier = Modifier

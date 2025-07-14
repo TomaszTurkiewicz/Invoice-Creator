@@ -15,6 +15,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.ui.app_bar.TopAppBarWithAction
+import com.tt.invoicecreator.ui.screens.AddItemScreen
 import com.tt.invoicecreator.ui.screens.InvoicesScreen
 import com.tt.invoicecreator.viewmodel.AppViewModel
 
@@ -51,6 +52,15 @@ fun InvoiceCreatorApp (
         ){
             composable(route = InvoiceCreatorScreen.Invoices.name) {
                 InvoicesScreen(
+                    viewModel = viewModel,
+                    ignoredOnComposing = {
+                        appBarState = it
+                    }
+                )
+            }
+
+            composable(route = InvoiceCreatorScreen.AddItem.name) {
+                AddItemScreen(
                     viewModel = viewModel,
                     ignoredOnComposing = {
                         appBarState = it

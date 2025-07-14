@@ -13,9 +13,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.tt.invoicecreator.data.AppBarState
+import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogAdd
 import com.tt.invoicecreator.ui.components.ListOfInvoices
 import com.tt.invoicecreator.viewmodel.AppViewModel
 
@@ -26,13 +29,17 @@ fun InvoicesScreen (
 ){
     val invoicesList by viewModel.invoiceList.observeAsState()
 
+    val alertDialogAdd = remember {
+        mutableStateOf(false)
+    }
+
     LaunchedEffect(key1 = true) {
         ignoredOnComposing(
             AppBarState(
                 action = {
                     Row {
                         IconButton(onClick = {
-                            //todo
+                            alertDialogAdd.value = true
                         }) {
                             Icon(Icons.Default.Add, null)
                         }
@@ -58,6 +65,12 @@ fun InvoicesScreen (
         }
         else{
             ListOfInvoices()
+        }
+    }
+
+    if(alertDialogAdd.value){
+        AlertDialogAdd {
+            alertDialogAdd.value = false
         }
     }
 
