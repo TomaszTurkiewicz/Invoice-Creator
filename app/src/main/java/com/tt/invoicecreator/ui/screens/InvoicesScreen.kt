@@ -17,21 +17,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
+import com.tt.invoicecreator.InvoiceCreatorScreen
 import com.tt.invoicecreator.data.AppBarState
-import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogAdd
 import com.tt.invoicecreator.ui.components.ListOfInvoices
 import com.tt.invoicecreator.viewmodel.AppViewModel
 
 @Composable
 fun InvoicesScreen (
     viewModel: AppViewModel,
-    ignoredOnComposing: (AppBarState) -> Unit
+    ignoredOnComposing: (AppBarState) -> Unit,
+    navController: NavController
 ){
     val invoicesList by viewModel.invoiceList.observeAsState()
 
-    val alertDialogAdd = remember {
-        mutableStateOf(false)
-    }
 
     LaunchedEffect(key1 = true) {
         ignoredOnComposing(
@@ -39,7 +38,7 @@ fun InvoicesScreen (
                 action = {
                     Row {
                         IconButton(onClick = {
-                            alertDialogAdd.value = true
+                            navController.navigate(InvoiceCreatorScreen.AddInvoice.name)
                         }) {
                             Icon(Icons.Default.Add, null)
                         }
@@ -65,12 +64,6 @@ fun InvoicesScreen (
         }
         else{
             ListOfInvoices()
-        }
-    }
-
-    if(alertDialogAdd.value){
-        AlertDialogAdd {
-            alertDialogAdd.value = false
         }
     }
 

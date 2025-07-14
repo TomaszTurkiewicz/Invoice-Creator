@@ -9,9 +9,10 @@ data class Invoice(
     @PrimaryKey(autoGenerate = true)
     val invoiceId: Int = 0,
     @Embedded
-    val client: Client,
+    val client: Client = Client(),
     @Embedded
-    val item: Item,
+    val item: Item = Item(),
+    val itemDiscount: Double = 0.0,
     val comment: String = "",
     var time:Long = 0L,
     var invoiceNumber:Int = 0

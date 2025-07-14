@@ -3,6 +3,6 @@
 
     <string name="database">database</string>
     <string name="invoices">INVOICES</string>
-    <string name="add_item">ADD ITEM</string>
+    <string name="add_invoice">ADD INVOICE</string>
 
 </resources>

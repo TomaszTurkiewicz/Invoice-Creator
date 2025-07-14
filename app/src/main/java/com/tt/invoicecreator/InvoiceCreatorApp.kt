@@ -8,6 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -15,7 +16,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.ui.app_bar.TopAppBarWithAction
-import com.tt.invoicecreator.ui.screens.AddItemScreen
+import com.tt.invoicecreator.ui.screens.AddInvoiceScreen
 import com.tt.invoicecreator.ui.screens.InvoicesScreen
 import com.tt.invoicecreator.viewmodel.AppViewModel
 
@@ -24,6 +25,8 @@ fun InvoiceCreatorApp (
     viewModel: AppViewModel,
     navController: NavHostController = rememberNavController()
 ){
+
+    val context = LocalContext.current
 
     val backStackEntry by navController.currentBackStackEntryAsState()
 
@@ -39,7 +42,8 @@ fun InvoiceCreatorApp (
         topBar = {
             TopAppBarWithAction(
                 appBarState = appBarState,
-                currentScreen = currentScreen
+                currentScreen = currentScreen,
+                context = context
             )
 
         }
@@ -55,18 +59,20 @@ fun InvoiceCreatorApp (
                     viewModel = viewModel,
                     ignoredOnComposing = {
                         appBarState = it
-                    }
+                    },
+                    navController = navController
                 )
             }
 
-            composable(route = InvoiceCreatorScreen.AddItem.name) {
-                AddItemScreen(
+            composable(route = InvoiceCreatorScreen.AddInvoice.name) {
+                AddInvoiceScreen(
                     viewModel = viewModel,
                     ignoredOnComposing = {
                         appBarState = it
-                    }
+                    },
                 )
             }
+
         }
     }
 

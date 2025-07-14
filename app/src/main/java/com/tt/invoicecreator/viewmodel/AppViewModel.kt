@@ -26,5 +26,10 @@ class AppViewModel(
     val clientList : LiveData<List<Client>> = clientRepository.getAllClients().asLiveData()
     val invoiceList : LiveData<List<Invoice>> = invoiceRepository.getAllInvoices().asLiveData()
 
+    private var invoice = Invoice()
+
+    fun getInvoice(): Invoice{
+        return this.invoice
+    }
 
 }
