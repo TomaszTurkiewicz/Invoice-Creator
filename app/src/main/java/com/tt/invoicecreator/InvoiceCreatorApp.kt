@@ -17,6 +17,7 @@ import androidx.navigation.compose.rememberNavController
 import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.ui.app_bar.TopAppBarWithAction
 import com.tt.invoicecreator.ui.screens.AddInvoiceScreen
+import com.tt.invoicecreator.ui.screens.ChooseClientScreen
 import com.tt.invoicecreator.ui.screens.InvoicesScreen
 import com.tt.invoicecreator.viewmodel.AppViewModel
 
@@ -70,6 +71,15 @@ fun InvoiceCreatorApp (
                     ignoredOnComposing = {
                         appBarState = it
                     },
+                    navController = navController
+                )
+            }
+
+            composable(route = InvoiceCreatorScreen.ChooseClient.name) {
+                ChooseClientScreen(
+                    ignoredOnComposing = {
+                        appBarState = it
+                    }
                 )
             }
 
