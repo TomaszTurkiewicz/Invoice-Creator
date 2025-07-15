@@ -7,5 +7,8 @@ import androidx.room.PrimaryKey
 data class Client(
     @PrimaryKey(autoGenerate = true)
     val clientId: Int = 0,
-    var clientName: String = ""
+    var clientName: String = "",
+    var clientAddress1: String = "",
+    var clientAddress2: String = "",
+    var clientCity: String = ""
 )

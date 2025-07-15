@@ -25,11 +25,7 @@ fun TopAppBarWithAction(
     TopAppBar(
         title = {
             Text(
-                text = when(currentScreen){
-                    InvoiceCreatorScreen.Invoices -> context.getString(currentScreen.title)
-                    InvoiceCreatorScreen.AddInvoice -> context.getString(currentScreen.title)
-                    InvoiceCreatorScreen.ChooseClient -> context.getString(currentScreen.title)
-                },
+                text = context.getString(currentScreen.title),
                 style = MaterialTheme.typography.labelLarge,
                 modifier = Modifier
                     .fillMaxWidth()

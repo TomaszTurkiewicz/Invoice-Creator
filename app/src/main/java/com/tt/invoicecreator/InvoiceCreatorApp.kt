@@ -16,6 +16,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.ui.app_bar.TopAppBarWithAction
+import com.tt.invoicecreator.ui.screens.AddClient
 import com.tt.invoicecreator.ui.screens.AddInvoiceScreen
 import com.tt.invoicecreator.ui.screens.ChooseClientScreen
 import com.tt.invoicecreator.ui.screens.InvoicesScreen
@@ -67,7 +68,6 @@ fun InvoiceCreatorApp (
 
             composable(route = InvoiceCreatorScreen.AddInvoice.name) {
                 AddInvoiceScreen(
-                    viewModel = viewModel,
                     ignoredOnComposing = {
                         appBarState = it
                     },
@@ -77,6 +77,16 @@ fun InvoiceCreatorApp (
 
             composable(route = InvoiceCreatorScreen.ChooseClient.name) {
                 ChooseClientScreen(
+                    viewModel = viewModel,
+                    ignoredOnComposing = {
+                        appBarState = it
+                    },
+                    navController = navController
+                )
+            }
+
+            composable(route = InvoiceCreatorScreen.AddClient.name) {
+                AddClient(
                     ignoredOnComposing = {
                         appBarState = it
                     }
