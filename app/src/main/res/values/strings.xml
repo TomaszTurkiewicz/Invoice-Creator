@@ -6,5 +6,7 @@
     <string name="add_invoice">ADD INVOICE</string>
     <string name="choose_client">CHOOSE CLIENT</string>
     <string name="add_client">ADD CLIENT</string>
+    <string name="choose_item">CHOOSE ITEM</string>
+    <string name="add_item">ADD ITEM</string>
 
 </resources>
