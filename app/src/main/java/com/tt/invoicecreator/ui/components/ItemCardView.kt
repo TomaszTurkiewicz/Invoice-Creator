@@ -46,7 +46,7 @@ fun ItemCardView(
                             .padding(5.dp)
                     )
                     Text(
-                        text = "i",
+                        text = "0",
                         fontWeight = FontWeight.W500,
                         modifier = Modifier
                             .fillMaxWidth(0.2f)
@@ -60,7 +60,7 @@ fun ItemCardView(
                             .padding(5.dp)
                     )
                     Text(
-                        text = "200",
+                        text = "0",
                         fontWeight = FontWeight.W500,
                         modifier = Modifier
                             .fillMaxWidth()

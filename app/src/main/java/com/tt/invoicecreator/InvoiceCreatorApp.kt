@@ -107,9 +107,11 @@ fun InvoiceCreatorApp (
 
             composable(route = InvoiceCreatorScreen.AddItem.name) {
                 AddItemScreen(
+                    viewModel = viewModel,
                     ignoredOnComposing = {
                         appBarState = it
-                    }
+                    },
+                    navController = navController
                 )
             }
 

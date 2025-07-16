@@ -8,6 +8,5 @@ data class Item(
     @PrimaryKey(autoGenerate = true)
     val itemId: Int = 0,
     var itemName: String = "",
-    var itemCount: Double = 0.0,
     var itemValue: Double = 0.0,
 )

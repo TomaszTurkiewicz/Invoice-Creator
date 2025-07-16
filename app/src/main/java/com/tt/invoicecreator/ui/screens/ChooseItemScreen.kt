@@ -64,7 +64,9 @@ fun ChooseItemScreen(
             )
         }
         else{
-            ListOfItems()
+            ListOfItems(
+                itemList!!
+            )
         }
     }
 

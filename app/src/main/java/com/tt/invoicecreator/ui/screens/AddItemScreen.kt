@@ -12,15 +12,25 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableDoubleStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.tt.invoicecreator.data.AppBarState
+import com.tt.invoicecreator.data.room.Item
+import com.tt.invoicecreator.helpers.DecimalFormatter
+import com.tt.invoicecreator.ui.components.InputDoubleWithLabel
 import com.tt.invoicecreator.ui.components.InputTextWithLabel
+import com.tt.invoicecreator.viewmodel.AppViewModel
 
 @Composable
 fun AddItemScreen(
-    ignoredOnComposing: (AppBarState) -> Unit
+    viewModel: AppViewModel,
+    ignoredOnComposing: (AppBarState) -> Unit,
+    navController: NavController
 ) {
     LaunchedEffect(key1 = true) {
         ignoredOnComposing(
@@ -39,29 +49,39 @@ fun AddItemScreen(
         )
     }
 
+    val itemName = remember {
+        mutableStateOf("")
+    }
+    val itemValue = remember {
+        mutableStateOf("")
+    }
+
+    val decimalFormatter:DecimalFormatter = DecimalFormatter()
     Column {
         InputTextWithLabel(
-            labelText = "Item name",
-            inputText = "Item name"
+            labelText = "ITEM NAME",
+            inputText = itemName.value
         ) {
-            //todo
-        }
-        InputTextWithLabel(
-            labelText = "Item value",
-            inputText = "item value"
-        ) {
-            //todo
-        }
-        InputTextWithLabel(
-            labelText = "Item count",
-            inputText = "item count"
-        ) {
-            //todo
+            itemName.value = it
         }
 
+
+        InputDoubleWithLabel(
+            labelText = "ITEM VALUE",
+            inputText = itemValue.value
+        ) {
+            itemValue.value = decimalFormatter.cleanup(it)
+        }
         Button(
+            enabled = itemName.value.trim().isNotEmpty() && itemValue.value.isNotEmpty() && itemValue.value.toDouble() != 0.0,
             onClick ={
-                //todo
+                viewModel.saveItem(
+                    Item(
+                        itemName = itemName.value.trim(),
+                        itemValue = itemValue.value.toDouble()
+                    )
+                )
+                navController.navigateUp()
             },
             modifier = Modifier
                 .padding(5.dp)

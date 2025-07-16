@@ -12,7 +12,7 @@ import com.tt.invoicecreator.R
         Client::class,
         Invoice::class
     ],
-    version = 4,
+    version = 5,
     exportSchema = false
 )
 abstract class Database : RoomDatabase() {

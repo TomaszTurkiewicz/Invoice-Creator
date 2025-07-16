@@ -12,6 +12,7 @@ data class Invoice(
     val client: Client = Client(),
     @Embedded
     val item: Item = Item(),
+    val itemCount: Double = 1.0,
     val itemDiscount: Double = 0.0,
     val comment: String = "",
     var time:Long = 0L,

@@ -12,6 +12,9 @@ import com.tt.invoicecreator.data.room.ItemDao
 import com.tt.invoicecreator.data.room.OfflineClientRepository
 import com.tt.invoicecreator.data.room.OfflineInvoiceRepository
 import com.tt.invoicecreator.data.room.OfflineItemRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class AppViewModel(
     private val itemDao: ItemDao,
@@ -26,9 +29,17 @@ class AppViewModel(
     val clientList : LiveData<List<Client>> = clientRepository.getAllClients().asLiveData()
     val invoiceList : LiveData<List<Invoice>> = invoiceRepository.getAllInvoices().asLiveData()
 
+    private val coroutine = CoroutineScope(Dispatchers.Main)
     private var invoice = Invoice()
 
     fun getInvoice(): Invoice{
         return this.invoice
     }
+
+    fun saveItem(item: Item){
+        coroutine.launch {
+            itemRepository.insertItem(item)
+        }
+    }
+
 }
