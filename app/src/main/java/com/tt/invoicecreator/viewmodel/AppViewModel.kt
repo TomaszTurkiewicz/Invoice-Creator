@@ -17,9 +17,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class AppViewModel(
-    private val itemDao: ItemDao,
-    private val clientDao: ClientDao,
-    private val invoiceDao: InvoiceDao
+    itemDao: ItemDao,
+    clientDao: ClientDao,
+    invoiceDao: InvoiceDao
 ) : ViewModel() {
     private val itemRepository:OfflineItemRepository = OfflineItemRepository(itemDao)
     private val clientRepository: OfflineClientRepository = OfflineClientRepository(clientDao)

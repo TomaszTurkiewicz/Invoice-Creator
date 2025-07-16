@@ -12,17 +12,14 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.data.room.Item
 import com.tt.invoicecreator.helpers.DecimalFormatter
-import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogItemCountDiscountAndComments
 import com.tt.invoicecreator.ui.components.InputDoubleWithLabel
 import com.tt.invoicecreator.ui.components.InputTextWithLabel
 import com.tt.invoicecreator.viewmodel.AppViewModel
