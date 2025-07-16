@@ -63,7 +63,13 @@ fun ChooseClientScreen(
             )
         }
         else{
-            ListOfClients()
+            ListOfClients(
+                list = clientList!!,
+                clientChosen = {
+                    viewModel.getInvoice().client = it
+                    navController.navigateUp()
+                }
+            )
         }
     }
 }

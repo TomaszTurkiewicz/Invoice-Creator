@@ -12,15 +12,35 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.tt.invoicecreator.data.AppBarState
+import com.tt.invoicecreator.data.room.Client
 import com.tt.invoicecreator.ui.components.InputTextWithLabel
+import com.tt.invoicecreator.viewmodel.AppViewModel
 
 @Composable
 fun AddClientScreen(
-    ignoredOnComposing: (AppBarState) -> Unit
+    viewModel: AppViewModel,
+    ignoredOnComposing: (AppBarState) -> Unit,
+    navController: NavController
 ) {
+
+    val clientName = remember {
+        mutableStateOf("")
+    }
+    val clientAddress1 = remember {
+        mutableStateOf("")
+    }
+    val clientAddress2 = remember {
+        mutableStateOf("")
+    }
+    val clientCity = remember {
+        mutableStateOf("")
+    }
     LaunchedEffect(key1 = true) {
         ignoredOnComposing(
             AppBarState(
@@ -41,31 +61,43 @@ fun AddClientScreen(
     Column {
         InputTextWithLabel(
             labelText = "Client name",
-            inputText = "client name"
+            inputText = clientName.value
         ) {
-            //todo
+            clientName.value = it
         }
         InputTextWithLabel(
             labelText = "Client address line 1",
-            inputText = "client address 1"
+            inputText = clientAddress1.value
         ) {
-            //todo
+            clientAddress1.value = it
         }
         InputTextWithLabel(
             labelText = "Client address line 2",
-            inputText = "client address 2"
+            inputText = clientAddress2.value
         ) {
-            //todo
+            clientAddress2.value = it
         }
         InputTextWithLabel(
             labelText = "Client city",
-            inputText = "client city"
+            inputText = clientCity.value
         ) {
-            //todo
+            clientCity.value = it
         }
         Button(
+            enabled = clientName.value.trim().isNotEmpty()
+                    && clientAddress1.value.trim().isNotEmpty()
+                    && clientAddress2.value.trim().isNotEmpty()
+                    && clientCity.value.trim().isNotEmpty(),
             onClick ={
-                //todo
+                viewModel.saveClient(
+                    Client(
+                        clientName = clientName.value.trim(),
+                        clientAddress1 = clientAddress1.value.trim(),
+                        clientAddress2 = clientAddress2.value.trim(),
+                        clientCity = clientCity.value.trim()
+                    )
+                )
+                navController.navigateUp()
             },
             modifier = Modifier
                 .padding(5.dp)

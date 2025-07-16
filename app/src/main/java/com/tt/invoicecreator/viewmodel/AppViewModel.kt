@@ -42,4 +42,10 @@ class AppViewModel(
         }
     }
 
+    fun saveClient(client: Client){
+        coroutine.launch {
+            clientRepository.insertClient(client)
+        }
+    }
+
 }

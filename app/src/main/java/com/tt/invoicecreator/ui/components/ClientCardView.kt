@@ -16,9 +16,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.tt.invoicecreator.viewmodel.AppViewModel
 
 @Composable
 fun ClientCardView (
+    viewModel: AppViewModel,
     onClick: () -> Unit
 ){
         Card(
@@ -38,15 +40,26 @@ fun ClientCardView (
             )
             {
                 Text(
-                    text = "ClientName",
+                    text = viewModel.getInvoice().client.clientName,
                     fontWeight = FontWeight.W700,
                     modifier = Modifier
                         .padding(5.dp))
                 Text(
-                    text = "Address",
+                    text = viewModel.getInvoice().client.clientAddress1,
+                    fontWeight = FontWeight.W300,
+                    modifier = Modifier
+                        .padding(5.dp))
+                Text(
+                    text = viewModel.getInvoice().client.clientAddress2,
+                    fontWeight = FontWeight.W300,
+                    modifier = Modifier
+                        .padding(5.dp))
+                Text(
+                    text = viewModel.getInvoice().client.clientCity,
                     fontWeight = FontWeight.W300,
                     modifier = Modifier
                         .padding(5.dp))
             }
+
         }
 }

@@ -9,7 +9,7 @@ data class Invoice(
     @PrimaryKey(autoGenerate = true)
     val invoiceId: Int = 0,
     @Embedded
-    val client: Client = Client(),
+    var client: Client = Client(),
     @Embedded
     var item: Item = Item(),
     var itemCount: Double = 1.0,
