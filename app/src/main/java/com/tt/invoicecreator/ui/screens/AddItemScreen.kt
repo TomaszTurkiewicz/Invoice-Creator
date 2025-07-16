@@ -22,6 +22,7 @@ import androidx.navigation.NavController
 import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.data.room.Item
 import com.tt.invoicecreator.helpers.DecimalFormatter
+import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogItemCountDiscountAndComments
 import com.tt.invoicecreator.ui.components.InputDoubleWithLabel
 import com.tt.invoicecreator.ui.components.InputTextWithLabel
 import com.tt.invoicecreator.viewmodel.AppViewModel
@@ -81,7 +82,10 @@ fun AddItemScreen(
                         itemValue = itemValue.value.toDouble()
                     )
                 )
-                navController.navigateUp()
+                viewModel.getInvoice().item = Item(
+                    itemName = itemName.value.trim(),
+                    itemValue = itemValue.value.toDouble()
+                )
             },
             modifier = Modifier
                 .padding(5.dp)
@@ -90,4 +94,6 @@ fun AddItemScreen(
             Text(text = "SAVE")
         }
     }
+
+
 }

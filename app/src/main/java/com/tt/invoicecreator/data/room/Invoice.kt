@@ -11,10 +11,10 @@ data class Invoice(
     @Embedded
     val client: Client = Client(),
     @Embedded
-    val item: Item = Item(),
-    val itemCount: Double = 1.0,
-    val itemDiscount: Double = 0.0,
-    val comment: String = "",
+    var item: Item = Item(),
+    var itemCount: Double = 1.0,
+    var itemDiscount: Double = 0.0,
+    var comment: String = "",
     var time:Long = 0L,
     var invoiceNumber:Int = 0
 )

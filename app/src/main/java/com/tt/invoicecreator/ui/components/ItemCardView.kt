@@ -15,9 +15,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.tt.invoicecreator.viewmodel.AppViewModel
 
 @Composable
 fun ItemCardView(
+    viewModel: AppViewModel,
     onClick: ()-> Unit
 ) {
     Card(
@@ -39,17 +41,17 @@ fun ItemCardView(
             Column {
                 Row {
                     Text(
-                        text = "item name",
+                        text = viewModel.getInvoice().item.itemName,
                         fontWeight = FontWeight.W700,
                         modifier = Modifier
                             .fillMaxWidth(0.7f)
                             .padding(5.dp)
                     )
                     Text(
-                        text = "0",
+                        text = viewModel.getInvoice().itemCount.toString(),
                         fontWeight = FontWeight.W500,
                         modifier = Modifier
-                            .fillMaxWidth(0.2f)
+                            .fillMaxWidth(0.4f)
                             .padding(5.dp)
                     )
                     Text(
@@ -60,7 +62,7 @@ fun ItemCardView(
                             .padding(5.dp)
                     )
                     Text(
-                        text = "0",
+                        text = viewModel.getInvoice().item.itemValue.toString(),
                         fontWeight = FontWeight.W500,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -81,14 +83,14 @@ fun ItemCardView(
                             .padding(5.dp)
                     )
                     Text(
-                        text = "0",
+                        text = viewModel.getInvoice().itemDiscount.toString(),
                         fontWeight = FontWeight.W100,
                         modifier = Modifier
                             .padding(5.dp)
                     )
                 }
                 Text(
-                    text = "comments",
+                    text = viewModel.getInvoice().comment,
                     fontWeight = FontWeight.W100,
                     modifier = Modifier
                         .padding(5.dp)

@@ -31,6 +31,7 @@ import com.tt.invoicecreator.viewmodel.AppViewModel
 
 @Composable
 fun AddInvoiceScreen(
+    viewModel: AppViewModel,
     ignoredOnComposing: (AppBarState) -> Unit,
     navController: NavController
 ) {
@@ -63,6 +64,7 @@ fun AddInvoiceScreen(
         )
 
         ItemCardView(
+            viewModel = viewModel,
             onClick = {
                 navController.navigate(InvoiceCreatorScreen.ChooseItem.name)
             }

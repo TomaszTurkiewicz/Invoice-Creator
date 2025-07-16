@@ -70,6 +70,7 @@ fun InvoiceCreatorApp (
 
             composable(route = InvoiceCreatorScreen.AddInvoice.name) {
                 AddInvoiceScreen(
+                    viewModel = viewModel,
                     ignoredOnComposing = {
                         appBarState = it
                     },

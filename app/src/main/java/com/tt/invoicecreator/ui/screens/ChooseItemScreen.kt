@@ -13,11 +13,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.tt.invoicecreator.InvoiceCreatorScreen
 import com.tt.invoicecreator.data.AppBarState
+import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogItemCountDiscountAndComments
 import com.tt.invoicecreator.ui.components.ListOfClients
 import com.tt.invoicecreator.ui.components.ListOfItems
 import com.tt.invoicecreator.viewmodel.AppViewModel
@@ -30,6 +33,12 @@ fun ChooseItemScreen(
 ) {
 
     val itemList by viewModel.itemList.observeAsState()
+
+    val alertDialog = remember {
+        mutableStateOf(false)
+    }
+
+
 
     LaunchedEffect(key1 = true) {
         ignoredOnComposing(
@@ -65,9 +74,23 @@ fun ChooseItemScreen(
         }
         else{
             ListOfItems(
-                itemList!!
+                list = itemList!!,
+                itemChosen = {
+                    viewModel.getInvoice().item = it
+                    alertDialog.value = true
+                }
             )
         }
+    }
+
+    if(alertDialog.value){
+        AlertDialogItemCountDiscountAndComments(
+            viewModel = viewModel,
+            onDismissRequest = {
+                alertDialog.value = false
+            },
+            navController = navController
+        )
     }
 
 }

@@ -18,13 +18,17 @@ import com.tt.invoicecreator.data.room.Item
 
 @Composable
 fun SingleRowItem(
-    item: Item
+    item: Item,
+    itemChosen: (Item) -> Unit
 ) {
     Card(
         shape = RoundedCornerShape(20.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(10.dp),
+            .padding(10.dp)
+            .clickable {
+                itemChosen(item)
+            },
         colors = CardDefaults.cardColors(containerColor = Color.LightGray),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
