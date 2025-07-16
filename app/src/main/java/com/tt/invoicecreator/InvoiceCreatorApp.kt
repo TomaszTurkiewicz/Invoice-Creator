@@ -113,8 +113,7 @@ fun InvoiceCreatorApp (
                     viewModel = viewModel,
                     ignoredOnComposing = {
                         appBarState = it
-                    },
-                    navController = navController
+                    }
                 )
             }
 

@@ -16,7 +16,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.data.room.Item
 import com.tt.invoicecreator.helpers.DecimalFormatter
@@ -27,8 +26,7 @@ import com.tt.invoicecreator.viewmodel.AppViewModel
 @Composable
 fun AddItemScreen(
     viewModel: AppViewModel,
-    ignoredOnComposing: (AppBarState) -> Unit,
-    navController: NavController
+    ignoredOnComposing: (AppBarState) -> Unit
 ) {
     LaunchedEffect(key1 = true) {
         ignoredOnComposing(
@@ -54,7 +52,7 @@ fun AddItemScreen(
         mutableStateOf("")
     }
 
-    val decimalFormatter:DecimalFormatter = DecimalFormatter()
+    val decimalFormatter = DecimalFormatter()
     Column {
         InputTextWithLabel(
             labelText = "ITEM NAME",
