@@ -1,5 +1,6 @@
 package com.tt.invoicecreator.ui.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,7 +21,8 @@ import com.tt.invoicecreator.helpers.InvoiceNumber
 @Composable
 fun InvoiceNumberCardView(
     number:Int,
-    time:Long
+    time:Long,
+    onClick: () -> Unit
 ) {
 
     val invoiceNumberString = InvoiceNumber.getStringNumber(number,time)
@@ -30,7 +32,10 @@ fun InvoiceNumberCardView(
         shape = RoundedCornerShape(20.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(10.dp),
+            .padding(10.dp)
+            .clickable {
+                onClick()
+            },
         colors = CardDefaults.cardColors(containerColor = Color.LightGray),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {

@@ -9,38 +9,25 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableIntState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import com.tt.invoicecreator.helpers.DecimalFormatter
 import com.tt.invoicecreator.ui.components.InputDigitsWithLabel
-import com.tt.invoicecreator.ui.components.InputTextWithLabel
 import com.tt.invoicecreator.viewmodel.AppViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AlertDialogItemCountDiscountAndComments(
-    viewModel: AppViewModel,
+fun AlertDialogInvoiceNumber(
     onDismissRequest: () -> Unit,
-    navController: NavController
+    viewModel: AppViewModel
 ) {
-    val itemCount = remember {
-        mutableStateOf("1")
+    val newNumber = remember {
+        mutableStateOf(viewModel.getInvoice().invoiceNumber.toString())
     }
-
-    val itemDiscount = remember {
-        mutableStateOf("0")
-    }
-
-    val itemComment = remember {
-        mutableStateOf("")
-    }
-
-    val decimalFormatter = DecimalFormatter()
-
 
     BasicAlertDialog(
         onDismissRequest = {
@@ -49,40 +36,27 @@ fun AlertDialogItemCountDiscountAndComments(
     ) {
         Column(
             modifier = Modifier
-                .background(Color.LightGray),
-
-            ) {
+                .background(Color.LightGray)
+        ) {
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(10.dp),
                 text = "TITLE"
             )
+
             InputDigitsWithLabel(
-                labelText = "Quantity",
-                inputText = itemCount.value
+                labelText = "NEW INVOICE NUMBER",
+                inputText = newNumber.value
             ) {
-                itemCount.value = decimalFormatter.cleanup(it)
+                newNumber.value = it
             }
-            InputDigitsWithLabel(
-                labelText = "DISCOUNT",
-                inputText = itemDiscount.value
-            ) {
-                itemDiscount.value = decimalFormatter.cleanup(it)
-            }
-            InputTextWithLabel(
-                labelText = "COMMENT",
-                inputText = itemComment.value
-            ) {
-                itemComment.value = it
-            }
+
             Button(
-                enabled = itemCount.value.isNotEmpty() && itemDiscount.value.isNotEmpty(),
                 onClick = {
-                    viewModel.getInvoice().itemCount = itemCount.value.toDouble()
-                    viewModel.getInvoice().itemDiscount = itemDiscount.value.toDouble()
-                    viewModel.getInvoice().comment = itemComment.value.trim()
-                    navController.navigateUp()
+                    viewModel.getInvoice().invoiceNumber = newNumber.value.toInt()
+                    viewModel.calculateNumber = false
+                    onDismissRequest()
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -93,12 +67,7 @@ fun AlertDialogItemCountDiscountAndComments(
                 )
 
             }
-
         }
 
     }
 }
-
-
-
-

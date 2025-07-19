@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.data.room.Item
 import com.tt.invoicecreator.helpers.DecimalFormatter
-import com.tt.invoicecreator.ui.components.InputDoubleWithLabel
+import com.tt.invoicecreator.ui.components.InputDigitsWithLabel
 import com.tt.invoicecreator.ui.components.InputTextWithLabel
 import com.tt.invoicecreator.viewmodel.AppViewModel
 
@@ -62,7 +62,7 @@ fun AddItemScreen(
         }
 
 
-        InputDoubleWithLabel(
+        InputDigitsWithLabel(
             labelText = "ITEM VALUE",
             inputText = itemValue.value
         ) {

@@ -26,6 +26,7 @@ import androidx.navigation.NavController
 import com.tt.invoicecreator.InvoiceCreatorScreen
 import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.helpers.InvoiceNumber
+import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogInvoiceNumber
 import com.tt.invoicecreator.ui.components.ClientCardView
 import com.tt.invoicecreator.ui.components.InvoiceNumberCardView
 import com.tt.invoicecreator.ui.components.ItemCardView
@@ -39,11 +40,17 @@ fun AddInvoiceScreen(
     navController: NavController
 ) {
     val invoiceList by viewModel.invoiceList.observeAsState()
+
+
     val time = remember {
         mutableLongStateOf(0L)
     }
-    val invoiceNumber = remember {
-        mutableIntStateOf(0)
+//    val invoiceNumber = remember {
+//        mutableIntStateOf(viewModel.getInvoice().invoiceNumber)
+//    }
+
+    val invoiceNumberAlertDialog = remember {
+        mutableStateOf(false)
     }
 
 
@@ -68,8 +75,11 @@ fun AddInvoiceScreen(
         time.longValue = System.currentTimeMillis()
         viewModel.getInvoice().time = time.longValue
 
-        invoiceNumber.intValue = InvoiceNumber.getNewNumber(viewModel.getInvoice().time,invoiceList)
-        viewModel.getInvoice().invoiceNumber = invoiceNumber.intValue
+        if(viewModel.calculateNumber){
+            viewModel.getInvoice().invoiceNumber= InvoiceNumber.getNewNumber(viewModel.getInvoice().time,invoiceList)
+        }
+
+
     }
 
 
@@ -78,9 +88,11 @@ fun AddInvoiceScreen(
             .fillMaxSize()
     ) {
         InvoiceNumberCardView(
-            number = invoiceNumber.intValue,
+            number = viewModel.getInvoice().invoiceNumber,
             time = time.longValue
-        )
+        ){
+            invoiceNumberAlertDialog.value = true
+        }
 
         ClientCardView(
             viewModel = viewModel,
@@ -108,5 +120,15 @@ fun AddInvoiceScreen(
         ) {
             Text(text = "SAVE")
         }
+    }
+
+
+    if(invoiceNumberAlertDialog.value){
+        AlertDialogInvoiceNumber(
+            onDismissRequest = {
+                invoiceNumberAlertDialog.value = false
+            },
+            viewModel = viewModel
+        )
     }
 }
