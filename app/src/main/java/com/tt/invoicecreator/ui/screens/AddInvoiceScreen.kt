@@ -13,11 +13,19 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.tt.invoicecreator.InvoiceCreatorScreen
 import com.tt.invoicecreator.data.AppBarState
+import com.tt.invoicecreator.helpers.InvoiceNumber
 import com.tt.invoicecreator.ui.components.ClientCardView
 import com.tt.invoicecreator.ui.components.InvoiceNumberCardView
 import com.tt.invoicecreator.ui.components.ItemCardView
@@ -30,6 +38,15 @@ fun AddInvoiceScreen(
     ignoredOnComposing: (AppBarState) -> Unit,
     navController: NavController
 ) {
+    val invoiceList by viewModel.invoiceList.observeAsState()
+    val time = remember {
+        mutableLongStateOf(0L)
+    }
+    val invoiceNumber = remember {
+        mutableIntStateOf(0)
+    }
+
+
     LaunchedEffect(key1 = true) {
         ignoredOnComposing(
             AppBarState(
@@ -46,11 +63,24 @@ fun AddInvoiceScreen(
             )
         )
     }
+
+    LaunchedEffect(key1 = true) {
+        time.longValue = System.currentTimeMillis()
+        viewModel.getInvoice().time = time.longValue
+
+        invoiceNumber.intValue = InvoiceNumber.getNewNumber(viewModel.getInvoice().time,invoiceList)
+        viewModel.getInvoice().invoiceNumber = invoiceNumber.intValue
+    }
+
+
     Column(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        InvoiceNumberCardView()
+        InvoiceNumberCardView(
+            number = invoiceNumber.intValue,
+            time = time.longValue
+        )
 
         ClientCardView(
             viewModel = viewModel,

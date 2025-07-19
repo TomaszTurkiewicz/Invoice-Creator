@@ -32,6 +32,7 @@ class AppViewModel(
     private val coroutine = CoroutineScope(Dispatchers.Main)
     private var invoice = Invoice()
 
+
     fun getInvoice(): Invoice{
         return this.invoice
     }
