@@ -32,8 +32,9 @@ class AppViewModel(
     private val coroutine = CoroutineScope(Dispatchers.Main)
     private var invoice = Invoice()
 
-    var calculateNumber = true
+    var paymentMethod:String = ""
 
+    var calculateNumber = true
 
     fun getInvoice(): Invoice{
         return this.invoice

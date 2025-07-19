@@ -21,12 +21,15 @@ import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.tt.invoicecreator.InvoiceCreatorScreen
 import com.tt.invoicecreator.data.AppBarState
+import com.tt.invoicecreator.data.SharedPreferences
 import com.tt.invoicecreator.helpers.InvoiceNumber
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogInvoiceNumber
+import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogPaymentMethod
 import com.tt.invoicecreator.ui.components.ClientCardView
 import com.tt.invoicecreator.ui.components.InvoiceNumberCardView
 import com.tt.invoicecreator.ui.components.ItemCardView
@@ -53,6 +56,13 @@ fun AddInvoiceScreen(
         mutableStateOf(false)
     }
 
+    val invoicePaymentMethodAlertDialog = remember {
+        mutableStateOf(false)
+    }
+
+    val context = LocalContext.current
+    viewModel.paymentMethod = SharedPreferences.readPaymentMethod(context) ?: ""
+
 
     LaunchedEffect(key1 = true) {
         ignoredOnComposing(
@@ -78,6 +88,8 @@ fun AddInvoiceScreen(
         if(viewModel.calculateNumber){
             viewModel.getInvoice().invoiceNumber= InvoiceNumber.getNewNumber(viewModel.getInvoice().time,invoiceList)
         }
+
+
 
 
     }
@@ -108,7 +120,12 @@ fun AddInvoiceScreen(
             }
         )
 
-        PaymentMethodCardView()
+        PaymentMethodCardView(
+            onClick = {
+                invoicePaymentMethodAlertDialog.value = true
+            },
+            paymentMethod = viewModel.paymentMethod
+        )
 
         Button(
             onClick ={
@@ -129,6 +146,14 @@ fun AddInvoiceScreen(
                 invoiceNumberAlertDialog.value = false
             },
             viewModel = viewModel
+        )
+    }
+
+    if(invoicePaymentMethodAlertDialog.value){
+        AlertDialogPaymentMethod (
+            onDismissRequest = {
+                invoicePaymentMethodAlertDialog.value = false
+            }
         )
     }
 }
