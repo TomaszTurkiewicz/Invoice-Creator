@@ -20,6 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.tt.invoicecreator.InvoiceCreatorScreen
 import com.tt.invoicecreator.data.AppBarState
+import com.tt.invoicecreator.data.room.Invoice
+import com.tt.invoicecreator.ui.alert_dialogs.PrintInvoiceAlertDialog
 import com.tt.invoicecreator.ui.components.ListOfInvoices
 import com.tt.invoicecreator.viewmodel.AppViewModel
 
@@ -30,6 +32,14 @@ fun InvoicesScreen (
     navController: NavController
 ){
     val invoicesList by viewModel.invoiceList.observeAsState()
+
+    val printInvoiceAlertDialog = remember {
+        mutableStateOf(false)
+    }
+
+    val invoice = remember {
+        mutableStateOf(Invoice())
+    }
 
 
     LaunchedEffect(key1 = true) {
@@ -67,10 +77,20 @@ fun InvoicesScreen (
             ListOfInvoices(
                 list = invoicesList!!,
                 invoiceChosen = {
-                    //todo
+                    invoice.value = it
+                    printInvoiceAlertDialog.value = true
                 }
             )
         }
+    }
+
+    if(printInvoiceAlertDialog.value){
+        PrintInvoiceAlertDialog(
+            invoice = invoice.value,
+            onDismissRequest = {
+                 printInvoiceAlertDialog.value = false
+            }
+        )
     }
 
 }

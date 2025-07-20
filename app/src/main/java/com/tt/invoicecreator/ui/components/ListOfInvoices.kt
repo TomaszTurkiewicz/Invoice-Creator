@@ -12,7 +12,6 @@ fun ListOfInvoices(
     list:List<Invoice>,
     invoiceChosen: (Invoice) -> Unit
 ) {
-//    val newList = list.reversed()
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
