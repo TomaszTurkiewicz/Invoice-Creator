@@ -64,7 +64,12 @@ fun InvoicesScreen (
             )
         }
         else{
-            ListOfInvoices()
+            ListOfInvoices(
+                list = invoicesList!!,
+                invoiceChosen = {
+                    //todo
+                }
+            )
         }
     }
 
