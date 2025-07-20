@@ -31,7 +31,7 @@ object InvoiceNumber {
                 }
             }
 
-            return invoiceNumber
+            return invoiceNumber+1
         }
     }
 
@@ -40,9 +40,6 @@ object InvoiceNumber {
         time:Long
     ):String{
         val monthAndYear = DateAndTime.monthAndYear(time)
-        val month = monthAndYear.month
-        val year = monthAndYear.year
-        val a = 11
         return "$invoiceNumber/${monthAndYear.month}/${monthAndYear.year}"
     }
 }

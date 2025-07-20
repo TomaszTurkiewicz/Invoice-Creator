@@ -38,6 +38,7 @@ fun InvoicesScreen (
                 action = {
                     Row {
                         IconButton(onClick = {
+                            viewModel.cleanInvoice()
                             navController.navigate(InvoiceCreatorScreen.AddInvoice.name)
                         }) {
                             Icon(Icons.Default.Add, null)

@@ -52,4 +52,15 @@ class AppViewModel(
         }
     }
 
+    fun saveInvoice(){
+        coroutine.launch {
+            invoiceRepository.insertInvoice(invoice)
+        }
+    }
+
+    fun cleanInvoice() {
+        this.invoice = Invoice()
+        this.calculateNumber = true
+    }
+
 }
