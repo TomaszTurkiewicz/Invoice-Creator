@@ -1,5 +1,6 @@
 package com.tt.invoicecreator.ui.alert_dialogs
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,10 +17,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.tt.invoicecreator.data.room.Invoice
 import com.tt.invoicecreator.helpers.InvoiceNumber
+import com.tt.invoicecreator.helpers.PdfUtils
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PrintInvoiceAlertDialog(
+    context: Context,
     invoice: Invoice,
     onDismissRequest:() -> Unit
 ) {
@@ -64,7 +67,8 @@ fun PrintInvoiceAlertDialog(
 
                 Button(
                     onClick = {
-                        // todo
+                        PdfUtils.generatePDF(context = context, invoice = invoice)
+                        onDismissRequest()
                     },
                     modifier = Modifier
                         .weight(1f)

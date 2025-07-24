@@ -17,6 +17,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import com.tt.invoicecreator.InvoiceCreatorScreen
 import com.tt.invoicecreator.data.AppBarState
@@ -40,6 +41,8 @@ fun InvoicesScreen (
     val invoice = remember {
         mutableStateOf(Invoice())
     }
+
+    val content = LocalContext.current
 
 
     LaunchedEffect(key1 = true) {
@@ -86,6 +89,7 @@ fun InvoicesScreen (
 
     if(printInvoiceAlertDialog.value){
         PrintInvoiceAlertDialog(
+            context = content,
             invoice = invoice.value,
             onDismissRequest = {
                  printInvoiceAlertDialog.value = false

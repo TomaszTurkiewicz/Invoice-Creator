@@ -40,6 +40,9 @@ object InvoiceNumber {
         time:Long
     ):String{
         val monthAndYear = DateAndTime.monthAndYear(time)
-        return "$invoiceNumber/${monthAndYear.month}/${monthAndYear.year}"
+        val monthTen = monthAndYear.month/10
+        val monthOne = monthAndYear.month%10
+        val year = monthAndYear.year%100
+        return "$invoiceNumber$monthTen$monthOne$year"
     }
 }
