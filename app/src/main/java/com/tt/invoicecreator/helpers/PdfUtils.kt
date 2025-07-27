@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.pdf.PdfDocument
@@ -13,365 +14,74 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.net.toUri
 import com.tt.invoicecreator.R
 import com.tt.invoicecreator.data.SharedPreferences
 import com.tt.invoicecreator.data.SignatureFile
 import com.tt.invoicecreator.data.room.Invoice
 import java.io.File
 import java.text.DecimalFormat
-import kotlin.math.roundToLong
-import androidx.core.net.toUri
 
 class PdfUtils {
     companion object{
+        private const val PAGE_WIDTH = 840
+        private const val PAGE_HEIGHT = 1188
+        private const val LEFT_MARGIN = 10f
+        private const val RIGHT_MARGIN = PAGE_WIDTH- LEFT_MARGIN
+        private const val MARGIN_BOTTOM = PAGE_HEIGHT-50f
+        private const val DESCRIPTION_RIGHT = 300f
+        private const val QUANTITY_RIGHT = 400f
+        private const val PRICE_RIGHT = 560f
+        private const val DISCOUNT_RIGHT = 660f
+        private const val MARGIN_TOP = 50f
+        private const val TEXT_SMALL = 15f
+        private const val TEXT_BIG = 30f
+        private const val SEPARATOR_LINE_Y = 140f
+        private const val HEAD_TOP = 200f
+        private const val TABLE_HEIGHT = 40f
 
         fun generatePDF(
             context:Context,
             invoice: Invoice
         ){
+            /*
+            todo margin right 50f
+            todo margin left also 50f
+            todo user bald letters
+            todo bill to section bigger
+            todo invoice number move invoice number right a little bit, number and date separate more
+            todo table move down
+            todo item better separation when comment
+            todo change color of the table and invoice word
+             */
+
 
             val pdfDocument = PdfDocument()
             val paint = Paint()
             val decimalFormat = DecimalFormat("#.00")
-
-            val pageInfo: PdfDocument.PageInfo? = PdfDocument.PageInfo.Builder(420,594,1).create()
+            val pageInfo: PdfDocument.PageInfo? = PdfDocument.PageInfo.Builder(PAGE_WIDTH, PAGE_HEIGHT,1).create()
             val page = pdfDocument.startPage(pageInfo)
-            val left = 10f
-            val right = 410f
-            val descRight = 150f
-            val qtyRight = 200f
-            val priceRight = 280f
-            val discRight = 330f
             val canvas = page.canvas
-            paint.textSize = 10f
-            paint.color = context.getColor(R.color.black)
-            paint.textAlign = Paint.Align.LEFT
 
-            /** USER **/
-            canvas.drawText(
-                "Tomasz Turkiewicz",
-                10f,
-                10f,
-                paint
-            )
-            canvas.drawText(
-                "Flat 3, 10 Morley Street",
-                10f,
-                25f,
-                paint
-            )
-            canvas.drawText(
-                "BN2 9RA",
-                10f,
-                40f,
-                paint
-            )
-            canvas.drawText(
-                "BRIGHTON",
-                10f,
-                55f,
-                paint
-            )
+            drawUser(context, canvas, paint)
 
-            /** INVOICE **/
-            paint.textSize = 20f
-            paint.color = context.getColor(R.color.purple_500)
-            paint.textAlign = Paint.Align.RIGHT
-            canvas.drawText(
-                "INVOICE",
-                410f,
-                20f,
-                paint
-            )
+            drawInvoiceWord(context, canvas, paint)
 
-            /** separator line **/
-            paint.color = context.getColor(R.color.teal_700)
-            canvas.drawLine(10f,70f,410f,70f,paint)
+            drawSeparatorLine(context, canvas, paint)
 
-            /** BILL TO **/
-            paint.textSize = 15f
-            paint.color = context.getColor(R.color.black)
-            paint.textAlign = Paint.Align.LEFT
-            canvas.drawText(
-                "Bill To:",
-                10f,
-                85f,
-                paint
-            )
-            paint.textSize = 10f
-            canvas.drawText(
-                invoice.client.clientName,
-                10f,
-                100f,
-                paint
-            )
-            canvas.drawText(
-                invoice.client.clientAddress1,
-                10f,
-                115f,
-                paint
-            )
-            canvas.drawText(
-                invoice.client.clientAddress2,
-                10f,
-                130f,
-                paint
-            )
-            canvas.drawText(
-                invoice.client.clientCity,
-                10f,
-                145f,
-                paint
-            )
+            drawBillToSection(context, canvas, paint, invoice)
 
-            /** invoice number and date **/
-            canvas.drawText(
-                "Invoice #",
-                300f,
-                85f,
-                paint
-            )
+            drawInvoiceNumberAndDate(canvas, paint, invoice)
 
-            paint.textAlign = Paint.Align.RIGHT
-            canvas.drawText(
-                InvoiceNumber.getStringNumber(invoiceNumber = invoice.invoiceNumber, time = invoice.time),
-                410f,
-                85f,
-                paint
-            )
-            canvas.drawText(
-                DateAndTime.convertLongToDate(time = invoice.time),
-                410f,
-                100f,
-                paint
-            )
+            drawTableHead(context, canvas, paint)
 
+            drawItem(canvas, paint, invoice, decimalFormat)
 
-            /** HEAD plus table **/
+            drawTotal(context, canvas, paint, invoice, decimalFormat)
 
-            paint.color = context.getColor(R.color.teal_200)
-            canvas.drawRect(
-                left,
-                150f,
-                right,
-                180f,
-                paint
-            )
-            paint.color = context.getColor(R.color.purple_200)
-            paint.style = Paint.Style.STROKE
-            canvas.drawRect(
-                left,
-                180f,
-                descRight,
-                210f,
-                paint
-            )
-            canvas.drawRect(
-                descRight,
-                180f,
-                qtyRight,
-                210f,
-                paint
-            )
-            canvas.drawRect(
-                qtyRight,
-                180f,
-                priceRight,
-                210f,
-                paint
-            )
-            canvas.drawRect(
-                priceRight,
-                180f,
-                discRight,
-                210f,
-                paint
-            )
-            canvas.drawRect(
-                discRight,
-                180f,
-                right,
-                210f,
-                paint
-            )
+            drawPaymentOptions(context, canvas, paint)
 
-
-            paint.textSize = 12f
-            paint.color = context.getColor(R.color.black)
-            paint.style = Paint.Style.FILL_AND_STROKE
-            paint.textAlign = Paint.Align.LEFT
-            canvas.drawText(
-                "Description",
-                left+10f,
-                170f,
-                paint
-            )
-            paint.textAlign = Paint.Align.CENTER
-            canvas.drawText(
-                "QTY",
-                Math.average(descRight,qtyRight),
-                170f,
-                paint
-            )
-
-            canvas.drawText(
-                "Price",
-                Math.average(qtyRight,priceRight),
-                170f,
-                paint
-            )
-            canvas.drawText(
-                "Discount",
-                Math.average(priceRight,discRight),
-                170f,
-                paint
-            )
-            paint.textAlign = Paint.Align.RIGHT
-            canvas.drawText(
-                "Amount",
-                right-10f,
-                170f,
-                paint
-            )
-
-            /** item **/
-            paint.textAlign = Paint.Align.LEFT
-            paint.textSize = 10f
-            paint.style = Paint.Style.FILL
-            if(invoice.comment.isNotEmpty()){
-                canvas.drawText(
-                    invoice.item.itemName,
-                    left+10f,
-                    193f,
-                    paint
-                )
-                canvas.drawText(
-                    invoice.comment,
-                    left+10f,
-                    207f,
-                    paint
-                )
-            }else{
-                canvas.drawText(
-                    invoice.item.itemName,
-                    left+10f,
-                    200f,
-                    paint
-                )
-            }
-
-            paint.textAlign = Paint.Align.CENTER
-            canvas.drawText(
-                invoice.itemCount.toString(),
-                Math.average(descRight,qtyRight),
-                200f,
-                paint
-            )
-
-            canvas.drawText(
-                "£"+decimalFormat.format(invoice.item.itemValue),
-                Math.average(qtyRight,priceRight),
-                200f,
-                paint
-            )
-            canvas.drawText(
-                if(invoice.itemDiscount!=0.0){
-                    "£"+decimalFormat.format(invoice.itemDiscount)
-                }else{
-                    "----"
-                },
-
-                Math.average(priceRight,discRight),
-                200f,
-                paint
-            )
-            paint.textAlign = Paint.Align.RIGHT
-            canvas.drawText(
-                "£"+decimalFormat.format(InvoiceValueCalculator.calculate(invoice)),
-//                InvoiceValueCalculator.calculate(invoice).toString(),
-                right-10f,
-                200f,
-                paint
-            )
-
-
-            /** total **/
-
-            paint.color = context.getColor(R.color.teal_200)
-            paint.style = Paint.Style.FILL_AND_STROKE
-            canvas.drawRect(
-                priceRight,
-                210f,
-                right,
-                240f,
-                paint
-            )
-
-            paint.color = context.getColor(R.color.black)
-            paint.textAlign = Paint.Align.RIGHT
-            canvas.drawText(
-                "Total",
-                discRight-10f,
-                230f,
-                paint
-            )
-
-            canvas.drawText(
-                "£"+decimalFormat.format(InvoiceValueCalculator.calculate(invoice)),
-                right-10f,
-                230f,
-                paint
-            )
-
-            /** payment options**/
-            paint.textAlign = Paint.Align.LEFT
-            canvas.drawText(
-                "Payment options",
-                left+10f,
-                260f,
-                paint
-            )
-
-            val list = SharedPreferences.readPaymentMethod(context)?.split("\n")
-
-            if(!list.isNullOrEmpty()){
-                var a = 0f
-                for(item in list){
-                    canvas.drawText(
-                        item,
-                        left+10f,
-                        280f+a,
-                        paint
-                    )
-                    a += 20f
-                }
-            }
-
-            /** signature **/
-            val pic = SignatureFile.getFilePath(context).toUri().path
-            val file = pic?.let {
-                File(it)
-            }
-            if(file!!.exists()){
-                val options = BitmapFactory.Options()
-                options.inPreferredConfig = Bitmap.Config.ARGB_8888
-
-                val signature = BitmapFactory.decodeFile(file.path,options)
-                val width = signature.width
-                val height = signature.height
-                val ratio:Float = width.toFloat()/height.toFloat()
-                val signatureHeight = 40f
-                val signatureWidth = signatureHeight*ratio
-
-                val destRect = Rect(
-                    left.toInt(),
-                    300f.toInt(),
-                    (left + signatureWidth).toInt(),
-                    (300f + signatureHeight).toInt()
-                )
-
-                canvas.drawBitmap(signature,null,destRect,paint)
-            }
+            drawSignature(context, canvas, paint)
 
             pdfDocument.finishPage(page)
 
@@ -403,6 +113,349 @@ class PdfUtils {
                 }
             }
             pdfDocument.close()
+        }
+
+        private fun drawSignature(context: Context,canvas: Canvas,paint: Paint) {
+
+            val pic = SignatureFile.getFilePath(context).toUri().path
+            val file = pic?.let {
+                File(it)
+            }
+            if(file!!.exists()){
+                val options = BitmapFactory.Options()
+                options.inPreferredConfig = Bitmap.Config.ARGB_8888
+
+                val signature = BitmapFactory.decodeFile(file.path,options)
+                val width = signature.width
+                val height = signature.height
+                val ratio:Float = width.toFloat()/height.toFloat()
+                val signatureHeight = 120f
+                val signatureWidth = signatureHeight*ratio
+
+                val destRect = Rect(
+                    (RIGHT_MARGIN-signatureWidth).toInt(),
+                    (MARGIN_BOTTOM-signatureHeight).toInt(),
+                    RIGHT_MARGIN.toInt(),
+                    MARGIN_BOTTOM.toInt()
+                )
+
+                canvas.drawBitmap(signature,null,destRect,paint)
+            }
+        }
+
+        private fun drawPaymentOptions(context: Context,canvas: Canvas,paint: Paint) {
+
+            paint.textAlign = Paint.Align.LEFT
+            canvas.drawText(
+                "Payment options",
+                LEFT_MARGIN+10f,
+                HEAD_TOP+ TABLE_HEIGHT*3,
+                paint
+            )
+
+            val list = SharedPreferences.readPaymentMethod(context)?.split("\n")
+
+            if(!list.isNullOrEmpty()){
+                var a = 0f
+                for(item in list){
+                    canvas.drawText(
+                        item,
+                        LEFT_MARGIN+10f,
+                        HEAD_TOP+ TABLE_HEIGHT*3+ TEXT_BIG+a,
+                        paint
+                    )
+                    a += 20f
+                }
+            }
+
+        }
+
+        private fun drawTotal(context: Context,canvas: Canvas,paint: Paint,invoice: Invoice,decimalFormat: DecimalFormat) {
+
+            paint.color = context.getColor(R.color.teal_200)
+            paint.style = Paint.Style.FILL_AND_STROKE
+            canvas.drawRect(
+                PRICE_RIGHT,
+                HEAD_TOP+ TABLE_HEIGHT*2,
+                RIGHT_MARGIN,
+                HEAD_TOP+ TABLE_HEIGHT*3,
+                paint
+            )
+
+            paint.color = context.getColor(R.color.black)
+            paint.textAlign = Paint.Align.RIGHT
+            canvas.drawText(
+                "Total",
+                DISCOUNT_RIGHT-10f,
+                HEAD_TOP+ TABLE_HEIGHT*2.66f,
+                paint
+            )
+
+            canvas.drawText(
+                "£"+decimalFormat.format(InvoiceValueCalculator.calculate(invoice)),
+                RIGHT_MARGIN-10f,
+                HEAD_TOP+ TABLE_HEIGHT*2.66f,
+                paint
+            )
+        }
+
+        private fun drawItem(canvas: Canvas,paint: Paint,invoice: Invoice,decimalFormat:DecimalFormat) {
+            paint.textAlign = Paint.Align.LEFT
+            paint.textSize = TEXT_SMALL
+            paint.style = Paint.Style.FILL
+            if(invoice.comment.isNotEmpty()){
+                canvas.drawText(
+                    invoice.item.itemName,
+                    LEFT_MARGIN+10f,
+                    HEAD_TOP+(TABLE_HEIGHT*1.45f),
+                    paint
+                )
+                canvas.drawText(
+                    invoice.comment,
+                    LEFT_MARGIN+10f,
+                    HEAD_TOP+(TABLE_HEIGHT*1.55f),
+                    paint
+                )
+            }else{
+                canvas.drawText(
+                    invoice.item.itemName,
+                    LEFT_MARGIN+10f,
+                    HEAD_TOP+ (TABLE_HEIGHT*1.66f),
+                    paint
+                )
+            }
+
+            paint.textAlign = Paint.Align.CENTER
+            canvas.drawText(
+                invoice.itemCount.toString(),
+                Math.average(DESCRIPTION_RIGHT, QUANTITY_RIGHT),
+                HEAD_TOP+ (TABLE_HEIGHT*1.66f),
+                paint
+            )
+
+            canvas.drawText(
+                "£"+decimalFormat.format(invoice.item.itemValue),
+                Math.average(QUANTITY_RIGHT, PRICE_RIGHT),
+                HEAD_TOP+ (TABLE_HEIGHT*1.66f),
+                paint
+            )
+            canvas.drawText(
+                if(invoice.itemDiscount!=0.0){
+                    "£"+decimalFormat.format(invoice.itemDiscount)
+                }else{
+                    "----"
+                },
+
+                Math.average(PRICE_RIGHT,DISCOUNT_RIGHT),
+                HEAD_TOP+ (TABLE_HEIGHT*1.66f),
+                paint
+            )
+            paint.textAlign = Paint.Align.RIGHT
+            canvas.drawText(
+                "£"+decimalFormat.format(InvoiceValueCalculator.calculate(invoice)),
+//                InvoiceValueCalculator.calculate(invoice).toString(),
+                RIGHT_MARGIN-10f,
+                HEAD_TOP+ (TABLE_HEIGHT*1.66f),
+                paint
+            )
+
+        }
+
+        private fun drawTableHead(context: Context,canvas: Canvas,paint: Paint) {
+
+            paint.color = context.getColor(R.color.teal_200)
+            canvas.drawRect(
+                LEFT_MARGIN,
+                HEAD_TOP,
+                RIGHT_MARGIN,
+                HEAD_TOP+ TABLE_HEIGHT,
+                paint
+            )
+            paint.color = context.getColor(R.color.purple_200)
+            paint.style = Paint.Style.STROKE
+            canvas.drawRect(
+                LEFT_MARGIN,
+                HEAD_TOP+ TABLE_HEIGHT,
+                DESCRIPTION_RIGHT,
+                HEAD_TOP+(TABLE_HEIGHT*2),
+                paint
+            )
+            canvas.drawRect(
+                DESCRIPTION_RIGHT,
+                HEAD_TOP+ TABLE_HEIGHT,
+                QUANTITY_RIGHT,
+                HEAD_TOP+(TABLE_HEIGHT*2),
+                paint
+            )
+            canvas.drawRect(
+                QUANTITY_RIGHT,
+                HEAD_TOP+ TABLE_HEIGHT,
+                PRICE_RIGHT,
+                HEAD_TOP+(TABLE_HEIGHT*2),
+                paint
+            )
+            canvas.drawRect(
+                PRICE_RIGHT,
+                HEAD_TOP+ TABLE_HEIGHT,
+                DISCOUNT_RIGHT,
+                HEAD_TOP+(TABLE_HEIGHT*2),
+                paint
+            )
+            canvas.drawRect(
+                DISCOUNT_RIGHT,
+                HEAD_TOP+ TABLE_HEIGHT,
+                RIGHT_MARGIN,
+                HEAD_TOP+(TABLE_HEIGHT*2),
+                paint
+            )
+
+
+            paint.textSize = TEXT_SMALL
+            paint.color = context.getColor(R.color.black)
+            paint.style = Paint.Style.FILL_AND_STROKE
+            paint.textAlign = Paint.Align.LEFT
+            canvas.drawText(
+                "Description",
+                LEFT_MARGIN+10f,
+                HEAD_TOP+ TABLE_HEIGHT*0.66f,
+                paint
+            )
+            paint.textAlign = Paint.Align.CENTER
+            canvas.drawText(
+                "QTY",
+                Math.average(DESCRIPTION_RIGHT, QUANTITY_RIGHT),
+                HEAD_TOP+ TABLE_HEIGHT*0.66f,
+                paint
+            )
+
+            canvas.drawText(
+                "Price",
+                Math.average(QUANTITY_RIGHT, PRICE_RIGHT),
+                HEAD_TOP+ TABLE_HEIGHT*0.66f,
+                paint
+            )
+            canvas.drawText(
+                "Discount",
+                Math.average(PRICE_RIGHT,DISCOUNT_RIGHT),
+                HEAD_TOP+ TABLE_HEIGHT*0.66f,
+                paint
+            )
+            paint.textAlign = Paint.Align.RIGHT
+            canvas.drawText(
+                "Amount",
+                RIGHT_MARGIN-10f,
+                HEAD_TOP+ TABLE_HEIGHT*0.66f,
+                paint
+            )
+
+        }
+
+        private fun drawInvoiceNumberAndDate(canvas: Canvas,paint: Paint,invoice: Invoice) {
+            canvas.drawText(
+                "Invoice #",
+                PRICE_RIGHT,
+                SEPARATOR_LINE_Y + TEXT_SMALL,
+                paint
+            )
+
+            paint.textAlign = Paint.Align.RIGHT
+            canvas.drawText(
+                InvoiceNumber.getStringNumber(invoiceNumber = invoice.invoiceNumber, time = invoice.time),
+                RIGHT_MARGIN,
+                SEPARATOR_LINE_Y + TEXT_SMALL,
+                paint
+            )
+            canvas.drawText(
+                DateAndTime.convertLongToDate(time = invoice.time),
+                RIGHT_MARGIN,
+                SEPARATOR_LINE_Y + (TEXT_SMALL*1.5f),
+                paint
+            )
+
+        }
+
+        private fun drawBillToSection(context: Context,canvas: Canvas,paint: Paint, invoice: Invoice) {
+            paint.textSize = TEXT_SMALL
+            paint.color = context.getColor(R.color.black)
+            paint.textAlign = Paint.Align.LEFT
+            canvas.drawText(
+                "Bill To:",
+                LEFT_MARGIN,
+                SEPARATOR_LINE_Y + TEXT_SMALL,
+                paint
+            )
+            paint.textSize = TEXT_SMALL
+            canvas.drawText(
+                invoice.client.clientName,
+                LEFT_MARGIN,
+                SEPARATOR_LINE_Y + (TEXT_SMALL*1.5f),
+                paint
+            )
+            canvas.drawText(
+                invoice.client.clientAddress1,
+                LEFT_MARGIN,
+                SEPARATOR_LINE_Y + (TEXT_SMALL*3f),
+                paint
+            )
+            canvas.drawText(
+                invoice.client.clientAddress2,
+                LEFT_MARGIN,
+                SEPARATOR_LINE_Y + (TEXT_SMALL*4.5f),
+                paint
+            )
+            canvas.drawText(
+                invoice.client.clientCity,
+                LEFT_MARGIN,
+                SEPARATOR_LINE_Y + (TEXT_SMALL*6f),
+                paint
+            )
+        }
+
+        private fun drawSeparatorLine(context: Context, canvas: Canvas, paint: Paint) {
+            paint.color = context.getColor(R.color.teal_700)
+            canvas.drawLine(LEFT_MARGIN, SEPARATOR_LINE_Y, RIGHT_MARGIN, SEPARATOR_LINE_Y,paint)
+        }
+
+        private fun drawInvoiceWord(context: Context,canvas: Canvas,paint: Paint) {
+            paint.textSize = TEXT_BIG
+            paint.color = context.getColor(R.color.purple_500)
+            paint.textAlign = Paint.Align.RIGHT
+            canvas.drawText(
+                "INVOICE",
+                RIGHT_MARGIN,
+                MARGIN_TOP,
+                paint
+            )
+        }
+
+        private fun drawUser(context: Context,canvas: Canvas,paint: Paint) {
+            paint.textSize = TEXT_SMALL
+            paint.color = context.getColor(R.color.black)
+            paint.textAlign = Paint.Align.LEFT
+            canvas.drawText(
+                "Tomasz Turkiewicz",
+                LEFT_MARGIN,
+                MARGIN_TOP,
+                paint
+            )
+            canvas.drawText(
+                "Flat 3, 10 Morley Street",
+                LEFT_MARGIN,
+                MARGIN_TOP+(TEXT_SMALL*1.5f),
+                paint
+            )
+            canvas.drawText(
+                "BN2 9RA",
+                LEFT_MARGIN,
+                MARGIN_TOP+(TEXT_SMALL*3f),
+                paint
+            )
+            canvas.drawText(
+                "BRIGHTON",
+                LEFT_MARGIN,
+                MARGIN_TOP+(TEXT_SMALL*4.5f),
+                paint
+            )
         }
 
         @RequiresApi(Build.VERSION_CODES.Q)

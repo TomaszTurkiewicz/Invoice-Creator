@@ -12,8 +12,8 @@ data class Invoice(
     var client: Client = Client(),
     @Embedded
     var item: Item = Item(),
-    var itemCount: Double = 1.00,
-    var itemDiscount: Double = 0.00,
+    var itemCount: Double = 1.0,
+    var itemDiscount: Double = 0.0,
     var comment: String = "",
     var time:Long = 0L,
     var invoiceNumber:Int = 0
