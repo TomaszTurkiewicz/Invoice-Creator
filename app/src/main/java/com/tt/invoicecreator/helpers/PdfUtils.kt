@@ -2,7 +2,10 @@ package com.tt.invoicecreator.helpers
 
 import android.content.ContentValues
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Paint
+import android.graphics.Rect
 import android.graphics.pdf.PdfDocument
 import android.net.Uri
 import android.os.Build
@@ -12,10 +15,12 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.tt.invoicecreator.R
 import com.tt.invoicecreator.data.SharedPreferences
+import com.tt.invoicecreator.data.SignatureFile
 import com.tt.invoicecreator.data.room.Invoice
 import java.io.File
 import java.text.DecimalFormat
 import kotlin.math.roundToLong
+import androidx.core.net.toUri
 
 class PdfUtils {
     companion object{
@@ -342,7 +347,31 @@ class PdfUtils {
                 }
             }
 
+            /** signature **/
+            val pic = SignatureFile.getFilePath(context).toUri().path
+            val file = pic?.let {
+                File(it)
+            }
+            if(file!!.exists()){
+                val options = BitmapFactory.Options()
+                options.inPreferredConfig = Bitmap.Config.ARGB_8888
 
+                val signature = BitmapFactory.decodeFile(file.path,options)
+                val width = signature.width
+                val height = signature.height
+                val ratio:Float = width.toFloat()/height.toFloat()
+                val signatureHeight = 40f
+                val signatureWidth = signatureHeight*ratio
+
+                val destRect = Rect(
+                    left.toInt(),
+                    300f.toInt(),
+                    (left + signatureWidth).toInt(),
+                    (300f + signatureHeight).toInt()
+                )
+
+                canvas.drawBitmap(signature,null,destRect,paint)
+            }
 
             pdfDocument.finishPage(page)
 
