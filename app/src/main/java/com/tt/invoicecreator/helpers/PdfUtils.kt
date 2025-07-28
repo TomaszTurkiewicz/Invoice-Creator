@@ -26,7 +26,7 @@ class PdfUtils {
     companion object{
         private const val PAGE_WIDTH = 840
         private const val PAGE_HEIGHT = 1188
-        private const val LEFT_MARGIN = 10f
+        private const val LEFT_MARGIN = 50f
         private const val RIGHT_MARGIN = PAGE_WIDTH- LEFT_MARGIN
         private const val MARGIN_BOTTOM = PAGE_HEIGHT-50f
         private const val DESCRIPTION_RIGHT = 300f
@@ -37,21 +37,14 @@ class PdfUtils {
         private const val TEXT_SMALL = 15f
         private const val TEXT_BIG = 30f
         private const val SEPARATOR_LINE_Y = 140f
-        private const val HEAD_TOP = 200f
-        private const val TABLE_HEIGHT = 40f
+        private const val HEAD_TOP = 300f
+        private const val TABLE_HEIGHT = 60f
 
         fun generatePDF(
             context:Context,
             invoice: Invoice
         ){
             /*
-            todo margin right 50f
-            todo margin left also 50f
-            todo user bald letters
-            todo bill to section bigger
-            todo invoice number move invoice number right a little bit, number and date separate more
-            todo table move down
-            todo item better separation when comment
             todo change color of the table and invoice word
              */
 
@@ -207,13 +200,13 @@ class PdfUtils {
                 canvas.drawText(
                     invoice.item.itemName,
                     LEFT_MARGIN+10f,
-                    HEAD_TOP+(TABLE_HEIGHT*1.45f),
+                    HEAD_TOP+(TABLE_HEIGHT*1.4f),
                     paint
                 )
                 canvas.drawText(
                     invoice.comment,
                     LEFT_MARGIN+10f,
-                    HEAD_TOP+(TABLE_HEIGHT*1.55f),
+                    HEAD_TOP+(TABLE_HEIGHT*1.8f),
                     paint
                 )
             }else{
@@ -351,24 +344,25 @@ class PdfUtils {
         }
 
         private fun drawInvoiceNumberAndDate(canvas: Canvas,paint: Paint,invoice: Invoice) {
+            paint.style = Paint.Style.FILL_AND_STROKE
             canvas.drawText(
                 "Invoice #",
                 PRICE_RIGHT,
-                SEPARATOR_LINE_Y + TEXT_SMALL,
+                SEPARATOR_LINE_Y + (TEXT_SMALL*1.2f),
                 paint
             )
-
+            paint.style = Paint.Style.FILL
             paint.textAlign = Paint.Align.RIGHT
             canvas.drawText(
                 InvoiceNumber.getStringNumber(invoiceNumber = invoice.invoiceNumber, time = invoice.time),
                 RIGHT_MARGIN,
-                SEPARATOR_LINE_Y + TEXT_SMALL,
+                SEPARATOR_LINE_Y + (TEXT_SMALL*1.2f),
                 paint
             )
             canvas.drawText(
                 DateAndTime.convertLongToDate(time = invoice.time),
                 RIGHT_MARGIN,
-                SEPARATOR_LINE_Y + (TEXT_SMALL*1.5f),
+                SEPARATOR_LINE_Y + (TEXT_SMALL*2.5f),
                 paint
             )
 
@@ -381,32 +375,33 @@ class PdfUtils {
             canvas.drawText(
                 "Bill To:",
                 LEFT_MARGIN,
-                SEPARATOR_LINE_Y + TEXT_SMALL,
+                SEPARATOR_LINE_Y + (TEXT_SMALL*1.2f),
                 paint
             )
-            paint.textSize = TEXT_SMALL
+
+            paint.style = Paint.Style.FILL
             canvas.drawText(
                 invoice.client.clientName,
-                LEFT_MARGIN,
-                SEPARATOR_LINE_Y + (TEXT_SMALL*1.5f),
-                paint
-            )
-            canvas.drawText(
-                invoice.client.clientAddress1,
                 LEFT_MARGIN,
                 SEPARATOR_LINE_Y + (TEXT_SMALL*3f),
                 paint
             )
             canvas.drawText(
-                invoice.client.clientAddress2,
+                invoice.client.clientAddress1,
                 LEFT_MARGIN,
                 SEPARATOR_LINE_Y + (TEXT_SMALL*4.5f),
                 paint
             )
             canvas.drawText(
-                invoice.client.clientCity,
+                invoice.client.clientAddress2,
                 LEFT_MARGIN,
                 SEPARATOR_LINE_Y + (TEXT_SMALL*6f),
+                paint
+            )
+            canvas.drawText(
+                invoice.client.clientCity,
+                LEFT_MARGIN,
+                SEPARATOR_LINE_Y + (TEXT_SMALL*7.5f),
                 paint
             )
         }
@@ -431,6 +426,7 @@ class PdfUtils {
         private fun drawUser(context: Context,canvas: Canvas,paint: Paint) {
             paint.textSize = TEXT_SMALL
             paint.color = context.getColor(R.color.black)
+            paint.style = Paint.Style.FILL_AND_STROKE
             paint.textAlign = Paint.Align.LEFT
             canvas.drawText(
                 "Tomasz Turkiewicz",
