@@ -19,6 +19,7 @@ import com.tt.invoicecreator.R
 import com.tt.invoicecreator.data.SharedPreferences
 import com.tt.invoicecreator.data.SignatureFile
 import com.tt.invoicecreator.data.room.Invoice
+import com.tt.invoicecreator.ui.theme.CustomColorsPalette
 import java.io.File
 import java.text.DecimalFormat
 
@@ -126,9 +127,9 @@ class PdfUtils {
                 val signatureWidth = signatureHeight*ratio
 
                 val destRect = Rect(
-                    (RIGHT_MARGIN-signatureWidth).toInt(),
+                    (RIGHT_MARGIN-signatureWidth-50f).toInt(),
                     (MARGIN_BOTTOM-signatureHeight).toInt(),
-                    RIGHT_MARGIN.toInt(),
+                    (RIGHT_MARGIN-50f).toInt(),
                     MARGIN_BOTTOM.toInt()
                 )
 
@@ -148,6 +149,7 @@ class PdfUtils {
 
             val list = SharedPreferences.readPaymentMethod(context)?.split("\n")
 
+            paint.style = Paint.Style.FILL
             if(!list.isNullOrEmpty()){
                 var a = 0f
                 for(item in list){
@@ -165,7 +167,7 @@ class PdfUtils {
 
         private fun drawTotal(context: Context,canvas: Canvas,paint: Paint,invoice: Invoice,decimalFormat: DecimalFormat) {
 
-            paint.color = context.getColor(R.color.teal_200)
+            paint.color = context.getColor(R.color.orange_light)
             paint.style = Paint.Style.FILL_AND_STROKE
             canvas.drawRect(
                 PRICE_RIGHT,
@@ -180,14 +182,14 @@ class PdfUtils {
             canvas.drawText(
                 "Total",
                 DISCOUNT_RIGHT-10f,
-                HEAD_TOP+ TABLE_HEIGHT*2.66f,
+                HEAD_TOP+ TABLE_HEIGHT*2.6f,
                 paint
             )
 
             canvas.drawText(
                 "£"+decimalFormat.format(InvoiceValueCalculator.calculate(invoice)),
                 RIGHT_MARGIN-10f,
-                HEAD_TOP+ TABLE_HEIGHT*2.66f,
+                HEAD_TOP+ TABLE_HEIGHT*2.6f,
                 paint
             )
         }
@@ -222,14 +224,14 @@ class PdfUtils {
             canvas.drawText(
                 invoice.itemCount.toString(),
                 Math.average(DESCRIPTION_RIGHT, QUANTITY_RIGHT),
-                HEAD_TOP+ (TABLE_HEIGHT*1.66f),
+                HEAD_TOP+ (TABLE_HEIGHT*1.6f),
                 paint
             )
 
             canvas.drawText(
                 "£"+decimalFormat.format(invoice.item.itemValue),
                 Math.average(QUANTITY_RIGHT, PRICE_RIGHT),
-                HEAD_TOP+ (TABLE_HEIGHT*1.66f),
+                HEAD_TOP+ (TABLE_HEIGHT*1.6f),
                 paint
             )
             canvas.drawText(
@@ -240,7 +242,7 @@ class PdfUtils {
                 },
 
                 Math.average(PRICE_RIGHT,DISCOUNT_RIGHT),
-                HEAD_TOP+ (TABLE_HEIGHT*1.66f),
+                HEAD_TOP+ (TABLE_HEIGHT*1.6f),
                 paint
             )
             paint.textAlign = Paint.Align.RIGHT
@@ -248,7 +250,7 @@ class PdfUtils {
                 "£"+decimalFormat.format(InvoiceValueCalculator.calculate(invoice)),
 //                InvoiceValueCalculator.calculate(invoice).toString(),
                 RIGHT_MARGIN-10f,
-                HEAD_TOP+ (TABLE_HEIGHT*1.66f),
+                HEAD_TOP+ (TABLE_HEIGHT*1.6f),
                 paint
             )
 
@@ -256,7 +258,7 @@ class PdfUtils {
 
         private fun drawTableHead(context: Context,canvas: Canvas,paint: Paint) {
 
-            paint.color = context.getColor(R.color.teal_200)
+            paint.color = context.getColor(R.color.orange_light)
             canvas.drawRect(
                 LEFT_MARGIN,
                 HEAD_TOP,
@@ -264,7 +266,7 @@ class PdfUtils {
                 HEAD_TOP+ TABLE_HEIGHT,
                 paint
             )
-            paint.color = context.getColor(R.color.purple_200)
+            paint.color = context.getColor(R.color.orange_light)
             paint.style = Paint.Style.STROKE
             canvas.drawRect(
                 LEFT_MARGIN,
@@ -310,34 +312,34 @@ class PdfUtils {
             canvas.drawText(
                 "Description",
                 LEFT_MARGIN+10f,
-                HEAD_TOP+ TABLE_HEIGHT*0.66f,
+                HEAD_TOP+ TABLE_HEIGHT*0.6f,
                 paint
             )
             paint.textAlign = Paint.Align.CENTER
             canvas.drawText(
                 "QTY",
                 Math.average(DESCRIPTION_RIGHT, QUANTITY_RIGHT),
-                HEAD_TOP+ TABLE_HEIGHT*0.66f,
+                HEAD_TOP+ TABLE_HEIGHT*0.6f,
                 paint
             )
 
             canvas.drawText(
                 "Price",
                 Math.average(QUANTITY_RIGHT, PRICE_RIGHT),
-                HEAD_TOP+ TABLE_HEIGHT*0.66f,
+                HEAD_TOP+ TABLE_HEIGHT*0.6f,
                 paint
             )
             canvas.drawText(
                 "Discount",
                 Math.average(PRICE_RIGHT,DISCOUNT_RIGHT),
-                HEAD_TOP+ TABLE_HEIGHT*0.66f,
+                HEAD_TOP+ TABLE_HEIGHT*0.6f,
                 paint
             )
             paint.textAlign = Paint.Align.RIGHT
             canvas.drawText(
                 "Amount",
                 RIGHT_MARGIN-10f,
-                HEAD_TOP+ TABLE_HEIGHT*0.66f,
+                HEAD_TOP+ TABLE_HEIGHT*0.6f,
                 paint
             )
 
@@ -407,13 +409,13 @@ class PdfUtils {
         }
 
         private fun drawSeparatorLine(context: Context, canvas: Canvas, paint: Paint) {
-            paint.color = context.getColor(R.color.teal_700)
+            paint.color = context.getColor(R.color.orange)
             canvas.drawLine(LEFT_MARGIN, SEPARATOR_LINE_Y, RIGHT_MARGIN, SEPARATOR_LINE_Y,paint)
         }
 
         private fun drawInvoiceWord(context: Context,canvas: Canvas,paint: Paint) {
             paint.textSize = TEXT_BIG
-            paint.color = context.getColor(R.color.purple_500)
+            paint.color = context.getColor(R.color.orange)
             paint.textAlign = Paint.Align.RIGHT
             canvas.drawText(
                 "INVOICE",

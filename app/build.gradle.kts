@@ -66,4 +66,7 @@ dependencies {
     implementation (libs.androidx.room.ktx)
     implementation (libs.androidx.runtime.livedata)
     ksp (libs.androidx.room.compiler)
+
+    //Theme and my palette
+    implementation (libs.accompanist.systemuicontroller)
 }
