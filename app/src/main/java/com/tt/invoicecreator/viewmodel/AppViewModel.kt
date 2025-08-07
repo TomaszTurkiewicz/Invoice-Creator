@@ -12,6 +12,10 @@ import com.tt.invoicecreator.data.room.ItemDao
 import com.tt.invoicecreator.data.room.OfflineClientRepository
 import com.tt.invoicecreator.data.room.OfflineInvoiceRepository
 import com.tt.invoicecreator.data.room.OfflineItemRepository
+import com.tt.invoicecreator.data.roomV2.ClientDaoV2
+import com.tt.invoicecreator.data.roomV2.InvoiceDaoV2
+import com.tt.invoicecreator.data.roomV2.InvoiceItemDaoV2
+import com.tt.invoicecreator.data.roomV2.ItemDaoV2
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,7 +23,11 @@ import kotlinx.coroutines.launch
 class AppViewModel(
     itemDao: ItemDao,
     clientDao: ClientDao,
-    invoiceDao: InvoiceDao
+    invoiceDao: InvoiceDao,
+    itemDaoV2: ItemDaoV2,
+    clientDaoV2: ClientDaoV2,
+    invoiceItemDaoV2: InvoiceItemDaoV2,
+    invoiceDaoV2: InvoiceDaoV2
 ) : ViewModel() {
     private val itemRepository:OfflineItemRepository = OfflineItemRepository(itemDao)
     private val clientRepository: OfflineClientRepository = OfflineClientRepository(clientDao)

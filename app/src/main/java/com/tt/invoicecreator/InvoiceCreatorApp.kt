@@ -21,7 +21,9 @@ import com.tt.invoicecreator.ui.screens.AddInvoiceScreen
 import com.tt.invoicecreator.ui.screens.AddItemScreen
 import com.tt.invoicecreator.ui.screens.ChooseClientScreen
 import com.tt.invoicecreator.ui.screens.ChooseItemScreen
+import com.tt.invoicecreator.ui.screens.ChooseModeScreen
 import com.tt.invoicecreator.ui.screens.InvoicesScreen
+import com.tt.invoicecreator.ui.screens.InvoicesScreenV2
 import com.tt.invoicecreator.viewmodel.AppViewModel
 
 @Composable
@@ -35,7 +37,7 @@ fun InvoiceCreatorApp (
     val backStackEntry by navController.currentBackStackEntryAsState()
 
     val currentScreen = InvoiceCreatorScreen.valueOf(
-        backStackEntry?.destination?.route ?: InvoiceCreatorScreen.Invoices.name
+        backStackEntry?.destination?.route ?: InvoiceCreatorScreen.ChooseMode.name
     )
 
     var appBarState by remember {
@@ -55,7 +57,7 @@ fun InvoiceCreatorApp (
         innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = InvoiceCreatorScreen.Invoices.name,
+            startDestination = InvoiceCreatorScreen.ChooseMode.name,
             modifier = Modifier.padding(innerPadding)
         ){
             composable(route = InvoiceCreatorScreen.Invoices.name) {
@@ -110,6 +112,22 @@ fun InvoiceCreatorApp (
 
             composable(route = InvoiceCreatorScreen.AddItem.name) {
                 AddItemScreen(
+                    viewModel = viewModel,
+                    ignoredOnComposing = {
+                        appBarState = it
+                    },
+                    navController = navController
+                )
+            }
+
+            composable(route = InvoiceCreatorScreen.ChooseMode.name) {
+                ChooseModeScreen(
+                    navController = navController
+                )
+            }
+
+            composable(route = InvoiceCreatorScreen.InvoicesV2.name) {
+                InvoicesScreenV2(
                     viewModel = viewModel,
                     ignoredOnComposing = {
                         appBarState = it

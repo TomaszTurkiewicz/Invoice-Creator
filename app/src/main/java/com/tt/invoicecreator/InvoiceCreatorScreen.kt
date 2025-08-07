@@ -8,5 +8,7 @@ enum class InvoiceCreatorScreen(@StringRes val title:Int) {
     ChooseClient(title = R.string.choose_client),
     AddClient(title = R.string.add_client),
     ChooseItem(title = R.string.choose_item),
-    AddItem(title = R.string.add_item)
+    AddItem(title = R.string.add_item),
+    ChooseMode(title = R.string.choose_mode),
+    InvoicesV2(title = R.string.invoicesV2)
 }

@@ -36,4 +36,17 @@ object SharedPreferences {
             userCity = sp.getString("userCity", "")
         )
     }
+
+    fun saveOneItemMode(context: Context, oneItemMode:Boolean){
+        val sp = context.getSharedPreferences("ONE_ITEM_MODE", Context.MODE_PRIVATE)
+        sp.edit {
+            putBoolean("one_item_mode", oneItemMode)
+        }
+    }
+
+    fun readOneItemMode(context: Context):Boolean{
+        val sp = context.getSharedPreferences("ONE_ITEM_MODE", Context.MODE_PRIVATE)
+        return sp.getBoolean("one_item_mode", true)
+    }
+
 }
