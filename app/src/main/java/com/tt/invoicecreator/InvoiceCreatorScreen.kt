@@ -10,5 +10,6 @@ enum class InvoiceCreatorScreen(@StringRes val title:Int) {
     ChooseItem(title = R.string.choose_item),
     AddItem(title = R.string.add_item),
     ChooseMode(title = R.string.choose_mode),
-    InvoicesV2(title = R.string.invoicesV2)
+    InvoicesV2(title = R.string.invoicesV2),
+    AddInvoiceV2(title = R.string.add_invoiceV2)
 }

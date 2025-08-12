@@ -18,6 +18,7 @@ import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.ui.app_bar.TopAppBarWithAction
 import com.tt.invoicecreator.ui.screens.AddClientScreen
 import com.tt.invoicecreator.ui.screens.AddInvoiceScreen
+import com.tt.invoicecreator.ui.screens.AddInvoiceV2
 import com.tt.invoicecreator.ui.screens.AddItemScreen
 import com.tt.invoicecreator.ui.screens.ChooseClientScreen
 import com.tt.invoicecreator.ui.screens.ChooseItemScreen
@@ -134,6 +135,10 @@ fun InvoiceCreatorApp (
                     },
                     navController = navController
                 )
+            }
+
+            composable(route = InvoiceCreatorScreen.AddInvoiceV2.name) {
+                AddInvoiceV2()
             }
 
         }

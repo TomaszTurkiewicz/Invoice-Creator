@@ -4,6 +4,7 @@
     <string name="database">database</string>
     <string name="invoices">INVOICES</string>
     <string name="add_invoice">ADD INVOICE</string>
+    <string name="add_invoiceV2">ADD INVOICE V2.0</string>
     <string name="choose_client">CHOOSE CLIENT</string>
     <string name="add_client">ADD CLIENT</string>
     <string name="choose_item">CHOOSE ITEM</string>

@@ -42,7 +42,7 @@ fun InvoicesScreen (
         mutableStateOf(Invoice())
     }
 
-    val content = LocalContext.current
+    val context = LocalContext.current
 
 
     LaunchedEffect(key1 = true) {
@@ -89,7 +89,7 @@ fun InvoicesScreen (
 
     if(printInvoiceAlertDialog.value){
         PrintInvoiceAlertDialog(
-            context = content,
+            context = context,
             invoice = invoice.value,
             onDismissRequest = {
                  printInvoiceAlertDialog.value = false
