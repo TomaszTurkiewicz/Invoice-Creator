@@ -112,6 +112,17 @@ class AppViewModel(
         }
     }
 
+    fun saveInvoiceV2(){
+        coroutine.launch {
+            invoiceRepositoryV2.insertInvoice(invoiceV2)
+
+            invoiceItems.forEach{
+                item ->
+                invoiceItemRepositoryV2.insertInvoiceItem(item)
+            }
+        }
+    }
+
     fun cleanInvoice() {
         this.invoice = Invoice()
         this.calculateNumber = true
@@ -123,8 +134,6 @@ class AppViewModel(
         this.calculateNumber = true
     }
 
-    fun saveInvoiceV2(){
-        //todo !!!
-    }
+
 
 }

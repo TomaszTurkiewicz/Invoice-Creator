@@ -149,7 +149,6 @@ fun AddInvoiceScreenV2(
                     )
                 }
             }else{
-                val a = 1
                 EmptyItemCardViewV2(
                     position = if(itemInvoiceList.isEmpty()) 1 else itemInvoiceList.size+1,
                     showPosition = true,
