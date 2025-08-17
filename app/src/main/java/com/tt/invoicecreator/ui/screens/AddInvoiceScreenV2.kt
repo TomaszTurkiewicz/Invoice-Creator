@@ -32,6 +32,9 @@ import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.data.SharedPreferences
 import com.tt.invoicecreator.data.SignatureFile
 import com.tt.invoicecreator.helpers.InvoiceNumber
+import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogInvoiceNumberV2
+import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogPaymentMethod
+import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogSignature
 import com.tt.invoicecreator.ui.components.ClientCardViewV2
 import com.tt.invoicecreator.ui.components.InvoiceNumberCardView
 import com.tt.invoicecreator.ui.components.ItemCardViewV2
@@ -191,7 +194,8 @@ fun AddInvoiceScreenV2(
                 }
             )
             Button(
-                enabled = viewModel.getInvoiceV2().client.clientName!="" && viewModel.getInvoiceItemList().size !=0,
+                enabled = viewModel.getInvoiceV2().client.clientName!="" && viewModel.getInvoiceItemList()
+                    .isNotEmpty(),
                 onClick ={
                     viewModel.saveInvoiceV2()
                     navController.navigateUp()
@@ -202,9 +206,30 @@ fun AddInvoiceScreenV2(
             ) {
                 Text(text = "SAVE")
             }
-
-
-
-
         }
+
+    if(invoiceNumberAlertDialog.value){
+        AlertDialogInvoiceNumberV2(
+            onDismissRequest = {
+                invoiceNumberAlertDialog.value = false
+            },
+            viewModel = viewModel
+        )
+    }
+
+    if(invoicePaymentMethodAlertDialog.value){
+        AlertDialogPaymentMethod (
+            onDismissRequest = {
+                invoicePaymentMethodAlertDialog.value = false
+            }
+        )
+    }
+
+    if(invoiceSignatureAlertDialog.value){
+        AlertDialogSignature (
+            onDismissRequest = {
+                invoiceSignatureAlertDialog.value = false
+            }
+        )
+    }
 }
