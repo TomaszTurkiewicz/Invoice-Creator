@@ -37,6 +37,7 @@ import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogInvoiceNumberV2
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogPaymentMethod
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogSignature
 import com.tt.invoicecreator.ui.components.ClientCardViewV2
+import com.tt.invoicecreator.ui.components.EmptyItemCardViewV2
 import com.tt.invoicecreator.ui.components.InvoiceNumberCardView
 import com.tt.invoicecreator.ui.components.ItemCardViewV2
 import com.tt.invoicecreator.ui.components.PaymentMethodCardView
@@ -52,7 +53,9 @@ fun AddInvoiceScreenV2(
 ) {
     val invoiceList by viewModel.invoiceListV2.observeAsState()
 
-    val invoiceItemList by viewModel.invoiceItemListV2.observeAsState()
+//    val invoiceItemList by viewModel.invoiceItemListV2.observeAsState()
+
+    val itemInvoiceList = viewModel.getInvoiceItemList()
 
     val time = remember {
         mutableLongStateOf(0L)
@@ -129,49 +132,31 @@ fun AddInvoiceScreenV2(
                     navController.navigate(InvoiceCreatorScreen.ChooseClientV2.name)
                 }
             )
-
-            ItemCardViewV2(
-                viewModel = viewModel,
-                position = 0,
-                showPosition = !SharedPreferences.readOneItemMode(context),
-                onClick = {
-                    // todo choose item screen
-                }
-            )
-
-            for(i in 1..positionCount.intValue){
+            itemInvoiceList.forEach{ itemInvoice ->
                 ItemCardViewV2(
-                    viewModel = viewModel,
-                    position = i,
-                    showPosition = !SharedPreferences.readOneItemMode(context),
-                    onClick = {
-                        // todo choose item screen
-                    }
+                    itemInvoice
                 )
             }
 
-            if(!SharedPreferences.readOneItemMode(context)){
-                val enable = if(viewModel.getInvoiceItemList().isEmpty()){
-                    false
-                }else{
-                    if(viewModel.getInvoiceItemList().size<=positionCount.intValue){
-                        false
-                    }else{
-                        viewModel.getInvoiceItemList()[positionCount.intValue].itemV2.itemName != ""
-                    }
-                }
-
-                Button(
-                    onClick = {
-                        positionCount.intValue +=1
-                    },
-                    enabled = enable
-                ) {
-                    Text(
-                        text = "add item"
+            if(SharedPreferences.readOneItemMode(context)){
+                if(itemInvoiceList.isEmpty()){
+                    EmptyItemCardViewV2(
+                        position = 0,
+                        showPosition = false,
+                        onClick = {
+                            navController.navigate(InvoiceCreatorScreen.ChooseItemV2.name)
+                        }
                     )
                 }
-
+            }else{
+                val a = 1
+                EmptyItemCardViewV2(
+                    position = if(itemInvoiceList.isEmpty()) 1 else itemInvoiceList.size+1,
+                    showPosition = true,
+                    onClick = {
+                        navController.navigate(InvoiceCreatorScreen.ChooseItemV2.name)
+                    }
+                )
             }
 
             PaymentMethodCardView(

@@ -14,114 +14,81 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.tt.invoicecreator.data.roomV2.InvoiceItemV2
 import com.tt.invoicecreator.viewmodel.AppViewModel
 
 @Composable
 fun ItemCardViewV2(
-    viewModel: AppViewModel,
-    position:Int,
-    showPosition:Boolean,
-    onClick: () -> Unit
+    invoiceItemV2: InvoiceItemV2
 ) {
     Card(
         shape = RoundedCornerShape(20.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(10.dp)
-            .clickable {
-                onClick()
-            },
+            .padding(10.dp),
         colors = CardDefaults.cardColors(containerColor = Color.LightGray),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
-
-        if(viewModel.getInvoiceItemList().isEmpty()){
-            Text(
-                text = if(showPosition)"Item: ${position+1} not chosen yet" else "Item not chosen yet",
-                fontWeight = FontWeight.W700,
-                modifier = Modifier
-                    .fillMaxWidth(0.7f)
-                    .padding(5.dp)
-            )
-
-        }else{
-
-            if(viewModel.getInvoiceItemList().size>=position){
-                Row(
-                    modifier = Modifier
-                        .padding(24.dp)
-                )
-                {
-
-
-                    Column {
-                        Row {
-                            Text(
-                                text = viewModel.getInvoiceItemList()[position].itemV2.itemName,
-                                fontWeight = FontWeight.W700,
-                                modifier = Modifier
-                                    .fillMaxWidth(0.7f)
-                                    .padding(5.dp)
-                            )
-                            Text(
-                                text = viewModel.getInvoiceItemList()[position].itemCount.toString(),
-                                fontWeight = FontWeight.W500,
-                                modifier = Modifier
-                                    .fillMaxWidth(0.4f)
-                                    .padding(5.dp)
-                            )
-                            Text(
-                                text = "x",
-                                fontWeight = FontWeight.W500,
-                                modifier = Modifier
-                                    .fillMaxWidth(0.2f)
-                                    .padding(5.dp)
-                            )
-                            Text(
-                                text = viewModel.getInvoiceItemList()[position].itemV2.itemValue.toString(),
-                                fontWeight = FontWeight.W500,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(5.dp)
-                            )
-                        }
-                        Row {
-                            Text(
-                                text = "discount",
-                                fontWeight = FontWeight.W100,
-                                modifier = Modifier
-                                    .padding(5.dp)
-                            )
-                            Text(
-                                text = ":",
-                                fontWeight = FontWeight.W100,
-                                modifier = Modifier
-                                    .padding(5.dp)
-                            )
-                            Text(
-                                text = viewModel.getInvoiceItemList()[position].itemDiscount.toString(),
-                                fontWeight = FontWeight.W100,
-                                modifier = Modifier
-                                    .padding(5.dp)
-                            )
-                        }
-                        Text(
-                            text = viewModel.getInvoiceItemList()[position].comment,
-                            fontWeight = FontWeight.W100,
-                            modifier = Modifier
-                                .padding(5.dp)
-                        )
-                    }
-
-
-
+        Row(
+            modifier = Modifier
+                .padding(24.dp)
+        )
+        {
+            Column {
+                Row {
+                    Text(
+                        text =invoiceItemV2.itemV2.itemName,
+                        fontWeight = FontWeight.W700,
+                        modifier = Modifier
+                            .fillMaxWidth(0.7f)
+                            .padding(5.dp)
+                    )
+                    Text(
+                        text = invoiceItemV2.itemCount.toString(),
+                        fontWeight = FontWeight.W500,
+                        modifier = Modifier
+                            .fillMaxWidth(0.4f)
+                            .padding(5.dp)
+                    )
+                    Text(
+                        text = "x",
+                        fontWeight = FontWeight.W500,
+                        modifier = Modifier
+                            .fillMaxWidth(0.2f)
+                            .padding(5.dp)
+                    )
+                    Text(
+                        text = invoiceItemV2.itemV2.itemValue.toString(),
+                        fontWeight = FontWeight.W500,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(5.dp)
+                    )
                 }
-            }else{
+                Row {
+                    Text(
+                        text = "discount",
+                        fontWeight = FontWeight.W100,
+                        modifier = Modifier
+                            .padding(5.dp)
+                    )
+                    Text(
+                        text = ":",
+                        fontWeight = FontWeight.W100,
+                        modifier = Modifier
+                            .padding(5.dp)
+                    )
+                    Text(
+                        text = invoiceItemV2.itemDiscount.toString(),
+                        fontWeight = FontWeight.W100,
+                        modifier = Modifier
+                            .padding(5.dp)
+                    )
+                }
                 Text(
-                    text = if(showPosition)"Item: ${position+1} not chosen yet" else "Item not chosen yet",
-                    fontWeight = FontWeight.W700,
+                    text = invoiceItemV2.comment,
+                    fontWeight = FontWeight.W100,
                     modifier = Modifier
-                        .fillMaxWidth(0.7f)
                         .padding(5.dp)
                 )
             }

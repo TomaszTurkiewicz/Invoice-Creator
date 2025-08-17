@@ -60,7 +60,7 @@ class AppViewModel(
     private val coroutine = CoroutineScope(Dispatchers.Main)
     private var invoice = Invoice()
 
-    private val invoiceItems: List<InvoiceItemV2> = mutableListOf()
+    private val invoiceItems: ArrayList<InvoiceItemV2> = ArrayList<InvoiceItemV2>()
 
     var paymentMethod:String = ""
 
@@ -68,6 +68,10 @@ class AppViewModel(
 
     fun getInvoice(): Invoice{
         return this.invoice
+    }
+
+    fun addItemToInvoice(invoiceItemV2: InvoiceItemV2){
+        invoiceItems.add(invoiceItemV2)
     }
 
     fun getInvoiceItemList():List<InvoiceItemV2>{
@@ -81,6 +85,12 @@ class AppViewModel(
     fun saveItem(item: Item){
         coroutine.launch {
             itemRepository.insertItem(item)
+        }
+    }
+
+    fun saveItemV2(item: ItemV2){
+        coroutine.launch {
+            itemRepositoryV2.insertItem(item)
         }
     }
 
@@ -109,6 +119,7 @@ class AppViewModel(
 
     fun cleanInvoiceV2() {
         this.invoiceV2 = InvoiceV2()
+        this.invoiceItems.clear()
         this.calculateNumber = true
     }
 

@@ -14,5 +14,7 @@
     <string name="databaseV2">databaseV2</string>
     <string name="choose_client_v2">CHOOSE CLIENT V2</string>
     <string name="add_client_v2">ADD CLIENT V2</string>
+    <string name="choose_item_v2">CHOOSE ITEM V2</string>
+    <string name="add_item_V2">ADD ITEM V2</string>
 
 </resources>

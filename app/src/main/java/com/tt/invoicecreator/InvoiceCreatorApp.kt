@@ -21,9 +21,11 @@ import com.tt.invoicecreator.ui.screens.AddClientScreenV2
 import com.tt.invoicecreator.ui.screens.AddInvoiceScreen
 import com.tt.invoicecreator.ui.screens.AddInvoiceScreenV2
 import com.tt.invoicecreator.ui.screens.AddItemScreen
+import com.tt.invoicecreator.ui.screens.AddItemScreenV2
 import com.tt.invoicecreator.ui.screens.ChooseClientScreen
 import com.tt.invoicecreator.ui.screens.ChooseClientScreenV2
 import com.tt.invoicecreator.ui.screens.ChooseItemScreen
+import com.tt.invoicecreator.ui.screens.ChooseItemScreenV2
 import com.tt.invoicecreator.ui.screens.ChooseModeScreen
 import com.tt.invoicecreator.ui.screens.InvoicesScreen
 import com.tt.invoicecreator.ui.screens.InvoicesScreenV2
@@ -113,8 +115,28 @@ fun InvoiceCreatorApp (
                 )
             }
 
+            composable(route = InvoiceCreatorScreen.ChooseItemV2.name) {
+                ChooseItemScreenV2(
+                    viewModel = viewModel,
+                    ignoredOnComposing = {
+                        appBarState = it
+                    },
+                    navController = navController
+                )
+            }
+
             composable(route = InvoiceCreatorScreen.AddItem.name) {
                 AddItemScreen(
+                    viewModel = viewModel,
+                    ignoredOnComposing = {
+                        appBarState = it
+                    },
+                    navController = navController
+                )
+            }
+
+            composable(route = InvoiceCreatorScreen.AddItemV2.name) {
+                AddItemScreenV2(
                     viewModel = viewModel,
                     ignoredOnComposing = {
                         appBarState = it
