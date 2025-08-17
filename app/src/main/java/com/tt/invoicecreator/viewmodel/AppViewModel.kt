@@ -118,6 +118,7 @@ class AppViewModel(
 
             invoiceItems.forEach{
                 item ->
+                item.invoiceNumber = invoiceV2.invoiceNumber
                 invoiceItemRepositoryV2.insertInvoiceItem(item)
             }
         }

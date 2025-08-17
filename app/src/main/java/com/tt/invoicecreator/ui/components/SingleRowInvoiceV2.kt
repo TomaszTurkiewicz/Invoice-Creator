@@ -13,13 +13,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.tt.invoicecreator.data.room.Invoice
+import com.tt.invoicecreator.data.roomV2.InvoiceItemV2
 import com.tt.invoicecreator.data.roomV2.InvoiceV2
 import com.tt.invoicecreator.helpers.DateAndTime
+import com.tt.invoicecreator.helpers.InvoiceNumber
 import com.tt.invoicecreator.helpers.InvoiceValueCalculator
 
 @Composable
 fun SingleRowInvoiceV2(
     invoice: InvoiceV2,
+    invoiceItems:List<InvoiceItemV2>,
     invoiceChosen: (InvoiceV2) -> Unit
 ) {
     Card(
@@ -38,7 +41,8 @@ fun SingleRowInvoiceV2(
                 .fillMaxWidth()
         ){
             Text(
-                text = "number: ${invoice.invoiceNumber}"
+//                text = "number: ${invoice.invoiceNumber}"
+                text = "number: ${InvoiceNumber.getStringNumber(invoice.invoiceNumber,invoice.time)}"
             )
             Text(
                 text = "date: ${DateAndTime.convertLongToDate(invoice.time)}"
@@ -48,7 +52,7 @@ fun SingleRowInvoiceV2(
             )
             Text(
 //                text = "value: ${InvoiceValueCalculator.calculate(invoice)}"
-                text = "value: TODO"
+                text = "value: ${InvoiceValueCalculator.calculateV2(invoiceItems)}"
             )
         }
     }

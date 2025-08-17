@@ -35,6 +35,8 @@ fun InvoicesScreenV2(
 ) {
     val invoiceListV2 by viewModel.invoiceListV2.observeAsState()
 
+    val invoiceItemsCollection by viewModel.invoiceItemListV2.observeAsState()
+
     val printInvoiceAlertDialog = remember {
         mutableStateOf(false)
     }
@@ -77,6 +79,8 @@ fun InvoicesScreenV2(
         }
         else{
             ListOfInvoicesV2(
+                viewModel = viewModel,
+                itemList = invoiceItemsCollection!!,
                 list = invoiceListV2!!,
                 invoiceChosen = {
                     invoice.value = it
