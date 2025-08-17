@@ -60,12 +60,22 @@ class AppViewModel(
     private val coroutine = CoroutineScope(Dispatchers.Main)
     private var invoice = Invoice()
 
+    private val invoiceItems: List<InvoiceItemV2> = mutableListOf()
+
     var paymentMethod:String = ""
 
     var calculateNumber = true
 
     fun getInvoice(): Invoice{
         return this.invoice
+    }
+
+    fun getInvoiceItemList():List<InvoiceItemV2>{
+        return this.invoiceItems
+    }
+
+    fun getInvoiceV2(): InvoiceV2{
+        return this.invoiceV2
     }
 
     fun saveItem(item: Item){
@@ -94,6 +104,10 @@ class AppViewModel(
     fun cleanInvoiceV2() {
         this.invoiceV2 = InvoiceV2()
         this.calculateNumber = true
+    }
+
+    fun saveInvoiceV2(){
+        //todo !!!
     }
 
 }

@@ -1,0 +1,210 @@
+package com.tt.invoicecreator.ui.screens
+
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
+import androidx.navigation.NavController
+import com.tt.invoicecreator.data.AppBarState
+import com.tt.invoicecreator.data.SharedPreferences
+import com.tt.invoicecreator.data.SignatureFile
+import com.tt.invoicecreator.helpers.InvoiceNumber
+import com.tt.invoicecreator.ui.components.ClientCardViewV2
+import com.tt.invoicecreator.ui.components.InvoiceNumberCardView
+import com.tt.invoicecreator.ui.components.ItemCardViewV2
+import com.tt.invoicecreator.ui.components.PaymentMethodCardView
+import com.tt.invoicecreator.ui.components.SignatureCardView
+import com.tt.invoicecreator.viewmodel.AppViewModel
+import java.io.File
+
+@Composable
+fun AddInvoiceScreenV2(
+    viewModel: AppViewModel,
+    ignoredOnComposing: (AppBarState) -> Unit,
+    navController: NavController
+) {
+    val invoiceList by viewModel.invoiceListV2.observeAsState()
+
+    val invoiceItemList by viewModel.invoiceItemListV2.observeAsState()
+
+    val time = remember {
+        mutableLongStateOf(0L)
+    }
+
+    val positionCount = remember {
+        mutableIntStateOf(0)
+    }
+
+    val invoiceNumberAlertDialog = remember {
+        mutableStateOf(false)
+    }
+
+    val invoicePaymentMethodAlertDialog = remember {
+        mutableStateOf(false)
+    }
+
+    val invoiceSignatureAlertDialog = remember {
+        mutableStateOf(false)
+    }
+
+    val image = remember {
+        mutableStateOf<Bitmap?>(null)
+    }
+
+    val context = LocalContext.current
+    viewModel.paymentMethod = SharedPreferences.readPaymentMethod(context) ?: ""
+
+    LaunchedEffect(key1 = true) {
+        ignoredOnComposing(
+            AppBarState(
+                action = {
+                    Row {
+                        IconButton(onClick = {
+                            //todo
+                        }) {
+                            Icon(Icons.Default.Settings,null)
+                        }
+                    }
+
+                }
+            )
+        )
+    }
+
+    LaunchedEffect(key1 = true) {
+        time.longValue = System.currentTimeMillis()
+        viewModel.getInvoiceV2().time = time.longValue
+
+        if (viewModel.calculateNumber) {
+            viewModel.getInvoiceV2().invoiceNumber = InvoiceNumber.getNewNumberV2(viewModel.getInvoiceV2().time,invoiceList)
+        }
+    }
+
+    val pic = SignatureFile.getFilePath(context).toUri().path
+    val file = pic?.let {
+        File(it)
+    }
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ){
+            InvoiceNumberCardView(
+                number = viewModel.getInvoiceV2().invoiceNumber,
+                time = time.longValue
+            ){
+                invoiceNumberAlertDialog.value = true
+            }
+            ClientCardViewV2(
+                viewModel = viewModel,
+                onClick = {
+                    // todo navigate to choose client screen V2
+                }
+            )
+
+            ItemCardViewV2(
+                viewModel = viewModel,
+                position = 0,
+                showPosition = !SharedPreferences.readOneItemMode(context),
+                onClick = {
+                    // todo choose item screen
+                }
+            )
+
+            for(i in 1..positionCount.intValue){
+                ItemCardViewV2(
+                    viewModel = viewModel,
+                    position = i,
+                    showPosition = !SharedPreferences.readOneItemMode(context),
+                    onClick = {
+                        // todo choose item screen
+                    }
+                )
+            }
+
+            if(!SharedPreferences.readOneItemMode(context)){
+                val enable = if(viewModel.getInvoiceItemList().isEmpty()){
+                    false
+                }else{
+                    if(viewModel.getInvoiceItemList().size<=positionCount.intValue){
+                        false
+                    }else{
+                        viewModel.getInvoiceItemList()[positionCount.intValue].itemV2.itemName != ""
+                    }
+                }
+
+                Button(
+                    onClick = {
+                        positionCount.intValue +=1
+                    },
+                    enabled = enable
+                ) {
+                    Text(
+                        text = "add item"
+                    )
+                }
+
+            }
+
+            PaymentMethodCardView(
+                onClick = {
+                    invoicePaymentMethodAlertDialog.value = true
+                },
+                paymentMethod = viewModel.paymentMethod
+            )
+
+            SignatureCardView(
+                onClick = {
+                    invoiceSignatureAlertDialog.value = true
+                },
+                imageBitmap = if(file!!.exists()){
+                    val options = BitmapFactory.Options()
+                    options.inPreferredConfig = Bitmap.Config.ARGB_8888
+                    image.value = BitmapFactory.decodeFile(file.path,options)
+                    image.value
+                }else{
+                    null
+                }
+            )
+            Button(
+                enabled = viewModel.getInvoiceV2().client.clientName!="" && viewModel.getInvoiceItemList().size !=0,
+                onClick ={
+                    viewModel.saveInvoiceV2()
+                    navController.navigateUp()
+                },
+                modifier = Modifier
+                    .padding(5.dp)
+                    .fillMaxWidth()
+            ) {
+                Text(text = "SAVE")
+            }
+
+
+
+
+        }
+}
