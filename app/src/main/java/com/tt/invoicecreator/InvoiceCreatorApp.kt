@@ -17,10 +17,12 @@ import androidx.navigation.compose.rememberNavController
 import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.ui.app_bar.TopAppBarWithAction
 import com.tt.invoicecreator.ui.screens.AddClientScreen
+import com.tt.invoicecreator.ui.screens.AddClientScreenV2
 import com.tt.invoicecreator.ui.screens.AddInvoiceScreen
 import com.tt.invoicecreator.ui.screens.AddInvoiceScreenV2
 import com.tt.invoicecreator.ui.screens.AddItemScreen
 import com.tt.invoicecreator.ui.screens.ChooseClientScreen
+import com.tt.invoicecreator.ui.screens.ChooseClientScreenV2
 import com.tt.invoicecreator.ui.screens.ChooseItemScreen
 import com.tt.invoicecreator.ui.screens.ChooseModeScreen
 import com.tt.invoicecreator.ui.screens.InvoicesScreen
@@ -139,6 +141,26 @@ fun InvoiceCreatorApp (
 
             composable(route = InvoiceCreatorScreen.AddInvoiceV2.name) {
                 AddInvoiceScreenV2(
+                    viewModel = viewModel,
+                    ignoredOnComposing = {
+                        appBarState = it
+                    },
+                    navController = navController
+                )
+            }
+
+            composable(route = InvoiceCreatorScreen.ChooseClientV2.name) {
+                ChooseClientScreenV2(
+                    viewModel = viewModel,
+                    ignoredOnComposing = {
+                        appBarState = it
+                    },
+                    navController = navController
+                )
+            }
+
+            composable(route = InvoiceCreatorScreen.AddClientV2.name) {
+                AddClientScreenV2(
                     viewModel = viewModel,
                     ignoredOnComposing = {
                         appBarState = it

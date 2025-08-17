@@ -12,5 +12,7 @@
     <string name="choose_mode">CHOOSE MODE</string>
     <string name="invoicesV2">INVOICES V2.0</string>
     <string name="databaseV2">databaseV2</string>
+    <string name="choose_client_v2">CHOOSE CLIENT V2</string>
+    <string name="add_client_v2">ADD CLIENT V2</string>
 
 </resources>

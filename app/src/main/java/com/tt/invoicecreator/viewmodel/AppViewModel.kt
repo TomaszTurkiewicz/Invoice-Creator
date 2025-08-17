@@ -90,6 +90,12 @@ class AppViewModel(
         }
     }
 
+    fun saveClientV2(clientV2: ClientV2){
+        coroutine.launch {
+            clientRepositoryV2.insertClient(clientV2)
+        }
+    }
+
     fun saveInvoice(){
         coroutine.launch {
             invoiceRepository.insertInvoice(invoice)

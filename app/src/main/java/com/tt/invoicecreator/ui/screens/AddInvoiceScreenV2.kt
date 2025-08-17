@@ -28,6 +28,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.navigation.NavController
+import com.tt.invoicecreator.InvoiceCreatorScreen
 import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.data.SharedPreferences
 import com.tt.invoicecreator.data.SignatureFile
@@ -125,7 +126,7 @@ fun AddInvoiceScreenV2(
             ClientCardViewV2(
                 viewModel = viewModel,
                 onClick = {
-                    // todo navigate to choose client screen V2
+                    navController.navigate(InvoiceCreatorScreen.ChooseClientV2.name)
                 }
             )
 
