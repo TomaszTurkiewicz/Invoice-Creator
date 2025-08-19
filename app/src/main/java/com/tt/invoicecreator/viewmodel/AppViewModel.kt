@@ -66,6 +66,9 @@ class AppViewModel(
 
     var calculateNumber = true
 
+    var invoiceForPrinting = InvoiceV2()
+    var listOfItemsForPrinting = ArrayList<InvoiceItemV2>()
+
     fun getInvoice(): Invoice{
         return this.invoice
     }
@@ -114,11 +117,11 @@ class AppViewModel(
 
     fun saveInvoiceV2(){
         coroutine.launch {
-            invoiceRepositoryV2.insertInvoice(invoiceV2)
+            val id = invoiceRepositoryV2.insertInvoice(invoiceV2)
 
             invoiceItems.forEach{
                 item ->
-                item.invoiceNumber = invoiceV2.invoiceNumber
+                item.invoiceId = id.toInt()
                 invoiceItemRepositoryV2.insertInvoiceItem(item)
             }
         }

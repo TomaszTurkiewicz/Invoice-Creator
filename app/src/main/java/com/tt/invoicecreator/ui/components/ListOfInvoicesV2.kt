@@ -16,7 +16,8 @@ fun ListOfInvoicesV2(
     viewModel: AppViewModel,
     list:List<InvoiceV2>,
     itemList:List<InvoiceItemV2>,
-    invoiceChosen: (InvoiceV2) -> Unit
+    invoiceChosen: (InvoiceV2) -> Unit,
+    itemsChosen: (List<InvoiceItemV2>) -> Unit
 ) {
 
 
@@ -29,7 +30,7 @@ fun ListOfInvoicesV2(
         ){
             invoice ->
             val invoiceItems = itemList.filter {
-                it.invoiceNumber == invoice.invoiceNumber
+                it.invoiceId == invoice.invoiceId
             }
 
             SingleRowInvoiceV2(
@@ -37,6 +38,9 @@ fun ListOfInvoicesV2(
                 invoiceItems = invoiceItems,
                 invoiceChosen = {
                     invoiceChosen(it)
+                },
+                itemsChosen = {
+                    itemsChosen(it)
                 }
             )
         }

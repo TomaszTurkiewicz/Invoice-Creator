@@ -13,7 +13,7 @@ import com.tt.invoicecreator.R
         InvoiceItemV2::class,
         InvoiceV2::class
     ],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 

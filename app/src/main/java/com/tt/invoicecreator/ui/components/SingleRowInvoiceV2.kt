@@ -23,7 +23,8 @@ import com.tt.invoicecreator.helpers.InvoiceValueCalculator
 fun SingleRowInvoiceV2(
     invoice: InvoiceV2,
     invoiceItems:List<InvoiceItemV2>,
-    invoiceChosen: (InvoiceV2) -> Unit
+    invoiceChosen: (InvoiceV2) -> Unit,
+    itemsChosen: (List<InvoiceItemV2>) -> Unit
 ) {
     Card(
         shape = RoundedCornerShape(20.dp),
@@ -32,6 +33,7 @@ fun SingleRowInvoiceV2(
             .padding(10.dp)
             .clickable {
                 invoiceChosen(invoice)
+                itemsChosen(invoiceItems)
             },
         colors = CardDefaults.cardColors(containerColor = Color.LightGray),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
@@ -55,5 +57,7 @@ fun SingleRowInvoiceV2(
                 text = "value: ${InvoiceValueCalculator.calculateV2(invoiceItems)}"
             )
         }
+
+        val a = 1
     }
 }

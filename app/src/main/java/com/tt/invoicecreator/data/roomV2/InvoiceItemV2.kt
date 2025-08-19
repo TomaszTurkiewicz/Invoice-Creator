@@ -13,5 +13,5 @@ data class InvoiceItemV2 (
     var itemCount: Double = 1.0,
     var itemDiscount: Double = 0.0,
     var comment: String = "",
-    var invoiceNumber:Int = 0
+    var invoiceId:Int = 0
 )

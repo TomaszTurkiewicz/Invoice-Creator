@@ -21,8 +21,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import com.tt.invoicecreator.InvoiceCreatorScreen
 import com.tt.invoicecreator.data.AppBarState
+import com.tt.invoicecreator.data.roomV2.InvoiceItemV2
 import com.tt.invoicecreator.data.roomV2.InvoiceV2
 import com.tt.invoicecreator.ui.alert_dialogs.PrintInvoiceAlertDialog
+import com.tt.invoicecreator.ui.alert_dialogs.PrintInvoiceAlertDialogV2
 import com.tt.invoicecreator.ui.components.ListOfInvoices
 import com.tt.invoicecreator.ui.components.ListOfInvoicesV2
 import com.tt.invoicecreator.viewmodel.AppViewModel
@@ -43,6 +45,11 @@ fun InvoicesScreenV2(
 
     val invoice = remember {
         mutableStateOf(InvoiceV2())
+    }
+
+
+    var itemList = remember {
+        mutableListOf(InvoiceItemV2())
     }
 
     val context = LocalContext.current
@@ -84,11 +91,32 @@ fun InvoicesScreenV2(
                 list = invoiceListV2!!,
                 invoiceChosen = {
                     invoice.value = it
-                    printInvoiceAlertDialog.value = true
+                },
+                itemsChosen = {
+                    val size = it.size
+                    itemList.clear()
+                    for(i in 0..size){
+                        if(i<size){
+                            itemList.add(it[i])
+                        }else{
+                            printInvoiceAlertDialog.value = true
+                        }
+                    }
                 }
             )
         }
     }
 
 //todo alert dialog printing invoice !!!
+    if(printInvoiceAlertDialog.value){
+
+        PrintInvoiceAlertDialogV2(
+            context = context,
+            invoiceV2 = invoice.value,
+            invoiceItemV2List = itemList,
+            onDismissRequest = {
+                printInvoiceAlertDialog.value = false
+            }
+        )
+    }
 }
