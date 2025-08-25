@@ -23,4 +23,8 @@ object InvoiceValueCalculator {
         }
         return sum
     }
+
+    fun calculateV2oneItem(itemV2: InvoiceItemV2): Double {
+        return itemV2.itemV2.itemValue * itemV2.itemCount - itemV2.itemDiscount
+    }
 }
