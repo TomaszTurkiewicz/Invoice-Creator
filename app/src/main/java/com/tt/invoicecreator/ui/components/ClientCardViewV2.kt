@@ -17,7 +17,11 @@ import com.tt.invoicecreator.viewmodel.AppViewModel
 
 @Composable
 fun ClientCardViewV2(
-    viewModel: AppViewModel,
+    clientName: String,
+    clientAddressLine1: String,
+    clientAddressLine2: String,
+    clientCity: String,
+    showCardView: () -> Boolean,
     onClick: () -> Unit
 ) {
     Card(
@@ -31,28 +35,29 @@ fun ClientCardViewV2(
         colors = CardDefaults.cardColors(containerColor = Color.LightGray),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ){
-        if(viewModel.getInvoiceV2().client.clientName != ""){
+//        if(viewModel.getInvoiceV2().client.clientName != ""){
+        if(showCardView()){
             Column(
                 modifier = Modifier
                     .padding(24.dp)
             ) {
                 Text(
-                    text = viewModel.getInvoiceV2().client.clientName,
+                    text = clientName,
                     fontWeight = FontWeight.W700,
                     modifier = Modifier
                         .padding(5.dp))
                 Text(
-                    text = viewModel.getInvoiceV2().client.clientAddress1,
+                    text = clientAddressLine1,
                     fontWeight = FontWeight.W300,
                     modifier = Modifier
                         .padding(5.dp))
                 Text(
-                    text = viewModel.getInvoiceV2().client.clientAddress2,
+                    text = clientAddressLine2,
                     fontWeight = FontWeight.W300,
                     modifier = Modifier
                         .padding(5.dp))
                 Text(
-                    text = viewModel.getInvoiceV2().client.clientCity,
+                    text = clientCity,
                     fontWeight = FontWeight.W300,
                     modifier = Modifier
                         .padding(5.dp))

@@ -23,6 +23,7 @@ import com.tt.invoicecreator.ui.screens.ChooseClientScreenV2
 import com.tt.invoicecreator.ui.screens.ChooseItemScreenV2
 import com.tt.invoicecreator.ui.screens.ChooseModeScreen
 import com.tt.invoicecreator.ui.screens.InvoicesScreenV2
+import com.tt.invoicecreator.ui.screens.Settings
 import com.tt.invoicecreator.viewmodel.AppViewModel
 
 @Composable
@@ -82,6 +83,9 @@ fun InvoiceCreatorApp (
 
             composable(route = InvoiceCreatorScreen.ChooseMode.name) {
                 ChooseModeScreen(
+                    ignoredOnComposing = {
+                        appBarState = it
+                    },
                     navController = navController
                 )
             }
@@ -123,6 +127,14 @@ fun InvoiceCreatorApp (
                         appBarState = it
                     },
                     navController = navController
+                )
+            }
+
+            composable(route = InvoiceCreatorScreen.Settings.name) {
+                Settings(
+                    ignoredOnComposing = {
+                        appBarState = it
+                    }
                 )
             }
 

@@ -17,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.tt.invoicecreator.InvoiceCreatorScreen
 import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.data.roomV2.ItemV2
 import com.tt.invoicecreator.helpers.DecimalFormatter
@@ -36,7 +37,7 @@ fun AddItemScreenV2(
                 action = {
                     Row {
                         IconButton(onClick = {
-                            //todo
+                            navController.navigate(InvoiceCreatorScreen.Settings.name)
                         }) {
                             Icon(Icons.Default.Settings,null)
                         }

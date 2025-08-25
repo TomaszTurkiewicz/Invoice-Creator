@@ -52,7 +52,7 @@ fun ChooseItemScreenV2(
                             Icon(Icons.Default.Add, null)
                         }
                         IconButton(onClick = {
-                            //todo
+                            navController.navigate(InvoiceCreatorScreen.Settings.name)
                         }) {
                             Icon(Icons.Default.Settings,null)
                         }

@@ -84,7 +84,7 @@ fun AddInvoiceScreenV2(
                 action = {
                     Row {
                         IconButton(onClick = {
-                            //todo
+                            navController.navigate(InvoiceCreatorScreen.Settings.name)
                         }) {
                             Icon(Icons.Default.Settings,null)
                         }
@@ -121,7 +121,13 @@ fun AddInvoiceScreenV2(
                 invoiceNumberAlertDialog.value = true
             }
             ClientCardViewV2(
-                viewModel = viewModel,
+                clientName = viewModel.getInvoiceV2().client.clientName,
+                clientAddressLine1 = viewModel.getInvoiceV2().client.clientAddress1,
+                clientAddressLine2 = viewModel.getInvoiceV2().client.clientAddress2,
+                clientCity = viewModel.getInvoiceV2().client.clientCity,
+                showCardView = {
+                    viewModel.getInvoiceV2().client.clientName != ""
+                },
                 onClick = {
                     navController.navigate(InvoiceCreatorScreen.ChooseClientV2.name)
                 }

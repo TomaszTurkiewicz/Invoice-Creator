@@ -21,8 +21,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import com.tt.invoicecreator.InvoiceCreatorScreen
 import com.tt.invoicecreator.data.AppBarState
+import com.tt.invoicecreator.data.SharedPreferences
 import com.tt.invoicecreator.data.roomV2.InvoiceItemV2
 import com.tt.invoicecreator.data.roomV2.InvoiceV2
+import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogAddMainUser
 import com.tt.invoicecreator.ui.alert_dialogs.PrintInvoiceAlertDialogV2
 import com.tt.invoicecreator.ui.components.ListOfInvoicesV2
 import com.tt.invoicecreator.viewmodel.AppViewModel
@@ -50,7 +52,13 @@ fun InvoicesScreenV2(
         mutableListOf(InvoiceItemV2())
     }
 
+    val addMainUSerAlertDialog = remember {
+        mutableStateOf(false)
+    }
+
     val context = LocalContext.current
+
+    val user = SharedPreferences.readUserDetails(context)
 
     LaunchedEffect(key1 = true) {
         ignoredOnComposing(
@@ -64,7 +72,7 @@ fun InvoicesScreenV2(
                             Icon(Icons.Default.Add,null)
                         }
                         IconButton(onClick = {
-                            // todo
+                            navController.navigate(InvoiceCreatorScreen.Settings.name)
                         }) {
                             Icon(Icons.Default.Settings,null)
                         }
@@ -72,6 +80,13 @@ fun InvoicesScreenV2(
                 }
             )
         )
+    }
+
+    LaunchedEffect(key1 = true) {
+
+        if(user.userName == ""){
+            addMainUSerAlertDialog.value = true
+        }
     }
 
     Box(modifier = Modifier
@@ -104,7 +119,16 @@ fun InvoicesScreenV2(
         }
     }
 
-//todo alert dialog printing invoice !!!
+    if(addMainUSerAlertDialog.value){
+        AlertDialogAddMainUser (
+            user = user,
+            closeAlertDialog = {
+                addMainUSerAlertDialog.value = false
+            },
+            canBeDismissed = false
+        )
+             }
+
     if(printInvoiceAlertDialog.value){
 
         PrintInvoiceAlertDialogV2(

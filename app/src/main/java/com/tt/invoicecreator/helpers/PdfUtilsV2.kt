@@ -47,6 +47,7 @@ class PdfUtilsV2 {
             invoiceV2: InvoiceV2,
             items:List<InvoiceItemV2>
         ){
+            val user = SharedPreferences.readUserDetails(context)
 
             val pdfDocument = PdfDocument()
             val paint = Paint()
@@ -55,7 +56,7 @@ class PdfUtilsV2 {
             val page = pdfDocument.startPage(pageInfo)
             val canvas = page.canvas
 
-            drawUserV2(context, canvas, paint)
+            drawUserV2(context, user, canvas, paint)
 
             drawInvoiceWordV2(context, canvas, paint)
 
@@ -458,31 +459,31 @@ class PdfUtilsV2 {
             )
         }
 
-        private fun drawUserV2(context: Context, canvas: Canvas, paint: Paint) {
+        private fun drawUserV2(context: Context, user:User, canvas: Canvas, paint: Paint) {
             paint.textSize = TEXT_SMALL
             paint.color = context.getColor(R.color.black)
             paint.style = Paint.Style.FILL_AND_STROKE
             paint.textAlign = Paint.Align.LEFT
             canvas.drawText(
-                "Tomasz Turkiewicz",
+                user.userName ?: "",
                 LEFT_MARGIN,
                 MARGIN_TOP,
                 paint
             )
             canvas.drawText(
-                "Flat 3, 10 Morley Street",
+                user.userAddressLine1 ?: "",
                 LEFT_MARGIN,
                 MARGIN_TOP +(TEXT_SMALL *1.5f),
                 paint
             )
             canvas.drawText(
-                "BN2 9RA",
+                user.userAddressLine2 ?: "",
                 LEFT_MARGIN,
                 MARGIN_TOP +(TEXT_SMALL *3f),
                 paint
             )
             canvas.drawText(
-                "BRIGHTON",
+                user.userCity ?: "",
                 LEFT_MARGIN,
                 MARGIN_TOP +(TEXT_SMALL *4.5f),
                 paint

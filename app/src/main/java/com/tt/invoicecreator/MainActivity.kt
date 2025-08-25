@@ -22,7 +22,6 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        enableEdgeToEdge()
         setContent {
             InvoiceCreatorTheme {
                 InvoiceCreatorApp(
@@ -32,3 +31,11 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
+/**
+ * todo change one item to pro condition
+ * todo add invoice paid if PRO
+ * todo add changing color schema if PRO
+ * todo add advert to add invoice if not PRO
+ * todo add settings screen
+ * **/
