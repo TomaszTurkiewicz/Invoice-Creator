@@ -28,22 +28,6 @@ fun ChooseModeScreen(
             .fillMaxSize()
             .background(Color.White)
     ) {
-        /** working one item invoice **/
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.33f),
-            contentAlignment = Alignment.BottomCenter
-        ){
-            Button(
-                onClick = {
-                    navController.navigate(InvoiceCreatorScreen.Invoices.name)
-                }
-            ) {
-                Text(text = "WORKING 1 ITEM")
-            }
-        }
-
         /** one item invoice version 2.0 **/
         Box(
             modifier = Modifier
@@ -66,7 +50,7 @@ fun ChooseModeScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(),
-            contentAlignment = Alignment.TopCenter
+            contentAlignment = Alignment.Center
         ){
             Button(
                 onClick = {

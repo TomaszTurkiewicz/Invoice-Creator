@@ -23,9 +23,7 @@ import com.tt.invoicecreator.InvoiceCreatorScreen
 import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.data.roomV2.InvoiceItemV2
 import com.tt.invoicecreator.data.roomV2.InvoiceV2
-import com.tt.invoicecreator.ui.alert_dialogs.PrintInvoiceAlertDialog
 import com.tt.invoicecreator.ui.alert_dialogs.PrintInvoiceAlertDialogV2
-import com.tt.invoicecreator.ui.components.ListOfInvoices
 import com.tt.invoicecreator.ui.components.ListOfInvoicesV2
 import com.tt.invoicecreator.viewmodel.AppViewModel
 
@@ -48,7 +46,7 @@ fun InvoicesScreenV2(
     }
 
 
-    var itemList = remember {
+    val itemList = remember {
         mutableListOf(InvoiceItemV2())
     }
 
@@ -86,7 +84,6 @@ fun InvoicesScreenV2(
         }
         else{
             ListOfInvoicesV2(
-                viewModel = viewModel,
                 itemList = invoiceItemsCollection!!,
                 list = invoiceListV2!!,
                 invoiceChosen = {

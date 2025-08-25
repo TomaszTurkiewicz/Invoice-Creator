@@ -1,6 +1,5 @@
 package com.tt.invoicecreator.ui.components
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,7 +14,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.tt.invoicecreator.data.roomV2.InvoiceItemV2
-import com.tt.invoicecreator.viewmodel.AppViewModel
 
 @Composable
 fun ItemCardViewV2(

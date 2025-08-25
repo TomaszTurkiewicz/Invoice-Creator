@@ -19,7 +19,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -53,16 +52,11 @@ fun AddInvoiceScreenV2(
 ) {
     val invoiceList by viewModel.invoiceListV2.observeAsState()
 
-//    val invoiceItemList by viewModel.invoiceItemListV2.observeAsState()
 
     val itemInvoiceList = viewModel.getInvoiceItemList()
 
     val time = remember {
         mutableLongStateOf(0L)
-    }
-
-    val positionCount = remember {
-        mutableIntStateOf(0)
     }
 
     val invoiceNumberAlertDialog = remember {
@@ -149,6 +143,7 @@ fun AddInvoiceScreenV2(
                     )
                 }
             }else{
+                if(itemInvoiceList.size<10){
                 EmptyItemCardViewV2(
                     position = if(itemInvoiceList.isEmpty()) 1 else itemInvoiceList.size+1,
                     showPosition = true,
@@ -156,6 +151,7 @@ fun AddInvoiceScreenV2(
                         navController.navigate(InvoiceCreatorScreen.ChooseItemV2.name)
                     }
                 )
+                }
             }
 
             PaymentMethodCardView(

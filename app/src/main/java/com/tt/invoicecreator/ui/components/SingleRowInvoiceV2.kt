@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.tt.invoicecreator.data.room.Invoice
 import com.tt.invoicecreator.data.roomV2.InvoiceItemV2
 import com.tt.invoicecreator.data.roomV2.InvoiceV2
 import com.tt.invoicecreator.helpers.DateAndTime

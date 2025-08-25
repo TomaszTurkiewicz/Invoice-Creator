@@ -49,7 +49,7 @@ fun InvoiceNumberCardView(
                 fontWeight = FontWeight.W500,
                 modifier = Modifier
                     .padding(5.dp))
-            Row(){
+            Row {
                 Text(
                     text = "Date",
                     fontWeight = FontWeight.W500,

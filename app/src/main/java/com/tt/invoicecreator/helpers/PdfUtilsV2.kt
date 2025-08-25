@@ -20,7 +20,6 @@ import com.tt.invoicecreator.data.SharedPreferences
 import com.tt.invoicecreator.data.SignatureFile
 import com.tt.invoicecreator.data.roomV2.InvoiceItemV2
 import com.tt.invoicecreator.data.roomV2.InvoiceV2
-import com.tt.invoicecreator.helpers.PdfUtils.Companion
 import java.io.File
 import java.text.DecimalFormat
 
@@ -119,7 +118,7 @@ class PdfUtilsV2 {
                 val signature = BitmapFactory.decodeFile(file.path,options)
                 val width = signature.width
                 val height = signature.height
-                val ratio:Float = width.toFloat()/height.toFloat()
+                val ratio: Float = width.toFloat() / height.toFloat()
                 val signatureHeight = 110f
                 val signatureWidth = signatureHeight*ratio
 

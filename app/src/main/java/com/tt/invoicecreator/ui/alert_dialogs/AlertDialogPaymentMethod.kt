@@ -17,7 +17,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.tt.invoicecreator.data.SharedPreferences
 import com.tt.invoicecreator.ui.components.InputTextWithLabel
-import com.tt.invoicecreator.viewmodel.AppViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

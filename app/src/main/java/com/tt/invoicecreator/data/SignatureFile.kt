@@ -4,7 +4,7 @@ import android.content.Context
 import com.tt.invoicecreator.R
 import java.io.File
 
-class SignatureFile() {
+class SignatureFile {
     companion object{
         fun getFilePath(context: Context):String{
             return getOutputDirectory(context) + "/" + photoFileName()

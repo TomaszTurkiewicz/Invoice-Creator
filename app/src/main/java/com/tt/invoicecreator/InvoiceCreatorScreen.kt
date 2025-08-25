@@ -3,14 +3,8 @@ package com.tt.invoicecreator
 import androidx.annotation.StringRes
 
 enum class InvoiceCreatorScreen(@StringRes val title:Int) {
-    Invoices(title = R.string.invoices),
-    AddInvoice(title = R.string.add_invoice),
-    ChooseClient(title = R.string.choose_client),
-    AddClient(title = R.string.add_client),
     AddClientV2(title = R.string.add_client_v2),
-    ChooseItem(title = R.string.choose_item),
     ChooseItemV2(title = R.string.choose_item_v2),
-    AddItem(title = R.string.add_item),
     AddItemV2(title = R.string.add_item_V2),
     ChooseMode(title = R.string.choose_mode),
     InvoicesV2(title = R.string.invoicesV2),

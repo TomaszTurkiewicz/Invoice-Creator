@@ -18,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.tt.invoicecreator.InvoiceCreatorScreen
 import com.tt.invoicecreator.data.AppBarState
-import com.tt.invoicecreator.ui.components.ListOfClients
 import com.tt.invoicecreator.ui.components.ListOfClientsV2
 import com.tt.invoicecreator.viewmodel.AppViewModel
 

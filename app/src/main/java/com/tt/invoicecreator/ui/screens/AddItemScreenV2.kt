@@ -18,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.tt.invoicecreator.data.AppBarState
-import com.tt.invoicecreator.data.room.Item
 import com.tt.invoicecreator.data.roomV2.ItemV2
 import com.tt.invoicecreator.helpers.DecimalFormatter
 import com.tt.invoicecreator.ui.components.InputDigitsWithLabel

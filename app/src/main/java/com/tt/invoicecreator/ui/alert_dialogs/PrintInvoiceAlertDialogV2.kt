@@ -18,7 +18,6 @@ import androidx.compose.ui.unit.dp
 import com.tt.invoicecreator.data.roomV2.InvoiceItemV2
 import com.tt.invoicecreator.data.roomV2.InvoiceV2
 import com.tt.invoicecreator.helpers.InvoiceNumber
-import com.tt.invoicecreator.helpers.PdfUtils
 import com.tt.invoicecreator.helpers.PdfUtilsV2
 
 @OptIn(ExperimentalMaterial3Api::class)
