@@ -42,7 +42,6 @@ fun SingleRowInvoiceV2(
                 .fillMaxWidth()
         ){
             Text(
-//                text = "number: ${invoice.invoiceNumber}"
                 text = "number: ${InvoiceNumber.getStringNumber(invoice.invoiceNumber,invoice.time)}"
             )
             Text(
@@ -52,11 +51,9 @@ fun SingleRowInvoiceV2(
                 text = "client: ${invoice.client.clientName}"
             )
             Text(
-//                text = "value: ${InvoiceValueCalculator.calculate(invoice)}"
+
                 text = "value: ${InvoiceValueCalculator.calculateV2(invoiceItems)}"
             )
         }
-
-        val a = 1
     }
 }
