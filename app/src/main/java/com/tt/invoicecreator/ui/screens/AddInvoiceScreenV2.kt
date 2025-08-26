@@ -138,7 +138,7 @@ fun AddInvoiceScreenV2(
                 )
             }
 
-            if(SharedPreferences.readOneItemMode(context)){
+            if(!SharedPreferences.readPROMode(context)){
                 if(itemInvoiceList.isEmpty()){
                     EmptyItemCardViewV2(
                         position = 0,

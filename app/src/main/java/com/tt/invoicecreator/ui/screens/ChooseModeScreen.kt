@@ -48,7 +48,7 @@ fun ChooseModeScreen(
         ){
             Button(
                 onClick = {
-                    SharedPreferences.saveOneItemMode(context = context, oneItemMode = true)
+                    SharedPreferences.savePROMode(context = context, PROMode = false)
                     navController.navigate(InvoiceCreatorScreen.InvoicesV2.name)
                 }
             ) {
@@ -65,7 +65,7 @@ fun ChooseModeScreen(
         ){
             Button(
                 onClick = {
-                    SharedPreferences.saveOneItemMode(context = context, oneItemMode = false)
+                    SharedPreferences.savePROMode(context = context, PROMode = true)
                     navController.navigate(InvoiceCreatorScreen.InvoicesV2.name)
                 }
             ) {

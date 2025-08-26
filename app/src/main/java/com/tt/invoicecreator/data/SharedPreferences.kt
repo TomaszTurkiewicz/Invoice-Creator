@@ -37,16 +37,16 @@ object SharedPreferences {
         )
     }
 
-    fun saveOneItemMode(context: Context, oneItemMode:Boolean){
-        val sp = context.getSharedPreferences("ONE_ITEM_MODE", Context.MODE_PRIVATE)
+    fun savePROMode(context: Context, PROMode:Boolean){
+        val sp = context.getSharedPreferences("PRO_MODE", Context.MODE_PRIVATE)
         sp.edit {
-            putBoolean("one_item_mode", oneItemMode)
+            putBoolean("pro_mode", PROMode)
         }
     }
 
-    fun readOneItemMode(context: Context):Boolean{
-        val sp = context.getSharedPreferences("ONE_ITEM_MODE", Context.MODE_PRIVATE)
-        return sp.getBoolean("one_item_mode", true)
+    fun readPROMode(context: Context):Boolean{
+        val sp = context.getSharedPreferences("PRO_MODE", Context.MODE_PRIVATE)
+        return sp.getBoolean("pro_mode", false)
     }
 
 }

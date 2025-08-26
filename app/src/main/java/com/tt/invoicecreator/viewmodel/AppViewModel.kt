@@ -46,6 +46,9 @@ class AppViewModel(
 
     var calculateNumber = true
 
+    private var rewardedAdLoaded = false
+    private var rewardedAdWatched = false
+
     fun addItemToInvoice(invoiceItemV2: InvoiceItemV2){
         invoiceItems.add(invoiceItemV2)
     }
@@ -80,6 +83,14 @@ class AppViewModel(
                 invoiceItemRepositoryV2.insertInvoiceItem(item)
             }
         }
+    }
+
+    fun rewardedApLoaded(){
+        this.rewardedAdLoaded = true
+    }
+
+    fun rewardedAdWatched(){
+        this.rewardedAdWatched = true
     }
 
     fun cleanInvoiceV2() {
