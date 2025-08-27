@@ -48,7 +48,8 @@ import java.io.File
 fun AddInvoiceScreenV2(
     viewModel: AppViewModel,
     ignoredOnComposing: (AppBarState) -> Unit,
-    navController: NavController
+    navController: NavController,
+    modePro:Boolean
 ) {
     val invoiceList by viewModel.invoiceListV2.observeAsState()
 
@@ -96,6 +97,10 @@ fun AddInvoiceScreenV2(
     }
 
     LaunchedEffect(key1 = true) {
+        viewModel.cleanAdFlags()
+    }
+
+    LaunchedEffect(key1 = true) {
         time.longValue = System.currentTimeMillis()
         viewModel.getInvoiceV2().time = time.longValue
 
@@ -138,7 +143,7 @@ fun AddInvoiceScreenV2(
                 )
             }
 
-            if(!SharedPreferences.readPROMode(context)){
+            if(!modePro){
                 if(itemInvoiceList.isEmpty()){
                     EmptyItemCardViewV2(
                         position = 0,

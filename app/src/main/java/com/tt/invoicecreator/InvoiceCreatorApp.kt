@@ -3,6 +3,7 @@ package com.tt.invoicecreator
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,7 +30,8 @@ import com.tt.invoicecreator.viewmodel.AppViewModel
 @Composable
 fun InvoiceCreatorApp (
     viewModel: AppViewModel,
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    activity: MainActivity
 ){
 
     val context = LocalContext.current
@@ -55,6 +57,9 @@ fun InvoiceCreatorApp (
         }
     ) {
         innerPadding ->
+
+        val uiState by viewModel.uiState.collectAsState()
+
         NavHost(
             navController = navController,
             startDestination = InvoiceCreatorScreen.ChooseMode.name,
@@ -83,6 +88,7 @@ fun InvoiceCreatorApp (
 
             composable(route = InvoiceCreatorScreen.ChooseMode.name) {
                 ChooseModeScreen(
+                    viewModel = viewModel,
                     ignoredOnComposing = {
                         appBarState = it
                     },
@@ -96,7 +102,11 @@ fun InvoiceCreatorApp (
                     ignoredOnComposing = {
                         appBarState = it
                     },
-                    navController = navController
+                    navController = navController,
+                    modePro = uiState.modePro,
+                    adLoaded = uiState.rewardedAppLoaded,
+                    activity = activity,
+                    adWatched = uiState.rewardedAdWatched
                 )
             }
 
@@ -106,7 +116,8 @@ fun InvoiceCreatorApp (
                     ignoredOnComposing = {
                         appBarState = it
                     },
-                    navController = navController
+                    navController = navController,
+                    modePro = uiState.modePro
                 )
             }
 

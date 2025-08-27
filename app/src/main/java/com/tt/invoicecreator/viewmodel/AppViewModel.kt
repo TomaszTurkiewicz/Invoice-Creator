@@ -1,8 +1,11 @@
 package com.tt.invoicecreator.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
+import com.tt.invoicecreator.data.AppUiState
+import com.tt.invoicecreator.data.SharedPreferences
 import com.tt.invoicecreator.data.roomV2.ClientDaoV2
 import com.tt.invoicecreator.data.roomV2.ClientV2
 import com.tt.invoicecreator.data.roomV2.InvoiceDaoV2
@@ -17,6 +20,10 @@ import com.tt.invoicecreator.data.roomV2.OfflineInvoiceRepositoryV2
 import com.tt.invoicecreator.data.roomV2.OfflineItemRepositoryV2
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class AppViewModel(
@@ -36,6 +43,9 @@ class AppViewModel(
     val invoiceItemListV2: LiveData<List<InvoiceItemV2>> = invoiceItemRepositoryV2.getAllInvoiceItems().asLiveData()
     val invoiceListV2: LiveData<List<InvoiceV2>> = invoiceRepositoryV2.getAllInvoices().asLiveData()
 
+    private val _uiState = MutableStateFlow(AppUiState())
+    val uiState: StateFlow<AppUiState> = _uiState.asStateFlow()
+
     private var invoiceV2 = InvoiceV2()
 
     private val coroutine = CoroutineScope(Dispatchers.Main)
@@ -46,8 +56,6 @@ class AppViewModel(
 
     var calculateNumber = true
 
-    private var rewardedAdLoaded = false
-    private var rewardedAdWatched = false
 
     fun addItemToInvoice(invoiceItemV2: InvoiceItemV2){
         invoiceItems.add(invoiceItemV2)
@@ -85,12 +93,29 @@ class AppViewModel(
         }
     }
 
+    fun setModePro(context: Context, boolean: Boolean){
+        SharedPreferences.savePROMode(context,boolean)
+        _uiState.update { currentState ->
+            currentState.copy(
+                modePro = boolean
+            )
+        }
+    }
+
     fun rewardedApLoaded(){
-        this.rewardedAdLoaded = true
+        _uiState.update { currentState ->
+            currentState.copy(
+                rewardedAppLoaded = true
+            )
+        }
     }
 
     fun rewardedAdWatched(){
-        this.rewardedAdWatched = true
+        _uiState.update { currentState ->
+            currentState.copy(
+                rewardedAdWatched = true
+            )
+        }
     }
 
     fun cleanInvoiceV2() {
@@ -99,6 +124,14 @@ class AppViewModel(
         this.calculateNumber = true
     }
 
+    fun cleanAdFlags() {
+        _uiState.update { currentState ->
+            currentState.copy(
+                rewardedAppLoaded = false,
+                rewardedAdWatched = false
+            )
+        }
+    }
 
 
 }

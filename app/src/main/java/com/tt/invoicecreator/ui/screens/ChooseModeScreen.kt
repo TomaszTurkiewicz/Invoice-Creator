@@ -18,9 +18,11 @@ import androidx.navigation.NavController
 import com.tt.invoicecreator.InvoiceCreatorScreen
 import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.data.SharedPreferences
+import com.tt.invoicecreator.viewmodel.AppViewModel
 
 @Composable
 fun ChooseModeScreen(
+    viewModel: AppViewModel,
     ignoredOnComposing: (AppBarState) -> Unit,
     navController: NavController
 ) {
@@ -48,7 +50,7 @@ fun ChooseModeScreen(
         ){
             Button(
                 onClick = {
-                    SharedPreferences.savePROMode(context = context, PROMode = false)
+                    viewModel.setModePro(context,false)
                     navController.navigate(InvoiceCreatorScreen.InvoicesV2.name)
                 }
             ) {
@@ -65,7 +67,7 @@ fun ChooseModeScreen(
         ){
             Button(
                 onClick = {
-                    SharedPreferences.savePROMode(context = context, PROMode = true)
+                    viewModel.setModePro(context,true)
                     navController.navigate(InvoiceCreatorScreen.InvoicesV2.name)
                 }
             ) {

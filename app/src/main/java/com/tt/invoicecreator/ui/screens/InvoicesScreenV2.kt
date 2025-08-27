@@ -1,5 +1,6 @@
 package com.tt.invoicecreator.ui.screens
 
+import android.app.Activity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,11 +21,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import com.tt.invoicecreator.InvoiceCreatorScreen
+import com.tt.invoicecreator.MainActivity
 import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.data.SharedPreferences
 import com.tt.invoicecreator.data.roomV2.InvoiceItemV2
 import com.tt.invoicecreator.data.roomV2.InvoiceV2
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogAddMainUser
+import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogWatchAd
 import com.tt.invoicecreator.ui.alert_dialogs.PrintInvoiceAlertDialogV2
 import com.tt.invoicecreator.ui.components.ListOfInvoicesV2
 import com.tt.invoicecreator.viewmodel.AppViewModel
@@ -33,11 +36,16 @@ import com.tt.invoicecreator.viewmodel.AppViewModel
 fun InvoicesScreenV2(
     viewModel: AppViewModel,
     ignoredOnComposing: (AppBarState) -> Unit,
-    navController: NavController
+    navController: NavController,
+    modePro:Boolean,
+    adLoaded:Boolean,
+    activity: MainActivity,
+    adWatched: Boolean
 ) {
     val invoiceListV2 by viewModel.invoiceListV2.observeAsState()
 
     val invoiceItemsCollection by viewModel.invoiceItemListV2.observeAsState()
+
 
     val printInvoiceAlertDialog = remember {
         mutableStateOf(false)
@@ -56,6 +64,10 @@ fun InvoicesScreenV2(
         mutableStateOf(false)
     }
 
+    val watchAdAlertDialog = remember {
+        mutableStateOf(false)
+    }
+
     val context = LocalContext.current
 
     val user = SharedPreferences.readUserDetails(context)
@@ -67,7 +79,13 @@ fun InvoicesScreenV2(
                     Row {
                         IconButton(onClick = {
                             viewModel.cleanInvoiceV2()
-                            navController.navigate(InvoiceCreatorScreen.AddInvoiceV2.name)
+                            if (modePro){
+                                navController.navigate(InvoiceCreatorScreen.AddInvoiceV2.name)
+                            }
+                            else{
+                                activity.loadRewardedAd()
+                                watchAdAlertDialog.value = true
+                            }
                         }) {
                             Icon(Icons.Default.Add,null)
                         }
@@ -139,5 +157,21 @@ fun InvoicesScreenV2(
                 printInvoiceAlertDialog.value = false
             }
         )
+    }
+
+    if(watchAdAlertDialog.value){
+        AlertDialogWatchAd(
+            onDismissRequest = {
+                watchAdAlertDialog.value = false
+            },
+            adLoaded = adLoaded
+        ){
+            activity.showRewardedAd()
+        }
+
+    }
+
+    if(adWatched){
+        navController.navigate(InvoiceCreatorScreen.AddInvoiceV2.name)
     }
 }

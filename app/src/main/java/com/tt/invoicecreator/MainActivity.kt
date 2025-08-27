@@ -42,7 +42,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             InvoiceCreatorTheme {
                 InvoiceCreatorApp(
-                    viewModel = viewModel
+                    viewModel = viewModel,
+                    activity = this
                 )
             }
         }
