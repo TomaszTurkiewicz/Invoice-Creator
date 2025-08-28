@@ -24,8 +24,8 @@ import com.tt.invoicecreator.InvoiceCreatorScreen
 import com.tt.invoicecreator.MainActivity
 import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.data.SharedPreferences
-import com.tt.invoicecreator.data.roomV2.InvoiceItemV2
-import com.tt.invoicecreator.data.roomV2.InvoiceV2
+import com.tt.invoicecreator.data.roomV2.entities.InvoiceItemV2
+import com.tt.invoicecreator.data.roomV2.entities.InvoiceV2
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogAddMainUser
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogWatchAd
 import com.tt.invoicecreator.ui.alert_dialogs.PrintInvoiceAlertDialogV2
@@ -46,6 +46,8 @@ fun InvoicesScreenV2(
 
     val invoiceItemsCollection by viewModel.invoiceItemListV2.observeAsState()
 
+    val paidInvoicesCollection by viewModel.paidListV2.observeAsState()
+
 
     val printInvoiceAlertDialog = remember {
         mutableStateOf(false)
@@ -65,6 +67,10 @@ fun InvoicesScreenV2(
     }
 
     val watchAdAlertDialog = remember {
+        mutableStateOf(false)
+    }
+
+    val alertDialogUpdatePaid = remember {
         mutableStateOf(false)
     }
 
@@ -119,6 +125,7 @@ fun InvoicesScreenV2(
             ListOfInvoicesV2(
                 itemList = invoiceItemsCollection!!,
                 list = invoiceListV2!!,
+                paidInvoices = paidInvoicesCollection,
                 invoiceChosen = {
                     invoice.value = it
                 },
@@ -132,7 +139,8 @@ fun InvoicesScreenV2(
                             printInvoiceAlertDialog.value = true
                         }
                     }
-                }
+                },
+                modePro = modePro
             )
         }
     }
@@ -155,6 +163,10 @@ fun InvoicesScreenV2(
             invoiceItemV2List = itemList,
             onDismissRequest = {
                 printInvoiceAlertDialog.value = false
+            },
+            modePro = modePro,
+            updatePaidClick = {
+                alertDialogUpdatePaid.value = true
             }
         )
     }

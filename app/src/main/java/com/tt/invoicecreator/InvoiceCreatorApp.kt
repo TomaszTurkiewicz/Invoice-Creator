@@ -47,6 +47,7 @@ fun InvoiceCreatorApp (
     }
 
     Scaffold (
+
         topBar = {
             TopAppBarWithAction(
                 appBarState = appBarState,

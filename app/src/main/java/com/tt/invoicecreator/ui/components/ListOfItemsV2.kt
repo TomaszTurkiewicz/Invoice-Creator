@@ -5,7 +5,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.tt.invoicecreator.data.roomV2.ItemV2
+import com.tt.invoicecreator.data.roomV2.entities.ItemV2
 
 @Composable
 fun ListOfItemsV2(

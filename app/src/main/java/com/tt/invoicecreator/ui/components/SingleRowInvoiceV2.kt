@@ -12,8 +12,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.tt.invoicecreator.data.roomV2.InvoiceItemV2
-import com.tt.invoicecreator.data.roomV2.InvoiceV2
+import com.tt.invoicecreator.data.roomV2.entities.InvoiceItemV2
+import com.tt.invoicecreator.data.roomV2.entities.InvoiceV2
+import com.tt.invoicecreator.data.roomV2.entities.PaidV2
 import com.tt.invoicecreator.helpers.DateAndTime
 import com.tt.invoicecreator.helpers.InvoiceNumber
 import com.tt.invoicecreator.helpers.InvoiceValueCalculator
@@ -22,8 +23,10 @@ import com.tt.invoicecreator.helpers.InvoiceValueCalculator
 fun SingleRowInvoiceV2(
     invoice: InvoiceV2,
     invoiceItems:List<InvoiceItemV2>,
+    paidInvoices: List<PaidV2>?,
     invoiceChosen: (InvoiceV2) -> Unit,
-    itemsChosen: (List<InvoiceItemV2>) -> Unit
+    itemsChosen: (List<InvoiceItemV2>) -> Unit,
+    modePro:Boolean
 ) {
     Card(
         shape = RoundedCornerShape(20.dp),
@@ -54,6 +57,9 @@ fun SingleRowInvoiceV2(
 
                 text = "value: ${InvoiceValueCalculator.calculateV2(invoiceItems)}"
             )
+            if(modePro){
+                // todo add paid section
+            }
         }
     }
 }

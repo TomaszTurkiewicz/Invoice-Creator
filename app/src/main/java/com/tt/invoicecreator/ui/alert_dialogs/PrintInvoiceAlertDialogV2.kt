@@ -15,8 +15,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.tt.invoicecreator.data.roomV2.InvoiceItemV2
-import com.tt.invoicecreator.data.roomV2.InvoiceV2
+import com.tt.invoicecreator.data.roomV2.entities.InvoiceItemV2
+import com.tt.invoicecreator.data.roomV2.entities.InvoiceV2
 import com.tt.invoicecreator.helpers.InvoiceNumber
 import com.tt.invoicecreator.helpers.PdfUtilsV2
 
@@ -26,7 +26,9 @@ fun PrintInvoiceAlertDialogV2(
     context: Context,
     invoiceV2: InvoiceV2,
     invoiceItemV2List: List<InvoiceItemV2>,
-    onDismissRequest: () -> Unit
+    onDismissRequest: () -> Unit,
+    modePro: Boolean,
+    updatePaidClick: () -> Unit
 ) {
 
     BasicAlertDialog(
@@ -51,20 +53,25 @@ fun PrintInvoiceAlertDialogV2(
                 text = "do You want to print invoice: ${InvoiceNumber.getStringNumber(invoiceNumber = invoiceV2.invoiceNumber, time = invoiceV2.time)} ?"
             )
 
-            Row (
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 10.dp),
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
+                verticalArrangement = Arrangement.spacedBy(10.dp)
             ){
-                Button(
-                    onClick = {
-                        onDismissRequest()
-                    },
-                    modifier = Modifier
-                        .weight(1f)
-                ) {
-                    Text(text = "DISMISS")
+
+                if(modePro){
+                    Button(
+                        onClick = {
+                            updatePaidClick()
+                            onDismissRequest()
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(5.dp)
+                    ) {
+                        Text(text = "UPDATE PAID")
+                    }
                 }
 
                 Button(
@@ -73,11 +80,22 @@ fun PrintInvoiceAlertDialogV2(
                         onDismissRequest()
                     },
                     modifier = Modifier
-                        .weight(1f)
+                        .fillMaxWidth()
+                        .padding(5.dp)
                 ) {
                     Text(text = "PRINT")
                 }
 
+                Button(
+                    onClick = {
+                        onDismissRequest()
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(5.dp)
+                ) {
+                    Text(text = "DISMISS")
+                }
             }
         }
 

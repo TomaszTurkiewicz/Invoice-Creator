@@ -29,6 +29,7 @@ class MainActivity : ComponentActivity() {
             (this.application as InvoiceCreatorApplication).databaseV2.getClientDaoV2(),
             (this.application as InvoiceCreatorApplication).databaseV2.getInvoiceItemDaoV2(),
             (this.application as InvoiceCreatorApplication).databaseV2.getInvoiceDaoV2(),
+            (this.application as InvoiceCreatorApplication).databaseV2.getPaidDaoV2()
         )
     }
 
@@ -143,8 +144,10 @@ class MainActivity : ComponentActivity() {
 
 /**
  * todo add VAT calculation
- * todo add invoice paid if PRO
+ * todo add invoice paid if PRO - list of payments !!! not paid in invoice
  * todo add changing color schema if PRO
- * todo add advert to add invoice if not PRO
+ * todo add due date
+ * todo track due date if pro
+* todo alert dialog showing ad change to better explanation what PRO gives, add 2nd button to update to PRO
  * todo add settings screen
  * **/

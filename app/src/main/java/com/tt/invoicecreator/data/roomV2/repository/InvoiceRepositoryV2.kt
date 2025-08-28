@@ -1,6 +1,6 @@
-package com.tt.invoicecreator.data.roomV2
+package com.tt.invoicecreator.data.roomV2.repository
 
-
+import com.tt.invoicecreator.data.roomV2.entities.InvoiceV2
 import kotlinx.coroutines.flow.Flow
 
 interface InvoiceRepositoryV2 {

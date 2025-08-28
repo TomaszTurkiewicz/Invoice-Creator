@@ -1,6 +1,6 @@
 package com.tt.invoicecreator.helpers
 
-import com.tt.invoicecreator.data.roomV2.InvoiceV2
+import com.tt.invoicecreator.data.roomV2.entities.InvoiceV2
 
 
 object InvoiceNumber {

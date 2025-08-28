@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.tt.invoicecreator.data.roomV2.ClientV2
+import com.tt.invoicecreator.data.roomV2.entities.ClientV2
 
 @Composable
 fun SingleRowClientV2(

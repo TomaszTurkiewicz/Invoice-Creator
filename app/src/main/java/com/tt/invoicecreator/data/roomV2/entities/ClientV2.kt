@@ -1,4 +1,4 @@
-package com.tt.invoicecreator.data.roomV2
+package com.tt.invoicecreator.data.roomV2.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

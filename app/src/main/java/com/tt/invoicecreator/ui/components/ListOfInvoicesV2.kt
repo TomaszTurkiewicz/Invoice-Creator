@@ -5,15 +5,18 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.tt.invoicecreator.data.roomV2.InvoiceItemV2
-import com.tt.invoicecreator.data.roomV2.InvoiceV2
+import com.tt.invoicecreator.data.roomV2.entities.InvoiceItemV2
+import com.tt.invoicecreator.data.roomV2.entities.InvoiceV2
+import com.tt.invoicecreator.data.roomV2.entities.PaidV2
 
 @Composable
 fun ListOfInvoicesV2(
     list:List<InvoiceV2>,
     itemList:List<InvoiceItemV2>,
+    paidInvoices: List<PaidV2>?,
     invoiceChosen: (InvoiceV2) -> Unit,
-    itemsChosen: (List<InvoiceItemV2>) -> Unit
+    itemsChosen: (List<InvoiceItemV2>) -> Unit,
+    modePro:Boolean
 ) {
 
 
@@ -32,12 +35,14 @@ fun ListOfInvoicesV2(
             SingleRowInvoiceV2(
                 invoice = invoice,
                 invoiceItems = invoiceItems,
+                paidInvoices = paidInvoices,
                 invoiceChosen = {
                     invoiceChosen(it)
                 },
                 itemsChosen = {
                     itemsChosen(it)
-                }
+                },
+                modePro = modePro
             )
         }
     }

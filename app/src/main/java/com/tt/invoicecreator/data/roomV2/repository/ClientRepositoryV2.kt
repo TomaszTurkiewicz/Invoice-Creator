@@ -1,7 +1,7 @@
-package com.tt.invoicecreator.data.roomV2
+package com.tt.invoicecreator.data.roomV2.repository
 
+import com.tt.invoicecreator.data.roomV2.entities.ClientV2
 import kotlinx.coroutines.flow.Flow
-
 
 interface ClientRepositoryV2 {
     fun getAllClients(): Flow<List<ClientV2>>

@@ -1,5 +1,8 @@
-package com.tt.invoicecreator.data.roomV2
+package com.tt.invoicecreator.data.roomV2.offline_repository
 
+import com.tt.invoicecreator.data.roomV2.dao.InvoiceDaoV2
+import com.tt.invoicecreator.data.roomV2.entities.InvoiceV2
+import com.tt.invoicecreator.data.roomV2.repository.InvoiceRepositoryV2
 import kotlinx.coroutines.flow.Flow
 
 class OfflineInvoiceRepositoryV2 (private val invoiceDaoV2: InvoiceDaoV2) : InvoiceRepositoryV2 {
