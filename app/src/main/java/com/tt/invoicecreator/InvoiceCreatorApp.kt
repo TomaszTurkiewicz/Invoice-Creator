@@ -23,6 +23,7 @@ import com.tt.invoicecreator.ui.screens.AddItemScreenV2
 import com.tt.invoicecreator.ui.screens.ChooseClientScreenV2
 import com.tt.invoicecreator.ui.screens.ChooseItemScreenV2
 import com.tt.invoicecreator.ui.screens.ChooseModeScreen
+import com.tt.invoicecreator.ui.screens.InvoiceInfoScreenV2
 import com.tt.invoicecreator.ui.screens.InvoicesScreenV2
 import com.tt.invoicecreator.ui.screens.Settings
 import com.tt.invoicecreator.viewmodel.AppViewModel
@@ -147,6 +148,19 @@ fun InvoiceCreatorApp (
                     ignoredOnComposing = {
                         appBarState = it
                     }
+                )
+            }
+
+            composable(route = InvoiceCreatorScreen.InvoiceInfoV2.name) {
+                InvoiceInfoScreenV2(
+                    invoiceV2 = uiState.invoiceV2,
+                    invoiceItemListV2 = uiState.invoiceItemListV2,
+                    paidListV2 = uiState.paidListV2,
+                    ignoredOnComposing = {
+                        appBarState = it
+                    },
+                    viewModel = viewModel,
+                    navController = navController
                 )
             }
 

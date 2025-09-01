@@ -26,6 +26,7 @@ fun SingleRowInvoiceV2(
     paidInvoices: List<PaidV2>?,
     invoiceChosen: (InvoiceV2) -> Unit,
     itemsChosen: (List<InvoiceItemV2>) -> Unit,
+    paidChosen: (List<PaidV2>?) -> Unit,
     modePro:Boolean
 ) {
     Card(
@@ -36,6 +37,7 @@ fun SingleRowInvoiceV2(
             .clickable {
                 invoiceChosen(invoice)
                 itemsChosen(invoiceItems)
+                paidChosen(paidInvoices)
             },
         colors = CardDefaults.cardColors(containerColor = Color.LightGray),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
@@ -58,7 +60,10 @@ fun SingleRowInvoiceV2(
                 text = "value: ${InvoiceValueCalculator.calculateV2(invoiceItems)}"
             )
             if(modePro){
-                // todo add paid section
+
+                Text(
+                    text = "paid: ${InvoiceValueCalculator.calculatePaid(paidInvoices)}"
+                )
             }
         }
     }

@@ -70,10 +70,6 @@ fun InvoicesScreenV2(
         mutableStateOf(false)
     }
 
-    val alertDialogUpdatePaid = remember {
-        mutableStateOf(false)
-    }
-
     val context = LocalContext.current
 
     val user = SharedPreferences.readUserDetails(context)
@@ -112,7 +108,6 @@ fun InvoicesScreenV2(
             addMainUSerAlertDialog.value = true
         }
     }
-
     Box(modifier = Modifier
         .fillMaxSize(),
         contentAlignment = Alignment.Center){
@@ -128,6 +123,7 @@ fun InvoicesScreenV2(
                 paidInvoices = paidInvoicesCollection,
                 invoiceChosen = {
                     invoice.value = it
+                    viewModel.updateInvoiceV2(it)
                 },
                 itemsChosen = {
                     val size = it.size
@@ -136,9 +132,13 @@ fun InvoicesScreenV2(
                         if(i<size){
                             itemList.add(it[i])
                         }else{
+                            viewModel.updateInvoiceItemListV2(it)
                             printInvoiceAlertDialog.value = true
                         }
                     }
+                },
+                paidChosen = {
+                    viewModel.updatePaidListV2(it)
                 },
                 modePro = modePro
             )
@@ -165,8 +165,8 @@ fun InvoicesScreenV2(
                 printInvoiceAlertDialog.value = false
             },
             modePro = modePro,
-            updatePaidClick = {
-                alertDialogUpdatePaid.value = true
+            goToInfo = {
+                navController.navigate(InvoiceCreatorScreen.InvoiceInfoV2.name)
             }
         )
     }

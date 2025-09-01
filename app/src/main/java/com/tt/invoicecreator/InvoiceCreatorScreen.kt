@@ -10,5 +10,7 @@ enum class InvoiceCreatorScreen(@StringRes val title:Int) {
     InvoicesV2(title = R.string.invoicesV2),
     AddInvoiceV2(title = R.string.add_invoiceV2),
     ChooseClientV2(title = R.string.choose_client_v2),
-    Settings(title = R.string.settings)
+    Settings(title = R.string.settings),
+
+    InvoiceInfoV2(title = R.string.info)
 }

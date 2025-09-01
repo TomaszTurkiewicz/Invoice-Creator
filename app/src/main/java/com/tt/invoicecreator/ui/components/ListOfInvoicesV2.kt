@@ -16,6 +16,7 @@ fun ListOfInvoicesV2(
     paidInvoices: List<PaidV2>?,
     invoiceChosen: (InvoiceV2) -> Unit,
     itemsChosen: (List<InvoiceItemV2>) -> Unit,
+    paidChosen: (List<PaidV2>?) -> Unit,
     modePro:Boolean
 ) {
 
@@ -32,15 +33,22 @@ fun ListOfInvoicesV2(
                 it.invoiceId == invoice.invoiceId
             }
 
+            val paidItems = paidInvoices?.filter {
+                it.invoiceId == invoice.invoiceId
+            }
+
             SingleRowInvoiceV2(
                 invoice = invoice,
                 invoiceItems = invoiceItems,
-                paidInvoices = paidInvoices,
+                paidInvoices = paidItems,
                 invoiceChosen = {
                     invoiceChosen(it)
                 },
                 itemsChosen = {
                     itemsChosen(it)
+                },
+                paidChosen = {
+                    paidChosen(it)
                 },
                 modePro = modePro
             )

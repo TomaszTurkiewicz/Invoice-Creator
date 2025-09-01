@@ -89,6 +89,12 @@ class AppViewModel(
         }
     }
 
+    fun savePayment(paidV2: PaidV2) {
+        coroutine.launch {
+            paidRepositoryV2.insertPaid(paidV2)
+        }
+    }
+
     fun saveInvoiceV2(){
         coroutine.launch {
             val id = invoiceRepositoryV2.insertInvoice(invoiceV2)
@@ -140,6 +146,36 @@ class AppViewModel(
             )
         }
     }
+
+    fun updateInvoiceV2(invoiceV2: InvoiceV2){
+        _uiState.update { currentState ->
+            currentState.copy(
+                invoiceV2 = invoiceV2
+            )
+        }
+    }
+
+    fun updateInvoiceItemListV2(invoiceItems:List<InvoiceItemV2>){
+        _uiState.update { currentState ->
+            currentState.copy(
+                invoiceItemListV2 = invoiceItems
+            )
+        }
+    }
+
+    fun updatePaidListV2(paidListV2: List<PaidV2>?){
+        _uiState.update { currentState ->
+            currentState.copy(
+                paidListV2 = paidListV2
+            )
+        }
+
+
+
+
+    }
+
+
 
 
 }

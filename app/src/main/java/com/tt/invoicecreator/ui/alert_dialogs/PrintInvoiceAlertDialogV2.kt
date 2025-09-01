@@ -28,7 +28,7 @@ fun PrintInvoiceAlertDialogV2(
     invoiceItemV2List: List<InvoiceItemV2>,
     onDismissRequest: () -> Unit,
     modePro: Boolean,
-    updatePaidClick: () -> Unit
+    goToInfo: () -> Unit
 ) {
 
     BasicAlertDialog(
@@ -63,14 +63,14 @@ fun PrintInvoiceAlertDialogV2(
                 if(modePro){
                     Button(
                         onClick = {
-                            updatePaidClick()
+                            goToInfo()
                             onDismissRequest()
                         },
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(5.dp)
                     ) {
-                        Text(text = "UPDATE PAID")
+                        Text(text = "INFO")
                     }
                 }
 
