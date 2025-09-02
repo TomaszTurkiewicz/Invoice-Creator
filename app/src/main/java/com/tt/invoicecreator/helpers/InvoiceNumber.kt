@@ -13,19 +13,20 @@ object InvoiceNumber {
         val currentMonthAndYear = DateAndTime.monthAndYear(time)
         var invoiceNumber = 1
 
-        return  if(invoices.isNullOrEmpty()){
+        val invoicesNew = invoices?.filter { it ->
+            val monthAndYear = DateAndTime.monthAndYear(it.time)
+            monthAndYear.month == currentMonthAndYear.month && monthAndYear.year == currentMonthAndYear.year
+        }
+
+        return  if(invoicesNew.isNullOrEmpty()){
             invoiceNumber
         }else{
-            invoices.forEach{
+            invoicesNew.forEach{
                 invoice ->
-                val invoiceMonthAndYear = DateAndTime.monthAndYear(invoice.time)
-                if(DateAndTime.isCurrentMonth(currentMonthAndYear,invoiceMonthAndYear)){
+
                     if(invoice.invoiceNumber>invoiceNumber){
                         invoiceNumber = invoice.invoiceNumber
                     }
-                }else{
-                    //do nothing
-                }
             }
             return invoiceNumber+1
         }

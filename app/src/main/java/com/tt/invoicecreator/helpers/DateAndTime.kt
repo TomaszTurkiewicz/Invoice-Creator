@@ -19,11 +19,4 @@ object DateAndTime {
             year = calendar.get(Calendar.YEAR)
         )
     }
-
-    fun isCurrentMonth(
-        monthAndYear1: MonthAndYear,
-        monthAndYear2: MonthAndYear
-    ):Boolean{
-        return (monthAndYear1.year == monthAndYear2.year)&&(monthAndYear1.month == monthAndYear2.month)
-    }
 }

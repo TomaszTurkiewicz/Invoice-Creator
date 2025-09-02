@@ -160,6 +160,7 @@ fun InvoiceCreatorApp (
                         appBarState = it
                     },
                     viewModel = viewModel,
+                    uiState= uiState,
                     navController = navController
                 )
             }

@@ -31,6 +31,7 @@ fun InvoiceInfoScreenV2(
     paidListV2: List<PaidV2>?,
     ignoredOnComposing:(AppBarState) -> Unit,
     viewModel: AppViewModel,
+    uiState: AppUiState,
     navController: NavController
     ) {
 
@@ -84,6 +85,7 @@ fun InvoiceInfoScreenV2(
             viewModel = viewModel,
             invoiceId = invoiceV2.invoiceId,
             paidListV2 = paidListV2,
+            uiState = uiState,
             closeAlertDialog = {
                 payAlertDialog.value = false
             }

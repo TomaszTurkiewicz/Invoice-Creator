@@ -7,20 +7,21 @@ import androidx.lifecycle.asLiveData
 import com.tt.invoicecreator.data.AppUiState
 import com.tt.invoicecreator.data.SharedPreferences
 import com.tt.invoicecreator.data.roomV2.dao.ClientDaoV2
-import com.tt.invoicecreator.data.roomV2.entities.ClientV2
 import com.tt.invoicecreator.data.roomV2.dao.InvoiceDaoV2
 import com.tt.invoicecreator.data.roomV2.dao.InvoiceItemDaoV2
+import com.tt.invoicecreator.data.roomV2.dao.ItemDaoV2
+import com.tt.invoicecreator.data.roomV2.dao.PaidDaoV2
+import com.tt.invoicecreator.data.roomV2.entities.ClientV2
 import com.tt.invoicecreator.data.roomV2.entities.InvoiceItemV2
 import com.tt.invoicecreator.data.roomV2.entities.InvoiceV2
-import com.tt.invoicecreator.data.roomV2.dao.ItemDaoV2
+import com.tt.invoicecreator.data.roomV2.entities.ItemV2
+import com.tt.invoicecreator.data.roomV2.entities.PaidV2
 import com.tt.invoicecreator.data.roomV2.offline_repository.OfflineClientRepositoryV2
 import com.tt.invoicecreator.data.roomV2.offline_repository.OfflineInvoiceItemRepositoryV2
 import com.tt.invoicecreator.data.roomV2.offline_repository.OfflineInvoiceRepositoryV2
 import com.tt.invoicecreator.data.roomV2.offline_repository.OfflineItemRepositoryV2
-import com.tt.invoicecreator.data.roomV2.dao.PaidDaoV2
-import com.tt.invoicecreator.data.roomV2.entities.ItemV2
-import com.tt.invoicecreator.data.roomV2.entities.PaidV2
 import com.tt.invoicecreator.data.roomV2.offline_repository.OfflinePaidRepositoryV2
+import com.tt.invoicecreator.helpers.DateAndTime
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -169,13 +170,14 @@ class AppViewModel(
                 paidListV2 = paidListV2
             )
         }
-
-
-
-
     }
 
-
-
+    fun updatePaymentDay(time:Long){
+        _uiState.update { currentState ->
+            currentState.copy(
+                paymentDay = DateAndTime.convertLongToDate(time)
+            )
+        }
+    }
 
 }
