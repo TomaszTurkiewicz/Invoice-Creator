@@ -9,6 +9,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -22,6 +23,7 @@ import com.tt.invoicecreator.data.roomV2.entities.PaidV2
 import com.tt.invoicecreator.helpers.InvoiceNumber
 import com.tt.invoicecreator.helpers.InvoiceValueCalculator
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogPayInvoiceV2
+import com.tt.invoicecreator.ui.components.PaymentHistoryRow
 import com.tt.invoicecreator.viewmodel.AppViewModel
 
 @Composable
@@ -37,6 +39,14 @@ fun InvoiceInfoScreenV2(
 
     val payAlertDialog = remember {
         mutableStateOf(false)
+    }
+
+    val invoiceValue = remember {
+        mutableDoubleStateOf(InvoiceValueCalculator.calculateV2(invoiceItemListV2))
+    }
+
+    val paidValue = remember {
+        mutableDoubleStateOf(InvoiceValueCalculator.calculatePaid(paidListV2))
     }
 
     LaunchedEffect(key1 = true) {
@@ -62,21 +72,40 @@ fun InvoiceInfoScreenV2(
         )
 
         Text(
-            text = "Value: ${InvoiceValueCalculator.calculateV2(invoiceItemListV2)}"
+            text = "Value: ${invoiceValue.doubleValue}"
         )
         Text(
             text = "Paid: ${InvoiceValueCalculator.calculatePaid(paidListV2)}"
         )
 
-        Button(
-            onClick = {
-                payAlertDialog.value = true
-            }
-        ) {
-            Text(
-                text = "PAY"
-            )
+        Text(
+            text = "Payment History"
+        )
+
+        paidListV2?.forEach { paidV2 ->
+            PaymentHistoryRow(paidV2)
         }
+
+        if(InvoiceValueCalculator.calculatePaid(paidListV2)<InvoiceValueCalculator.calculateV2(invoiceItemListV2)){
+            Button(
+                onClick = {
+                    payAlertDialog.value = true
+                }
+            ) {
+                Text(
+                    text = "PAY"
+                )
+            }
+        }
+//        Button(
+//            onClick = {
+//                payAlertDialog.value = true
+//            }
+//        ) {
+//            Text(
+//                text = "PAY"
+//            )
+//        }
 
     }
 
@@ -86,6 +115,8 @@ fun InvoiceInfoScreenV2(
             invoiceId = invoiceV2.invoiceId,
             paidListV2 = paidListV2,
             uiState = uiState,
+            invoiceValue = invoiceValue.doubleValue,
+            paid = paidValue.doubleValue,
             closeAlertDialog = {
                 payAlertDialog.value = false
             }

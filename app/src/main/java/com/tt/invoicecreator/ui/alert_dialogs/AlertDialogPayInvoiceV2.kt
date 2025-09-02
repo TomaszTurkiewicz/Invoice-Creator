@@ -18,6 +18,7 @@ import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.tt.invoicecreator.data.AppUiState
+import com.tt.invoicecreator.data.roomV2.entities.InvoiceItemV2
 import com.tt.invoicecreator.data.roomV2.entities.PaidV2
 import com.tt.invoicecreator.helpers.DateAndTime
 import com.tt.invoicecreator.helpers.DecimalFormatter
@@ -39,6 +41,8 @@ fun AlertDialogPayInvoiceV2(
     invoiceId:Int,
     uiState: AppUiState,
     paidListV2: List<PaidV2>?,
+    invoiceValue: Double,
+    paid: Double,
     closeAlertDialog: () -> Unit
 ) {
 
@@ -57,6 +61,7 @@ fun AlertDialogPayInvoiceV2(
     val timeMilisec = remember {
         mutableLongStateOf(System.currentTimeMillis())
     }
+
 
     LaunchedEffect(key1 = true) {
         viewModel.updatePaymentDay(timeMilisec.longValue)
@@ -80,7 +85,12 @@ fun AlertDialogPayInvoiceV2(
             )
             InputDigitsWithLabel(
                 labelText = "amount",
-                inputText = amountPaid.value
+                inputText = amountPaid.value,
+                isError = if(amountPaid.value == ""){
+                    invoiceValue < paid + 0.0
+                } else {
+                    invoiceValue < paid + amountPaid.value.toDouble()
+                }
             ) {
                 amountPaid.value = decimalFormatter.cleanup(it)
             }
@@ -92,27 +102,6 @@ fun AlertDialogPayInvoiceV2(
                         datePicker.value = true
                     }
             )
-
-//            InputDigitsWithLabel(
-//                labelText = "year",
-//                inputText = yearPaid.value
-//            ) {
-//                yearPaid.value = decimalFormatter.cleanup(it)
-//            }
-//            InputDigitsWithLabel(
-//                labelText = "month",
-//                inputText = monthPaid.value
-//            ) {
-//                monthPaid.value = decimalFormatter.cleanup(it)
-//            }
-//            InputDigitsWithLabel(
-//                labelText = "day",
-//                inputText = dayPaid.value
-//            ) {
-//                dayPaid.value = decimalFormatter.cleanup(it)
-//            }
-
-
 
             InputDigitsWithLabel(
                 labelText = "comments",
@@ -145,6 +134,11 @@ fun AlertDialogPayInvoiceV2(
                     )
                     viewModel.updatePaidListV2(newPaidList)
                     closeAlertDialog()
+                },
+                enabled = if(amountPaid.value == ""){
+                    !(invoiceValue < paid + 0.0)
+                } else {
+                    !(invoiceValue < paid + amountPaid.value.toDouble())
                 }
             ) {
                 Text(

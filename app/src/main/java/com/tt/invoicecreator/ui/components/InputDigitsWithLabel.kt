@@ -15,7 +15,9 @@ import androidx.compose.ui.unit.dp
 fun InputDigitsWithLabel(
     labelText: String,
     inputText: String?,
-    onValueChange: (String) -> Unit
+    isError: Boolean = false,
+    onValueChange: (String) -> Unit,
+
 ) {
     Column(
         modifier = Modifier
@@ -34,7 +36,8 @@ fun InputDigitsWithLabel(
             },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number
-            )
+            ),
+            isError = isError
         )
     }
 }

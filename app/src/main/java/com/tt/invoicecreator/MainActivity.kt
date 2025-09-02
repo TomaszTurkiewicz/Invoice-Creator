@@ -144,8 +144,6 @@ class MainActivity : ComponentActivity() {
 
 /**
  * todo add VAT calculation
- * todo add invoice paid if PRO - list of payments !!! not paid in invoice
- * todo update payment alert dialog (choose date default today, date picker), if total payment equal to invoice value block pay button in info screen, check if payment not bigger than invoice value in alert dialog, date cannot be null
  * todo add changing color schema if PRO
  * todo add due date
  * todo track due date if pro
