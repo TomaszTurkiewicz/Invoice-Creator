@@ -31,6 +31,7 @@ import com.tt.invoicecreator.InvoiceCreatorScreen
 import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.data.SharedPreferences
 import com.tt.invoicecreator.data.SignatureFile
+import com.tt.invoicecreator.helpers.InvoiceDueDate
 import com.tt.invoicecreator.helpers.InvoiceNumber
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogInvoiceNumberV2
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogPaymentMethod
@@ -107,6 +108,10 @@ fun AddInvoiceScreenV2(
         if (viewModel.calculateNumber) {
             viewModel.getInvoiceV2().invoiceNumber = InvoiceNumber.getNewNumberV2(viewModel.getInvoiceV2().time,invoiceList)
         }
+
+        if(viewModel.calculateDueDate && modePro){
+            viewModel.getInvoiceV2().dueDate = InvoiceDueDate.getInitialDueDate(time.longValue)
+        }
     }
 
     val pic = SignatureFile.getFilePath(context).toUri().path
@@ -121,7 +126,9 @@ fun AddInvoiceScreenV2(
         ){
             InvoiceNumberCardView(
                 number = viewModel.getInvoiceV2().invoiceNumber,
-                time = time.longValue
+                time = time.longValue,
+                modePro = modePro,
+                dueDate = viewModel.getInvoiceV2().dueDate
             ){
                 invoiceNumberAlertDialog.value = true
             }

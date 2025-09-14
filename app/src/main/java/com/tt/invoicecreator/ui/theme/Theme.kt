@@ -11,9 +11,9 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val DarkMyColorScheme = CustomColorsPalette(
     material = darkColorScheme(
-        primary = Purple40,
-        primaryContainer = Pink40,
-        background = PurpleGrey40
+        primary = Blue500Dark,
+        primaryContainer = Blue100Dark,
+        background = Blue50Dark
     ),
     invoicePrimary = Orange,
     primaryDark = Grey
@@ -21,9 +21,9 @@ private val DarkMyColorScheme = CustomColorsPalette(
 
 private val LightMyColorScheme = CustomColorsPalette(
     material = lightColorScheme(
-        primary = Purple80,
-        primaryContainer = Pink80,
-        background = PurpleGrey80
+        primary = Blue500,
+        primaryContainer = Blue100,
+        background = Blue50
     ),
     invoicePrimary = Orange,
     primaryDark = Grey
@@ -45,7 +45,7 @@ fun InvoiceCreatorTheme(
             LightMyColorScheme
         }
     }
-    CompositionLocalProvider {
+    CompositionLocalProvider(LocalColors provides colors) {
         MaterialTheme(
             colorScheme = colors.material,
             typography = Typography,

@@ -13,3 +13,15 @@ val Pink40 = Color(0xFF7D5260)
 
 val Orange = Color(0xFFFF5722)
 val Grey = Color(0xFFB0B0B0)
+
+val Blue500 = Color(0xFF2196F3)
+
+val Blue50 = Color(0xFFE3F2FD)
+
+val Blue100 = Color(0xFFBBDEFB)
+
+val Blue500Dark = Color(0xFF104B79)
+
+val Blue50Dark = Color(0xFF72797E)
+
+val Blue100Dark = Color(0xFF5E6F7D)

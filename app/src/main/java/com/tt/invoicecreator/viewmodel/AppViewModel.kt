@@ -65,6 +65,8 @@ class AppViewModel(
 
     var calculateNumber = true
 
+    var calculateDueDate = true
+
 
     fun addItemToInvoice(invoiceItemV2: InvoiceItemV2){
         invoiceItems.add(invoiceItemV2)
@@ -137,6 +139,7 @@ class AppViewModel(
         this.invoiceV2 = InvoiceV2()
         this.invoiceItems.clear()
         this.calculateNumber = true
+        this.calculateDueDate = true
     }
 
     fun cleanAdFlags() {

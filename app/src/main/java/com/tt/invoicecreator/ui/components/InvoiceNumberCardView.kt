@@ -22,6 +22,8 @@ import com.tt.invoicecreator.helpers.InvoiceNumber
 fun InvoiceNumberCardView(
     number:Int,
     time:Long,
+    modePro:Boolean,
+    dueDate:Long?,
     onClick: () -> Unit
 ) {
 
@@ -60,6 +62,30 @@ fun InvoiceNumberCardView(
                     fontWeight = FontWeight.W500,
                     modifier = Modifier
                         .padding(5.dp))
+            }
+            if(modePro){
+                Row{
+                    Text(
+                        text = "Due date",
+                        fontWeight = FontWeight.W500,
+                        modifier = Modifier
+                            .padding(5.dp))
+                    if(dueDate!=null){
+                        Text(
+                            text = DateAndTime.convertLongToDate(dueDate),
+                            fontWeight = FontWeight.W500,
+                            modifier = Modifier
+                                .padding(5.dp))
+                    }
+                    else{
+                        Text(
+                            text = "----",
+                            fontWeight = FontWeight.W500,
+                            modifier = Modifier
+                                .padding(5.dp))
+                    }
+
+                }
             }
 
         }

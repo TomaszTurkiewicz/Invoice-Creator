@@ -11,5 +11,6 @@ data class InvoiceV2 (
     @Embedded
     var client: ClientV2 = ClientV2(),
     var time:Long = 0L,
-    var invoiceNumber:Int = 0
+    var invoiceNumber:Int = 0,
+    var dueDate:Long? = null
 )

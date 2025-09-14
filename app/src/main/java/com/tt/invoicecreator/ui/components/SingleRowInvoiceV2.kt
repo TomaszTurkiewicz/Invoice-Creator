@@ -29,18 +29,7 @@ fun SingleRowInvoiceV2(
     paidChosen: (List<PaidV2>?) -> Unit,
     modePro:Boolean
 ) {
-    Card(
-        shape = RoundedCornerShape(20.dp),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp)
-            .clickable {
-                invoiceChosen(invoice)
-                itemsChosen(invoiceItems)
-                paidChosen(paidInvoices)
-            },
-        colors = CardDefaults.cardColors(containerColor = Color.LightGray),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+    CustomCardView(
     ){
         Column(
             modifier = Modifier
