@@ -7,7 +7,10 @@ class DecimalFormatter(
 ) {
     private val decimalSeparator = symbols.decimalSeparator
 
-    fun cleanup(input: String):String{
+    fun cleanup(
+        input: String,
+        needSeparator: Boolean = true
+    ):String{
         if (input.matches("\\D".toRegex())) return ""
         if (input.matches("0+".toRegex())) return "0"
 
@@ -20,7 +23,7 @@ class DecimalFormatter(
                 sb.append(char)
                 continue
             }
-            if(char == decimalSeparator && !hasDecimalSep && sb.isNotEmpty()){
+            if(char == decimalSeparator && !hasDecimalSep && sb.isNotEmpty() && needSeparator){
                 sb.append(char)
                 hasDecimalSep = true
             }

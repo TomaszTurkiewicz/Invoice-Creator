@@ -110,7 +110,7 @@ fun AddInvoiceScreenV2(
         }
 
         if(viewModel.calculateDueDate && modePro){
-            viewModel.getInvoiceV2().dueDate = InvoiceDueDate.getInitialDueDate(time.longValue)
+            viewModel.getInvoiceV2().dueDate = InvoiceDueDate.getDueDate(time.longValue)
         }
     }
 
@@ -212,7 +212,8 @@ fun AddInvoiceScreenV2(
             onDismissRequest = {
                 invoiceNumberAlertDialog.value = false
             },
-            viewModel = viewModel
+            viewModel = viewModel,
+            modePro = modePro
         )
     }
 

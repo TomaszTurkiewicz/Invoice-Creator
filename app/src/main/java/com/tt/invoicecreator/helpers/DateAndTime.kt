@@ -19,4 +19,10 @@ object DateAndTime {
             year = calendar.get(Calendar.YEAR)
         )
     }
+
+    fun getDifferenceInDays(timeStart:Long, timeEnd:Long):Int{
+        val dif = timeEnd-timeStart
+
+        return (dif/(1000*60*60*24)).toInt()
+    }
 }

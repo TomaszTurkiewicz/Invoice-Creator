@@ -30,6 +30,12 @@ fun SingleRowInvoiceV2(
     modePro:Boolean
 ) {
     CustomCardView(
+        modifier = Modifier
+            .clickable {
+                invoiceChosen(invoice)
+                itemsChosen(invoiceItems)
+                paidChosen(paidInvoices)
+            }
     ){
         Column(
             modifier = Modifier
@@ -41,6 +47,11 @@ fun SingleRowInvoiceV2(
             Text(
                 text = "date: ${DateAndTime.convertLongToDate(invoice.time)}"
             )
+            if(modePro && invoice.dueDate != null){
+                Text(
+                    text = "due date: ${DateAndTime.convertLongToDate(invoice.dueDate!!)}"
+                )
+            }
             Text(
                 text = "client: ${invoice.client.clientName}"
             )

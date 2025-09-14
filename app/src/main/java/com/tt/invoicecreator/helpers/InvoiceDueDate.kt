@@ -5,8 +5,10 @@ import java.util.Calendar
 
 object InvoiceDueDate {
 
-    fun getInitialDueDate(
-        time:Long
+
+    fun getDueDate(
+        time: Long,
+        days: Int = 14
     ): Long{
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = time
@@ -14,10 +16,8 @@ object InvoiceDueDate {
 
         val newCalendar = GregorianCalendar()
         newCalendar.time = date
-        newCalendar.add(Calendar.DATE,14)
+        newCalendar.add(Calendar.DATE,days)
 
         return newCalendar.time.time
     }
-
-
 }

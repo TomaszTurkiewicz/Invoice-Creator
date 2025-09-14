@@ -19,11 +19,12 @@ import com.tt.invoicecreator.ui.theme.myColors
 
 @Composable
 fun CustomCardView(
+    modifier: Modifier,
     content: @Composable ColumnScope.() -> Unit
 ) {
     Card(
         shape = RoundedCornerShape(20.dp),
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(10.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.myColors.material.primary),

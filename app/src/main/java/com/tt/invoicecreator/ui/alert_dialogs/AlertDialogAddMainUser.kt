@@ -17,7 +17,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.tt.invoicecreator.data.SharedPreferences
 import com.tt.invoicecreator.helpers.User
-import com.tt.invoicecreator.ui.components.InputDigitsWithLabel
+import com.tt.invoicecreator.ui.components.InputTextWithLabel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,26 +57,26 @@ fun AlertDialogAddMainUser(
                     .padding(10.dp),
                 text = "TITLE"
             )
-            InputDigitsWithLabel(
+            InputTextWithLabel(
                 labelText = "Name",
                 inputText = name.value
             ) {
                 name.value = it
             }
 
-            InputDigitsWithLabel(
+            InputTextWithLabel(
                 labelText = "Address line 1",
                 inputText = addressLine1.value
             ) {
                 addressLine1.value = it
             }
-            InputDigitsWithLabel(
+            InputTextWithLabel(
                 labelText = "Address line 2",
                 inputText = addressLine2.value
             ) {
                 addressLine2.value = it
             }
-            InputDigitsWithLabel(
+            InputTextWithLabel(
                 labelText = "city",
                 inputText = city.value
             ) {

@@ -397,6 +397,14 @@ class PdfUtilsV2 {
                 SEPARATOR_LINE_Y + (TEXT_SMALL *2.5f),
                 paint
             )
+            if(invoiceV2.dueDate!=null){
+                canvas.drawText(
+                    "Due: "+DateAndTime.convertLongToDate(time = invoiceV2.dueDate!!),
+                    RIGHT_MARGIN,
+                    SEPARATOR_LINE_Y + (TEXT_SMALL *3.8f),
+                    paint
+                )
+            }
         }
 
         private fun drawBillToSectionV2(
