@@ -31,8 +31,11 @@ import com.tt.invoicecreator.InvoiceCreatorScreen
 import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.data.SharedPreferences
 import com.tt.invoicecreator.data.SignatureFile
+import com.tt.invoicecreator.data.roomV2.entities.InvoiceV2
+import com.tt.invoicecreator.helpers.DateAndTime
 import com.tt.invoicecreator.helpers.InvoiceDueDate
 import com.tt.invoicecreator.helpers.InvoiceNumber
+import com.tt.invoicecreator.helpers.MonthAndYear
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogInvoiceNumberV2
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogPaymentMethod
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogSignature
@@ -50,9 +53,10 @@ fun AddInvoiceScreenV2(
     viewModel: AppViewModel,
     ignoredOnComposing: (AppBarState) -> Unit,
     navController: NavController,
-    modePro:Boolean
+    modePro:Boolean,
+    invoiceList:List<InvoiceV2>?
 ) {
-    val invoiceList by viewModel.invoiceListV2.observeAsState()
+//    val invoiceList by viewModel.invoiceListV2.observeAsState()
 
 
     val itemInvoiceList = viewModel.getInvoiceItemList()
@@ -76,6 +80,7 @@ fun AddInvoiceScreenV2(
     val image = remember {
         mutableStateOf<Bitmap?>(null)
     }
+
 
     val context = LocalContext.current
     viewModel.paymentMethod = SharedPreferences.readPaymentMethod(context) ?: ""
@@ -213,7 +218,12 @@ fun AddInvoiceScreenV2(
                 invoiceNumberAlertDialog.value = false
             },
             viewModel = viewModel,
-            modePro = modePro
+            modePro = modePro,
+            listOfThisMonthAndYearInvoices = invoiceList?.filter { invoiceV2 ->
+                val invoiceMAY = DateAndTime.monthAndYear(invoiceV2.time)
+                val currentMAY = DateAndTime.monthAndYear(time.longValue)
+                invoiceMAY.year == currentMAY.year && invoiceMAY.month == currentMAY.month
+            }
         )
     }
 

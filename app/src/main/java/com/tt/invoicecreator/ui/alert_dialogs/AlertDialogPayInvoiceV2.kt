@@ -84,6 +84,8 @@ fun AlertDialogPayInvoiceV2(
                 text = "TITLE"
             )
             InputDigitsWithLabel(
+                modifier = Modifier
+                    .fillMaxWidth(),
                 labelText = "amount",
                 inputText = amountPaid.value,
                 isError = if(amountPaid.value == ""){
@@ -104,6 +106,8 @@ fun AlertDialogPayInvoiceV2(
             )
 
             InputDigitsWithLabel(
+                modifier = Modifier
+                    .fillMaxWidth(),
                 labelText = "comments",
                 inputText = comments.value
             ) {

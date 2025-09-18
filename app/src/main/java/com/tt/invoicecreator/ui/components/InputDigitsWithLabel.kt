@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun InputDigitsWithLabel(
+    modifier: Modifier,
     labelText: String,
     inputText: String?,
     isError: Boolean = false,
@@ -20,8 +21,7 @@ fun InputDigitsWithLabel(
 
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = modifier
             .padding(10.dp)
     ){
         Text(

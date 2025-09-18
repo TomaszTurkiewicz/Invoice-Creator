@@ -61,12 +61,16 @@ fun AlertDialogItemCountDiscountAndCommentsV2(
                 text = "TITLE"
             )
             InputDigitsWithLabel(
+                modifier = Modifier
+                    .fillMaxWidth(),
                 labelText = "Quantity",
                 inputText = itemCount.value
             ) {
                 itemCount.value = decimalFormatter.cleanup(it)
             }
             InputDigitsWithLabel(
+                modifier = Modifier
+                    .fillMaxWidth(),
                 labelText = "DISCOUNT",
                 inputText = itemDiscount.value
             ) {

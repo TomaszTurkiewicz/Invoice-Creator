@@ -66,6 +66,8 @@ fun AddItemScreenV2(
 
 
         InputDigitsWithLabel(
+            modifier = Modifier
+                .fillMaxWidth(),
             labelText = "ITEM VALUE",
             inputText = itemValue.value
         ) {

@@ -11,15 +11,19 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.tt.invoicecreator.data.roomV2.entities.InvoiceV2
 import com.tt.invoicecreator.helpers.DateAndTime
 import com.tt.invoicecreator.helpers.DecimalFormatter
 import com.tt.invoicecreator.helpers.InvoiceDueDate
+import com.tt.invoicecreator.helpers.InvoiceNumber
 import com.tt.invoicecreator.ui.components.InputDigitsWithLabel
 import com.tt.invoicecreator.viewmodel.AppViewModel
 
@@ -28,8 +32,16 @@ import com.tt.invoicecreator.viewmodel.AppViewModel
 fun AlertDialogInvoiceNumberV2(
     onDismissRequest: () -> Unit,
     viewModel: AppViewModel,
-    modePro: Boolean
+    modePro: Boolean,
+    listOfThisMonthAndYearInvoices: List<InvoiceV2>?
 ) {
+
+
+    val availableNumbers = remember {
+        mutableListOf<Int>()
+    }
+    val decimalFormatter = DecimalFormatter()
+
     val newNumber = remember {
         mutableStateOf(viewModel.getInvoiceV2().invoiceNumber.toString())
     }
@@ -52,6 +64,38 @@ fun AlertDialogInvoiceNumberV2(
             ))
         )
     }
+
+    LaunchedEffect(true) {
+        var number = 1
+        if(listOfThisMonthAndYearInvoices!=null){
+            while (availableNumbers.size<5){
+
+                var numberUsed = false
+                for(j in listOfThisMonthAndYearInvoices){
+                    if(j.invoiceNumber == number){
+                        numberUsed = true
+                        break
+                    }
+                }
+
+                if(!numberUsed){
+                    availableNumbers.add(number)
+                    number++
+                }else{
+                    number++
+                }
+            }
+        }
+        else{
+            availableNumbers.add(1)
+            availableNumbers.add(2)
+            availableNumbers.add(3)
+            availableNumbers.add(4)
+            availableNumbers.add(5)
+        }
+    }
+
+
     BasicAlertDialog(
         onDismissRequest = {
             onDismissRequest()
@@ -68,16 +112,41 @@ fun AlertDialogInvoiceNumberV2(
                 text = "TITLE"
             )
 
-            InputDigitsWithLabel(
-                labelText = "NEW INVOICE NUMBER",
-                inputText = newNumber.value
-            ) {
-                newNumber.value = it
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.Bottom
+            ){
+                InputDigitsWithLabel(
+                    modifier = Modifier
+                        .fillMaxWidth(0.7f),
+                    labelText = "NEW INVOICE NUMBER",
+                    inputText = newNumber.value,
+                    isError = newNumber.value == 0.toString() || newNumber.value == ""
+                ) {
+                    newNumber.value = decimalFormatter.cleanup(it,false)
+                }
+
+                Text(
+                    text = InvoiceNumber.getStringMonthAndYear(viewModel.getInvoiceV2().time),
+                    modifier = Modifier
+                        .padding(bottom = 20.dp)
+                )
             }
+            if(availableNumbers.size == 5){
+                Text(
+                    text = "available numbers:${availableNumbers[0]}, ${availableNumbers[1]}, ${availableNumbers[2]}, ${availableNumbers[3]}, ${availableNumbers[4]}"
+                )
+            }
+
+
+
+
+
 
             /** due date **/
             if(modePro){
-                Column(){
+                Column {
                     Row{
                       Text(
                           text = "due date"
@@ -92,6 +161,8 @@ fun AlertDialogInvoiceNumberV2(
 
                     if(dueDateActive.value){
                         InputDigitsWithLabel(
+                            modifier = Modifier
+                                .fillMaxWidth(),
                             labelText = "PAYMENT IN...",
                             inputText = dueDateString.value,
                             isError = dueDateString.value.isEmpty()
@@ -102,7 +173,6 @@ fun AlertDialogInvoiceNumberV2(
                                 dueDateLong.longValue = InvoiceDueDate.getDueDate(viewModel.getInvoiceV2().time,days)
                             }
                             else{
-
                                 dueDateLong.longValue = InvoiceDueDate.getDueDate(viewModel.getInvoiceV2().time,0)
                             }
 
@@ -115,6 +185,7 @@ fun AlertDialogInvoiceNumberV2(
                 onClick = {
                     viewModel.getInvoiceV2().invoiceNumber = newNumber.value.toInt()
                     viewModel.calculateNumber = false
+                    viewModel.calculateDueDate = false
                     if(dueDateActive.value){
                         viewModel.getInvoiceV2().dueDate = dueDateLong.longValue
                     }else{
@@ -125,7 +196,10 @@ fun AlertDialogInvoiceNumberV2(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(5.dp),
-                enabled = !dueDateActive.value || dueDateString.value.isNotEmpty()
+                enabled = !dueDateActive.value
+                        || dueDateString.value != ""
+                        && newNumber.value != 0.toString()
+                        && newNumber.value != ""
             ) {
                 Text(
                     text = "SAVE"
@@ -138,6 +212,4 @@ fun AlertDialogInvoiceNumberV2(
 
 }
 
-//todo check if new number not equal to "0"
 // todo check if new number available (this month and year)
-// todo show available numbers for this month and year

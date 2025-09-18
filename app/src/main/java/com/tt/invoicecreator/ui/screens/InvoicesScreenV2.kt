@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -91,6 +92,14 @@ fun InvoicesScreenV2(
                         }) {
                             Icon(Icons.Default.Add,null)
                         }
+                        if(modePro){
+                            IconButton(onClick = {
+                                
+                            }) {
+                                Icon(Icons.Default.Menu,null)
+                            }
+                        }
+
                         IconButton(onClick = {
                             navController.navigate(InvoiceCreatorScreen.Settings.name)
                         }) {
