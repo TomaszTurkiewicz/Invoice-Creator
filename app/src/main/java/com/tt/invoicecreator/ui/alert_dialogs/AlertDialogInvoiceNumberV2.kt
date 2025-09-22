@@ -65,6 +65,10 @@ fun AlertDialogInvoiceNumberV2(
         )
     }
 
+    val numberExist = remember {
+        mutableStateOf(false)
+    }
+
     LaunchedEffect(true) {
         var number = 1
         if(listOfThisMonthAndYearInvoices!=null){
@@ -122,9 +126,28 @@ fun AlertDialogInvoiceNumberV2(
                         .fillMaxWidth(0.7f),
                     labelText = "NEW INVOICE NUMBER",
                     inputText = newNumber.value,
-                    isError = newNumber.value == 0.toString() || newNumber.value == ""
+                    isError = newNumber.value == 0.toString() || newNumber.value == "" || numberExist.value,
+                    errorText = when (newNumber.value) {
+                        0.toString() -> {
+                            "number cannot be 0"
+                        }
+                        "" -> {
+                            "not valid number"
+                        }
+                        else -> {
+                            "number already exists"
+                        }
+                    }
                 ) {
+                    numberExist.value = false
                     newNumber.value = decimalFormatter.cleanup(it,false)
+                    if(newNumber.value != "" && newNumber.value != "0"){
+                        listOfThisMonthAndYearInvoices?.forEach{ invoice ->
+                            if(invoice.invoiceNumber == newNumber.value.toInt()){
+                                numberExist.value = true
+                            }
+                        }
+                    }
                 }
 
                 Text(
@@ -181,6 +204,9 @@ fun AlertDialogInvoiceNumberV2(
                 }
             }
 
+
+
+
             Button(
                 onClick = {
                     viewModel.getInvoiceV2().invoiceNumber = newNumber.value.toInt()
@@ -200,6 +226,7 @@ fun AlertDialogInvoiceNumberV2(
                         || dueDateString.value != ""
                         && newNumber.value != 0.toString()
                         && newNumber.value != ""
+                        && !numberExist.value
             ) {
                 Text(
                     text = "SAVE"
@@ -211,5 +238,3 @@ fun AlertDialogInvoiceNumberV2(
     }
 
 }
-
-// todo check if new number available (this month and year)

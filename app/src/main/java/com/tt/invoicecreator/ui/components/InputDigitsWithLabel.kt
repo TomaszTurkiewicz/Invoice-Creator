@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -17,7 +18,9 @@ fun InputDigitsWithLabel(
     labelText: String,
     inputText: String?,
     isError: Boolean = false,
-    onValueChange: (String) -> Unit,
+    errorText: String = "",
+    onValueChange: (String) -> Unit
+
 
 ) {
     Column(
@@ -39,5 +42,13 @@ fun InputDigitsWithLabel(
             ),
             isError = isError
         )
+        if(isError){
+            Text(
+                text = errorText,
+                modifier = Modifier
+                    .padding(start = 10.dp),
+                color = MaterialTheme.colorScheme.error
+            )
+        }
     }
 }
