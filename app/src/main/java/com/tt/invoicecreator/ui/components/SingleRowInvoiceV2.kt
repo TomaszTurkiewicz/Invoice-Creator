@@ -9,6 +9,10 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableDoubleStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -18,6 +22,7 @@ import com.tt.invoicecreator.data.roomV2.entities.PaidV2
 import com.tt.invoicecreator.helpers.DateAndTime
 import com.tt.invoicecreator.helpers.InvoiceNumber
 import com.tt.invoicecreator.helpers.InvoiceValueCalculator
+import com.tt.invoicecreator.ui.theme.Typography
 
 @Composable
 fun SingleRowInvoiceV2(
@@ -29,6 +34,13 @@ fun SingleRowInvoiceV2(
     paidChosen: (List<PaidV2>?) -> Unit,
     modePro:Boolean
 ) {
+
+    val amountPaid = remember {
+        mutableDoubleStateOf(0.0)
+    }
+
+    amountPaid.doubleValue = InvoiceValueCalculator.calculatePaid(paidInvoices)
+
     CustomCardView(
         modifier = Modifier
             .clickable {
@@ -42,7 +54,8 @@ fun SingleRowInvoiceV2(
                 .fillMaxWidth()
         ){
             Text(
-                text = "number: ${InvoiceNumber.getStringNumber(invoice.invoiceNumber,invoice.time)}"
+                text = "Invoice number: ${InvoiceNumber.getStringNumber(invoice.invoiceNumber,invoice.time)}",
+                style = Typography.titleLarge
             )
             Text(
                 text = "date: ${DateAndTime.convertLongToDate(invoice.time)}"
@@ -62,7 +75,25 @@ fun SingleRowInvoiceV2(
             if(modePro){
 
                 Text(
-                    text = "paid: ${InvoiceValueCalculator.calculatePaid(paidInvoices)}"
+                    text = "paid: ${amountPaid.doubleValue}"
+                )
+            }
+            if(modePro
+                && invoice.dueDate != null
+                && invoice.dueDate!! < System.currentTimeMillis()
+                && amountPaid.doubleValue < InvoiceValueCalculator.calculateV2(invoiceItems)){
+                Text(
+                    text = "OVERDUE",
+                    style = Typography.titleLarge,
+                    color = Color.Red
+                )
+            }
+            if(modePro
+                && amountPaid.doubleValue == InvoiceValueCalculator.calculateV2(invoiceItems)){
+                Text(
+                    text = "PAID",
+                    style = Typography.titleLarge,
+                    color = Color.Green
                 )
             }
         }

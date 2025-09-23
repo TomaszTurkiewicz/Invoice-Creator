@@ -1,6 +1,7 @@
 package com.tt.invoicecreator.ui.screens
 
 import android.app.Activity
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,6 +11,7 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -118,7 +120,8 @@ fun InvoicesScreenV2(
         }
     }
     Box(modifier = Modifier
-        .fillMaxSize(),
+        .fillMaxSize()
+        .background(MaterialTheme.colorScheme.background),
         contentAlignment = Alignment.Center){
         if(invoiceListV2.isNullOrEmpty()){
             Text(

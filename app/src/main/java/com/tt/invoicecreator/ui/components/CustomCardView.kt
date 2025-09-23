@@ -27,10 +27,13 @@ fun CustomCardView(
         modifier = modifier
             .fillMaxWidth()
             .padding(10.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.myColors.material.primary),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.myColors.material.primaryContainer),
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
     ){
-        Column(content = content)
+        Column(
+            content = content,
+            modifier = Modifier
+                .padding(10.dp))
     }
 
 }
