@@ -30,6 +30,7 @@ import com.tt.invoicecreator.data.roomV2.entities.InvoiceItemV2
 import com.tt.invoicecreator.data.roomV2.entities.PaidV2
 import com.tt.invoicecreator.helpers.DateAndTime
 import com.tt.invoicecreator.helpers.DecimalFormatter
+import com.tt.invoicecreator.ui.components.CustomCardView
 import com.tt.invoicecreator.ui.components.InputDigitsWithLabel
 import com.tt.invoicecreator.viewmodel.AppViewModel
 
@@ -73,10 +74,11 @@ fun AlertDialogPayInvoiceV2(
             closeAlertDialog()
         }
     ) {
+        CustomCardView {
         Column(
             modifier = Modifier
-                .background(Color.LightGray)
-        ) {
+        )
+        {
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -152,6 +154,7 @@ fun AlertDialogPayInvoiceV2(
 
         }
     }
+    }
 
     if(datePicker.value){
         val datePickerState = rememberDatePickerState()
@@ -174,7 +177,7 @@ fun AlertDialogPayInvoiceV2(
                 }
             }
         ) {
-            DatePicker(state = datePickerState)
+                DatePicker(state = datePickerState)
         }
 
     }

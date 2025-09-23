@@ -24,6 +24,7 @@ import com.tt.invoicecreator.helpers.DateAndTime
 import com.tt.invoicecreator.helpers.DecimalFormatter
 import com.tt.invoicecreator.helpers.InvoiceDueDate
 import com.tt.invoicecreator.helpers.InvoiceNumber
+import com.tt.invoicecreator.ui.components.CustomCardView
 import com.tt.invoicecreator.ui.components.InputDigitsWithLabel
 import com.tt.invoicecreator.viewmodel.AppViewModel
 
@@ -105,134 +106,134 @@ fun AlertDialogInvoiceNumberV2(
             onDismissRequest()
         }
     ) {
-        Column(
-            modifier = Modifier
-                .background(Color.LightGray)
-        ) {
-            Text(
+        CustomCardView {
+
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp),
-                text = "TITLE"
-            )
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.Bottom
-            ){
-                InputDigitsWithLabel(
-                    modifier = Modifier
-                        .fillMaxWidth(0.7f),
-                    labelText = "NEW INVOICE NUMBER",
-                    inputText = newNumber.value,
-                    isError = newNumber.value == 0.toString() || newNumber.value == "" || numberExist.value,
-                    errorText = when (newNumber.value) {
-                        0.toString() -> {
-                            "number cannot be 0"
-                        }
-                        "" -> {
-                            "not valid number"
-                        }
-                        else -> {
-                            "number already exists"
-                        }
-                    }
-                ) {
-                    numberExist.value = false
-                    newNumber.value = decimalFormatter.cleanup(it,false)
-                    if(newNumber.value != "" && newNumber.value != "0"){
-                        listOfThisMonthAndYearInvoices?.forEach{ invoice ->
-                            if(invoice.invoiceNumber == newNumber.value.toInt()){
-                                numberExist.value = true
-                            }
-                        }
-                    }
-                }
-
-                Text(
-                    text = InvoiceNumber.getStringMonthAndYear(viewModel.getInvoiceV2().time),
-                    modifier = Modifier
-                        .padding(bottom = 20.dp)
-                )
-            }
-            if(availableNumbers.size == 5){
-                Text(
-                    text = "available numbers:${availableNumbers[0]}, ${availableNumbers[1]}, ${availableNumbers[2]}, ${availableNumbers[3]}, ${availableNumbers[4]}"
-                )
-            }
-
-
-
-
-
-
-            /** due date **/
-            if(modePro){
-                Column {
-                    Row{
-                      Text(
-                          text = "due date"
-                      )
-                        Switch(
-                            checked = dueDateActive.value,
-                            onCheckedChange = {
-                                dueDateActive.value = it
-                            }
-                        )
-                    }
-
-                    if(dueDateActive.value){
-                        InputDigitsWithLabel(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            labelText = "PAYMENT IN...",
-                            inputText = dueDateString.value,
-                            isError = dueDateString.value.isEmpty()
-                        ) {
-                            dueDateString.value = DecimalFormatter().cleanup(it,false)
-                            if(dueDateString.value != ""){
-                                val days = dueDateString.value.toInt()
-                                dueDateLong.longValue = InvoiceDueDate.getDueDate(viewModel.getInvoiceV2().time,days)
-                            }
-                            else{
-                                dueDateLong.longValue = InvoiceDueDate.getDueDate(viewModel.getInvoiceV2().time,0)
-                            }
-
-                        }
-                    }
-                }
-            }
-
-
-
-
-            Button(
-                onClick = {
-                    viewModel.getInvoiceV2().invoiceNumber = newNumber.value.toInt()
-                    viewModel.calculateNumber = false
-                    viewModel.calculateDueDate = false
-                    if(dueDateActive.value){
-                        viewModel.getInvoiceV2().dueDate = dueDateLong.longValue
-                    }else{
-                        viewModel.getInvoiceV2().dueDate = null
-                    }
-                    onDismissRequest()
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(5.dp),
-                enabled = !dueDateActive.value
-                        || dueDateString.value != ""
-                        && newNumber.value != 0.toString()
-                        && newNumber.value != ""
-                        && !numberExist.value
             ) {
                 Text(
-                    text = "SAVE"
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp),
+                    text = "TITLE"
                 )
 
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.Bottom
+                ) {
+                    InputDigitsWithLabel(
+                        modifier = Modifier
+                            .fillMaxWidth(0.7f),
+                        labelText = "NEW INVOICE NUMBER",
+                        inputText = newNumber.value,
+                        isError = newNumber.value == 0.toString() || newNumber.value == "" || numberExist.value,
+                        errorText = when (newNumber.value) {
+                            0.toString() -> {
+                                "number cannot be 0"
+                            }
+
+                            "" -> {
+                                "not valid number"
+                            }
+
+                            else -> {
+                                "number already exists"
+                            }
+                        }
+                    ) {
+                        numberExist.value = false
+                        newNumber.value = decimalFormatter.cleanup(it, false)
+                        if (newNumber.value != "" && newNumber.value != "0") {
+                            listOfThisMonthAndYearInvoices?.forEach { invoice ->
+                                if (invoice.invoiceNumber == newNumber.value.toInt()) {
+                                    numberExist.value = true
+                                }
+                            }
+                        }
+                    }
+
+                    Text(
+                        text = InvoiceNumber.getStringMonthAndYear(viewModel.getInvoiceV2().time),
+                        modifier = Modifier
+                            .padding(bottom = 20.dp)
+                    )
+                }
+                if (availableNumbers.size == 5) {
+                    Text(
+                        text = "available numbers:${availableNumbers[0]}, ${availableNumbers[1]}, ${availableNumbers[2]}, ${availableNumbers[3]}, ${availableNumbers[4]}"
+                    )
+                }
+
+                /** due date **/
+                if (modePro) {
+                    Column {
+                        Row {
+                            Text(
+                                text = "due date"
+                            )
+                            Switch(
+                                checked = dueDateActive.value,
+                                onCheckedChange = {
+                                    dueDateActive.value = it
+                                }
+                            )
+                        }
+
+                        if (dueDateActive.value) {
+                            InputDigitsWithLabel(
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                labelText = "PAYMENT IN...",
+                                inputText = dueDateString.value,
+                                isError = dueDateString.value.isEmpty()
+                            ) {
+                                dueDateString.value = DecimalFormatter().cleanup(it, false)
+                                if (dueDateString.value != "") {
+                                    val days = dueDateString.value.toInt()
+                                    dueDateLong.longValue = InvoiceDueDate.getDueDate(
+                                        viewModel.getInvoiceV2().time,
+                                        days
+                                    )
+                                } else {
+                                    dueDateLong.longValue =
+                                        InvoiceDueDate.getDueDate(viewModel.getInvoiceV2().time, 0)
+                                }
+
+                            }
+                        }
+                    }
+                }
+
+                Button(
+                    onClick = {
+                        viewModel.getInvoiceV2().invoiceNumber = newNumber.value.toInt()
+                        viewModel.calculateNumber = false
+                        viewModel.calculateDueDate = false
+                        if (dueDateActive.value) {
+                            viewModel.getInvoiceV2().dueDate = dueDateLong.longValue
+                        } else {
+                            viewModel.getInvoiceV2().dueDate = null
+                        }
+                        onDismissRequest()
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(5.dp),
+                    enabled = !dueDateActive.value
+                            || dueDateString.value != ""
+                            && newNumber.value != 0.toString()
+                            && newNumber.value != ""
+                            && !numberExist.value
+                ) {
+                    Text(
+                        text = "SAVE"
+                    )
+
+                }
             }
+
         }
 
     }

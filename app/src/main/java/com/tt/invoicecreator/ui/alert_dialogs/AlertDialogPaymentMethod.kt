@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.tt.invoicecreator.data.SharedPreferences
+import com.tt.invoicecreator.ui.components.CustomCardView
 import com.tt.invoicecreator.ui.components.InputTextWithLabel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -33,36 +34,38 @@ fun AlertDialogPaymentMethod(
         }
     ) {
 
-        Column(
-            modifier = Modifier
-                .background(Color.LightGray)
-        ) {
-            Text(
+        CustomCardView {
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp),
-                text = "TITLE"
             )
-
-            InputTextWithLabel(
-                labelText = "NEW PAYMENT METHOD",
-                inputText = paymentMethod.value
-            ) {
-                paymentMethod.value = it
-            }
-            Button(
-                enabled = paymentMethod.value?.trim()!!.isNotEmpty(),
-                onClick = {
-                    SharedPreferences.savePaymentMethod(context,paymentMethod.value!!)
-                    onDismissRequest()
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(5.dp)
-            ){
+            {
                 Text(
-                    text = "SAVE"
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp),
+                    text = "TITLE"
                 )
+
+                InputTextWithLabel(
+                    labelText = "NEW PAYMENT METHOD",
+                    inputText = paymentMethod.value
+                ) {
+                    paymentMethod.value = it
+                }
+                Button(
+                    enabled = paymentMethod.value?.trim()!!.isNotEmpty(),
+                    onClick = {
+                        SharedPreferences.savePaymentMethod(context, paymentMethod.value!!)
+                        onDismissRequest()
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(5.dp)
+                ) {
+                    Text(
+                        text = "SAVE"
+                    )
+                }
             }
         }
     }

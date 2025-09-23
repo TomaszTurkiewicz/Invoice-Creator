@@ -18,6 +18,7 @@ import androidx.navigation.NavController
 import com.tt.invoicecreator.data.roomV2.entities.InvoiceItemV2
 import com.tt.invoicecreator.data.roomV2.entities.ItemV2
 import com.tt.invoicecreator.helpers.DecimalFormatter
+import com.tt.invoicecreator.ui.components.CustomCardView
 import com.tt.invoicecreator.ui.components.InputDigitsWithLabel
 import com.tt.invoicecreator.ui.components.InputTextWithLabel
 import com.tt.invoicecreator.viewmodel.AppViewModel
@@ -49,63 +50,65 @@ fun AlertDialogItemCountDiscountAndCommentsV2(
             onDismissRequest()
         }
     ) {
-        Column(
-            modifier = Modifier
-                .background(Color.LightGray),
-
-            ) {
-            Text(
+        CustomCardView {
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp),
-                text = "TITLE"
+
             )
-            InputDigitsWithLabel(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                labelText = "Quantity",
-                inputText = itemCount.value
-            ) {
-                itemCount.value = decimalFormatter.cleanup(it)
-            }
-            InputDigitsWithLabel(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                labelText = "DISCOUNT",
-                inputText = itemDiscount.value
-            ) {
-                itemDiscount.value = decimalFormatter.cleanup(it)
-            }
-            InputTextWithLabel(
-                labelText = "COMMENT",
-                inputText = itemComment.value
-            ) {
-                itemComment.value = it
-            }
-            Button(
-                enabled = itemCount.value.isNotEmpty() && itemDiscount.value.isNotEmpty(),
-                onClick = {
-
-                    viewModel.addItemToInvoice(
-                        InvoiceItemV2(
-                            itemV2 = itemV2,
-                            itemCount = itemCount.value.toDouble(),
-                            itemDiscount = itemDiscount.value.toDouble(),
-                            comment = itemComment.value.trim()
-                        )
-                    )
-                    navController.navigateUp()
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(5.dp)
-            ) {
+            {
                 Text(
-                    text = "SAVE"
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp),
+                    text = "TITLE"
                 )
+                InputDigitsWithLabel(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    labelText = "Quantity",
+                    inputText = itemCount.value
+                ) {
+                    itemCount.value = decimalFormatter.cleanup(it)
+                }
+                InputDigitsWithLabel(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    labelText = "DISCOUNT",
+                    inputText = itemDiscount.value
+                ) {
+                    itemDiscount.value = decimalFormatter.cleanup(it)
+                }
+                InputTextWithLabel(
+                    labelText = "COMMENT",
+                    inputText = itemComment.value
+                ) {
+                    itemComment.value = it
+                }
+                Button(
+                    enabled = itemCount.value.isNotEmpty() && itemDiscount.value.isNotEmpty(),
+                    onClick = {
+
+                        viewModel.addItemToInvoice(
+                            InvoiceItemV2(
+                                itemV2 = itemV2,
+                                itemCount = itemCount.value.toDouble(),
+                                itemDiscount = itemDiscount.value.toDouble(),
+                                comment = itemComment.value.trim()
+                            )
+                        )
+                        navController.navigateUp()
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(5.dp)
+                ) {
+                    Text(
+                        text = "SAVE"
+                    )
+
+                }
 
             }
-
         }
 
     }

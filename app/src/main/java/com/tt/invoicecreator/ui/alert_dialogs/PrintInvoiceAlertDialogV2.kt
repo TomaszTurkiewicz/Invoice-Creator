@@ -19,6 +19,7 @@ import com.tt.invoicecreator.data.roomV2.entities.InvoiceItemV2
 import com.tt.invoicecreator.data.roomV2.entities.InvoiceV2
 import com.tt.invoicecreator.helpers.InvoiceNumber
 import com.tt.invoicecreator.helpers.PdfUtilsV2
+import com.tt.invoicecreator.ui.components.CustomCardView
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,65 +37,76 @@ fun PrintInvoiceAlertDialogV2(
             onDismissRequest()
         }
     ) {
-        Column(
-            modifier = Modifier
-                .background(Color.LightGray)
-        ){
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp),
-                text = "TITLE"
-            )
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp),
-                text = "do You want to print invoice: ${InvoiceNumber.getStringNumber(invoiceNumber = invoiceV2.invoiceNumber, time = invoiceV2.time)} ?"
-            )
-
+        CustomCardView {
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 10.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
-            ){
+            )
+            {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp),
+                    text = "TITLE"
+                )
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp),
+                    text = "do You want to print invoice: ${
+                        InvoiceNumber.getStringNumber(
+                            invoiceNumber = invoiceV2.invoiceNumber,
+                            time = invoiceV2.time
+                        )
+                    } ?"
+                )
 
-                if(modePro){
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 10.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+
+                    if (modePro) {
+                        Button(
+                            onClick = {
+                                goToInfo()
+                                onDismissRequest()
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(5.dp)
+                        ) {
+                            Text(text = "INFO")
+                        }
+                    }
+
                     Button(
                         onClick = {
-                            goToInfo()
+                            PdfUtilsV2.generatePdfV2(
+                                context = context,
+                                invoiceV2 = invoiceV2,
+                                items = invoiceItemV2List
+                            )
                             onDismissRequest()
                         },
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(5.dp)
                     ) {
-                        Text(text = "INFO")
+                        Text(text = "PRINT")
                     }
-                }
 
-                Button(
-                    onClick = {
-                        PdfUtilsV2.generatePdfV2(context = context, invoiceV2 = invoiceV2, items = invoiceItemV2List)
-                        onDismissRequest()
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(5.dp)
-                ) {
-                    Text(text = "PRINT")
-                }
-
-                Button(
-                    onClick = {
-                        onDismissRequest()
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(5.dp)
-                ) {
-                    Text(text = "DISMISS")
+                    Button(
+                        onClick = {
+                            onDismissRequest()
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(5.dp)
+                    ) {
+                        Text(text = "DISMISS")
+                    }
                 }
             }
         }
