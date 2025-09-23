@@ -21,20 +21,14 @@ fun PaymentMethodCardView(
 ) {
 
 
-    Card(
-        shape = RoundedCornerShape(20.dp),
+    CustomCardView(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp)
             .clickable {
                 onClick()
-            },
-        colors = CardDefaults.cardColors(containerColor = Color.LightGray),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+            }
     ) {
         Column(
             modifier = Modifier
-                .padding(24.dp)
         )
         {
             Text(

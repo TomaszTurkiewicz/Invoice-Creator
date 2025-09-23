@@ -19,17 +19,11 @@ import com.tt.invoicecreator.data.roomV2.entities.InvoiceItemV2
 fun ItemCardViewV2(
     invoiceItemV2: InvoiceItemV2
 ) {
-    Card(
-        shape = RoundedCornerShape(20.dp),
+    CustomCardView(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.LightGray),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
         Row(
             modifier = Modifier
-                .padding(24.dp)
         )
         {
             Column {

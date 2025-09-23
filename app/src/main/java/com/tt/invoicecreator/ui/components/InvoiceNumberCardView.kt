@@ -30,21 +30,13 @@ fun InvoiceNumberCardView(
     val invoiceNumberString = InvoiceNumber.getStringNumber(number,time)
 
 
-    Card(
-        shape = RoundedCornerShape(20.dp),
+    CustomCardView(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp)
             .clickable {
                 onClick()
-            },
-        colors = CardDefaults.cardColors(containerColor = Color.LightGray),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+            }
     ) {
-        Column(
-            modifier = Modifier
-                .padding(24.dp)
-        )
+        Column()
         {
             Text(
                 text = "Invoice Number: $invoiceNumberString",

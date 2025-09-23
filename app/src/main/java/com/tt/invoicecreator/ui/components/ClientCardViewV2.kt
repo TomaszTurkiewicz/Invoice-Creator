@@ -24,23 +24,15 @@ fun ClientCardViewV2(
     showCardView: () -> Boolean,
     onClick: () -> Unit
 ) {
-    Card(
-        shape = RoundedCornerShape(20.dp),
+    CustomCardView(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp)
             .clickable {
                 onClick()
-            },
-        colors = CardDefaults.cardColors(containerColor = Color.LightGray),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+            }
     ){
 //        if(viewModel.getInvoiceV2().client.clientName != ""){
         if(showCardView()){
-            Column(
-                modifier = Modifier
-                    .padding(24.dp)
-            ) {
+            Column() {
                 Text(
                     text = clientName,
                     fontWeight = FontWeight.W700,

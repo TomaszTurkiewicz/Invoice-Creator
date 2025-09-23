@@ -20,16 +20,11 @@ fun SignatureCardView(
     onClick: () -> Unit,
     imageBitmap: Bitmap?
 ) {
-    Card(
-        shape = RoundedCornerShape(20.dp),
+    CustomCardView(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp)
             .clickable {
                 onClick()
-            },
-        colors = CardDefaults.cardColors(containerColor = Color.LightGray),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+            }
     ){
         if(imageBitmap != null){
             Image(
@@ -42,7 +37,6 @@ fun SignatureCardView(
             Text(
                 text = "NO SIGNATURE YET",
                 modifier = Modifier
-                    .padding(20.dp)
             )
         }
 

@@ -20,20 +20,14 @@ fun SingleRowClientV2(
     client: ClientV2,
     clientChosen: (ClientV2) -> Unit
 ) {
-    Card(
-        shape = RoundedCornerShape(20.dp),
+    CustomCardView(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp)
             .clickable {
                 clientChosen(client)
-            },
-        colors = CardDefaults.cardColors(containerColor = Color.LightGray),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+            }
     ){
         Column(
             modifier = Modifier
-                .padding(24.dp)
         ) {
             Text(
                 text = client.clientName,

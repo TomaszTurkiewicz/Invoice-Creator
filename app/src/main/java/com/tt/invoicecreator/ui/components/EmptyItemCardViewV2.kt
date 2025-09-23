@@ -19,16 +19,11 @@ fun EmptyItemCardViewV2(
     showPosition:Boolean,
     onClick: () -> Unit
 ) {
-    Card(
-        shape = RoundedCornerShape(20.dp),
+    CustomCardView (
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp)
             .clickable {
                 onClick()
-            },
-        colors = CardDefaults.cardColors(containerColor = Color.LightGray),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+            }
     ){
         Text(
             text = if(showPosition)"Item: $position not chosen yet" else "Item not chosen yet",

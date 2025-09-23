@@ -20,20 +20,14 @@ fun SingleRowItemV2(
     item: ItemV2,
     itemChosen: (ItemV2) -> Unit
 ) {
-    Card(
-        shape = RoundedCornerShape(20.dp),
+    CustomCardView(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp)
             .clickable {
                 itemChosen(item)
-            },
-        colors = CardDefaults.cardColors(containerColor = Color.LightGray),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+            }
     ) {
         Row(
             modifier = Modifier
-                .padding(24.dp)
         )
         {
             Row {
