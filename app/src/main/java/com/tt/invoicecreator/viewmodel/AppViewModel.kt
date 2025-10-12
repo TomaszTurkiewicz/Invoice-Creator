@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.tt.invoicecreator.data.AppUiState
+import com.tt.invoicecreator.data.InvoiceStatus
 import com.tt.invoicecreator.data.SharedPreferences
 import com.tt.invoicecreator.data.roomV2.dao.ClientDaoV2
 import com.tt.invoicecreator.data.roomV2.dao.InvoiceDaoV2
@@ -183,4 +184,12 @@ class AppViewModel(
         }
     }
 
+    fun updateInvoiceStatus(status: Enum<InvoiceStatus>) {
+        _uiState.update {
+            currentState ->
+            currentState.copy(
+                invoiceState = status
+            )
+        }
+    }
 }

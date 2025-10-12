@@ -11,7 +11,6 @@ data class AppUiState(
     val invoiceV2: InvoiceV2 = InvoiceV2(),
     val invoiceItemListV2: List<InvoiceItemV2> = listOf(),
     val paidListV2: List<PaidV2>? = listOf(),
-    val paymentDay: String = ""
-
-
+    val paymentDay: String = "",
+    val invoiceState: Enum<InvoiceStatus> = InvoiceStatus.ALL
 )

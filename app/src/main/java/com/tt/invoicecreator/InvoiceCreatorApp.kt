@@ -111,7 +111,8 @@ fun InvoiceCreatorApp (
                     modePro = uiState.modePro,
                     adLoaded = uiState.rewardedAppLoaded,
                     activity = activity,
-                    adWatched = uiState.rewardedAdWatched
+                    adWatched = uiState.rewardedAdWatched,
+                    invoiceStatus = uiState.invoiceState
                 )
             }
 

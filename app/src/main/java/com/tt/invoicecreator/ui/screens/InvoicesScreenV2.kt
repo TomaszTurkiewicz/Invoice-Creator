@@ -26,10 +26,12 @@ import androidx.navigation.NavController
 import com.tt.invoicecreator.InvoiceCreatorScreen
 import com.tt.invoicecreator.MainActivity
 import com.tt.invoicecreator.data.AppBarState
+import com.tt.invoicecreator.data.InvoiceStatus
 import com.tt.invoicecreator.data.SharedPreferences
 import com.tt.invoicecreator.data.roomV2.entities.InvoiceItemV2
 import com.tt.invoicecreator.data.roomV2.entities.InvoiceV2
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogAddMainUser
+import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogSearchInvoices
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogWatchAd
 import com.tt.invoicecreator.ui.alert_dialogs.PrintInvoiceAlertDialogV2
 import com.tt.invoicecreator.ui.components.ListOfInvoicesV2
@@ -43,7 +45,8 @@ fun InvoicesScreenV2(
     modePro:Boolean,
     adLoaded:Boolean,
     activity: MainActivity,
-    adWatched: Boolean
+    adWatched: Boolean,
+    invoiceStatus: Enum<InvoiceStatus>
 ) {
     val invoiceListV2 by viewModel.invoiceListV2.observeAsState()
 
@@ -77,6 +80,10 @@ fun InvoicesScreenV2(
 
     val user = SharedPreferences.readUserDetails(context)
 
+    val searchAlertDialog = remember {
+        mutableStateOf(false)
+    }
+
     LaunchedEffect(key1 = true) {
         ignoredOnComposing(
             AppBarState(
@@ -96,7 +103,7 @@ fun InvoicesScreenV2(
                         }
                         if(modePro){
                             IconButton(onClick = {
-                                
+                                searchAlertDialog.value = true
                             }) {
                                 Icon(Icons.Default.Menu,null)
                             }
@@ -205,4 +212,15 @@ fun InvoicesScreenV2(
     if(adWatched){
         navController.navigate(InvoiceCreatorScreen.AddInvoiceV2.name)
     }
+
+    if(searchAlertDialog.value){
+        AlertDialogSearchInvoices(
+            invoiceStatus = invoiceStatus,
+            viewModel = viewModel
+        ) {
+            searchAlertDialog.value = false
+        }
+    }
 }
+
+//todo: ALL, OVERDUE, NOT PAID, PAID, CLIENT
