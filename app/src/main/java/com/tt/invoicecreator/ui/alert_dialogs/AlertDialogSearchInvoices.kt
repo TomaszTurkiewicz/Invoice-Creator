@@ -8,6 +8,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.tt.invoicecreator.data.InvoiceStatus
@@ -18,10 +20,13 @@ import com.tt.invoicecreator.viewmodel.AppViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AlertDialogSearchInvoices(
-    invoiceStatus: Enum<InvoiceStatus>,
     viewModel: AppViewModel,
     closeAlertDialog: () -> Unit,
 ) {
+    val invoiceStatus = remember {
+        mutableStateOf(InvoiceStatus.ALL)
+    }
+
     BasicAlertDialog(
         onDismissRequest = {
             closeAlertDialog()
@@ -37,22 +42,25 @@ fun AlertDialogSearchInvoices(
                         .padding(10.dp),
                     text = "SHOW INVOICES"
                 )
-                InvoiceStateRow(invoiceStatus,InvoiceStatus.ALL){
-                    viewModel.updateInvoiceStatus(it)
+                InvoiceStateRow(invoiceStatus.value,InvoiceStatus.ALL){
+                    invoiceStatus.value = it
                 }
-                InvoiceStateRow(invoiceStatus,InvoiceStatus.OVERDUE){
-                    viewModel.updateInvoiceStatus(it)
+                InvoiceStateRow(invoiceStatus.value,InvoiceStatus.OVERDUE){
+                    invoiceStatus.value = it
                 }
-                InvoiceStateRow(invoiceStatus,InvoiceStatus.NOT_PAID){
-                    viewModel.updateInvoiceStatus(it)
+                InvoiceStateRow(invoiceStatus.value,InvoiceStatus.NOT_PAID){
+                    invoiceStatus.value = it
                 }
-                InvoiceStateRow(invoiceStatus,InvoiceStatus.PAID){
-                    viewModel.updateInvoiceStatus(it)
+                InvoiceStateRow(invoiceStatus.value,InvoiceStatus.PAID){
+                    invoiceStatus.value = it
                 }
+
+
 
 
                 Button(
                     onClick = {
+                        viewModel.updateInvoiceStatus(invoiceStatus.value)
                         closeAlertDialog()
                     }
                 ) { Text(

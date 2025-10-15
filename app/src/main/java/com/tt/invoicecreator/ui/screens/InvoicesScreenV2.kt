@@ -142,6 +142,7 @@ fun InvoicesScreenV2(
                 )
             }else{
                 ListOfInvoicesV2(
+                    invoiceStatus = invoiceStatus,
                     itemList = invoiceItemsCollection!!,
                     list = invoiceListV2!!,
                     paidInvoices = paidInvoicesCollection,
@@ -215,7 +216,6 @@ fun InvoicesScreenV2(
 
     if(searchAlertDialog.value){
         AlertDialogSearchInvoices(
-            invoiceStatus = invoiceStatus,
             viewModel = viewModel
         ) {
             searchAlertDialog.value = false
