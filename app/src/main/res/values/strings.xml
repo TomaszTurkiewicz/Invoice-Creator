@@ -13,5 +13,6 @@
     <string name="test_rewarded_ad">ca-app-pub-3940256099942544/5224354917</string>
     <string name="admob_rewarded_ad">ca-app-pub-6785166837488087/4429003394</string>
     <string name="info">INFO</string>
+    <string name="filtered_invoices_v2">FILTERED INVOICES V2</string>
 
 </resources>

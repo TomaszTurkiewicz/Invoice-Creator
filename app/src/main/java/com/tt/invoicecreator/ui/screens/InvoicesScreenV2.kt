@@ -3,6 +3,7 @@ package com.tt.invoicecreator.ui.screens
 import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
@@ -21,8 +22,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.VectorProperty
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
+import androidx.room.util.TableInfo
 import com.tt.invoicecreator.InvoiceCreatorScreen
 import com.tt.invoicecreator.MainActivity
 import com.tt.invoicecreator.data.AppBarState
@@ -30,10 +33,12 @@ import com.tt.invoicecreator.data.InvoiceStatus
 import com.tt.invoicecreator.data.SharedPreferences
 import com.tt.invoicecreator.data.roomV2.entities.InvoiceItemV2
 import com.tt.invoicecreator.data.roomV2.entities.InvoiceV2
+import com.tt.invoicecreator.helpers.FilterInvoices
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogAddMainUser
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogSearchInvoices
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogWatchAd
 import com.tt.invoicecreator.ui.alert_dialogs.PrintInvoiceAlertDialogV2
+import com.tt.invoicecreator.ui.components.FilteredInvoicesCardView
 import com.tt.invoicecreator.ui.components.ListOfInvoicesV2
 import com.tt.invoicecreator.viewmodel.AppViewModel
 
@@ -53,6 +58,8 @@ fun InvoicesScreenV2(
     val invoiceItemsCollection by viewModel.invoiceItemListV2.observeAsState()
 
     val paidInvoicesCollection by viewModel.paidListV2.observeAsState()
+
+    val clientList by viewModel.clientListV2.observeAsState()
 
 
     val printInvoiceAlertDialog = remember {
@@ -101,13 +108,6 @@ fun InvoicesScreenV2(
                         }) {
                             Icon(Icons.Default.Add,null)
                         }
-                        if(modePro){
-                            IconButton(onClick = {
-                                searchAlertDialog.value = true
-                            }) {
-                                Icon(Icons.Default.Menu,null)
-                            }
-                        }
 
                         IconButton(onClick = {
                             navController.navigate(InvoiceCreatorScreen.Settings.name)
@@ -141,6 +141,7 @@ fun InvoicesScreenV2(
                     text = "LOADING IN PROGRESS...",
                 )
             }else{
+                if(!modePro){
                 ListOfInvoicesV2(
                     invoiceStatus = invoiceStatus,
                     itemList = invoiceItemsCollection!!,
@@ -165,8 +166,53 @@ fun InvoicesScreenV2(
                     paidChosen = {
                         viewModel.updatePaidListV2(it)
                     },
-                    modePro = modePro
+                    modePro = false
                 )
+            }
+                else{
+                    Column() {
+                        FilteredInvoicesCardView(
+                            header = "ALL INVOICES",
+                            message = "number of all invoices:",
+                            count = invoiceListV2!!.size
+
+                        ){
+                            viewModel.updateInvoiceStatus(InvoiceStatus.ALL)
+                            navController.navigate(InvoiceCreatorScreen.FilteredInvoicesV2.name)
+                        }
+                        FilteredInvoicesCardView(
+                            header = "OVERDUE",
+                            message = "number of overdue invoices:",
+                            count = FilterInvoices.getOverdue(
+                                invoiceListV2!!,
+                                invoiceItemsCollection!!,
+                                paidInvoicesCollection
+                            ).size
+                        ){
+                            viewModel.updateInvoiceStatus(InvoiceStatus.OVERDUE)
+                            navController.navigate(InvoiceCreatorScreen.FilteredInvoicesV2.name)
+                        }
+                        FilteredInvoicesCardView(
+                            header = "NOT PAID",
+                            message = "number of not paid invoices:",
+                            count = FilterInvoices.getNotPaid(
+                                invoiceListV2!!,
+                                invoiceItemsCollection!!,
+                                paidInvoicesCollection
+                            ).size
+                        ){
+                            viewModel.updateInvoiceStatus(InvoiceStatus.NOT_PAID)
+                            navController.navigate(InvoiceCreatorScreen.FilteredInvoicesV2.name)
+                        }
+                        FilteredInvoicesCardView(
+                            header = "BY CLIENT",
+                            message = "number of clients:",
+                            count = clientList?.size ?: 0
+                        ){
+                            //todo
+                        }
+                    }
+                }
             }
 
         }
@@ -216,7 +262,8 @@ fun InvoicesScreenV2(
 
     if(searchAlertDialog.value){
         AlertDialogSearchInvoices(
-            viewModel = viewModel
+            viewModel = viewModel,
+            listOfClients = clientList!!
         ) {
             searchAlertDialog.value = false
         }

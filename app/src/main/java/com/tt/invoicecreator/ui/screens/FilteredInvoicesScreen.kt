@@ -1,0 +1,101 @@
+package com.tt.invoicecreator.ui.screens
+
+import androidx.compose.foundation.layout.Row
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.navigation.NavController
+import com.tt.invoicecreator.InvoiceCreatorScreen
+import com.tt.invoicecreator.MainActivity
+import com.tt.invoicecreator.data.AppBarState
+import com.tt.invoicecreator.data.InvoiceStatus
+import com.tt.invoicecreator.data.roomV2.entities.InvoiceItemV2
+import com.tt.invoicecreator.data.roomV2.entities.InvoiceV2
+import com.tt.invoicecreator.ui.components.ListOfInvoicesV2
+import com.tt.invoicecreator.viewmodel.AppViewModel
+
+@Composable
+fun FilteredInvoicesScreen(
+    viewModel: AppViewModel,
+    ignoredOnComposing: (AppBarState) -> Unit,
+    navController: NavController,
+    invoiceStatus: Enum<InvoiceStatus>
+) {
+
+    val invoiceListV2 by viewModel.invoiceListV2.observeAsState()
+    val invoiceItemsCollection by viewModel.invoiceItemListV2.observeAsState()
+    val paidInvoicesCollection by viewModel.paidListV2.observeAsState()
+
+    val invoice = remember {
+        mutableStateOf(InvoiceV2())
+    }
+
+    val itemList = remember {
+        mutableListOf(InvoiceItemV2())
+    }
+
+    val printInvoiceAlertDialog = remember {
+        mutableStateOf(false)
+    }
+
+    LaunchedEffect(key1 = true) {
+        ignoredOnComposing(
+            AppBarState(
+                action = {
+                    Row {
+                        IconButton(onClick = {
+                            viewModel.cleanInvoiceV2()
+                            navController.navigate(InvoiceCreatorScreen.AddInvoiceV2.name)
+                        }) {
+                            Icon(Icons.Default.Add,null)
+                        }
+
+                        IconButton(onClick = {
+                            navController.navigate(InvoiceCreatorScreen.Settings.name)
+                        }) {
+                            Icon(Icons.Default.Settings,null)
+                        }
+                    }
+                }
+            )
+        )
+    }
+
+    ListOfInvoicesV2(
+        invoiceStatus = invoiceStatus,
+        itemList = invoiceItemsCollection!!,
+        list = invoiceListV2!!,
+        paidInvoices = paidInvoicesCollection,
+        invoiceChosen = {
+            invoice.value = it
+            viewModel.updateInvoiceV2(it)
+        },
+        itemsChosen = {
+            val size = it.size
+            itemList.clear()
+            for(i in 0..size){
+                if(i<size){
+                    itemList.add(it[i])
+                }else{
+                    viewModel.updateInvoiceItemListV2(it)
+                    printInvoiceAlertDialog.value = true
+                }
+            }
+        },
+        paidChosen = {
+            viewModel.updatePaidListV2(it)
+        },
+        modePro = true
+
+
+
+    )
+}

@@ -18,12 +18,14 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.ui.app_bar.TopAppBarWithAction
+import com.tt.invoicecreator.ui.app_bar.TopAppBarWithCustomTitleAndAction
 import com.tt.invoicecreator.ui.screens.AddClientScreenV2
 import com.tt.invoicecreator.ui.screens.AddInvoiceScreenV2
 import com.tt.invoicecreator.ui.screens.AddItemScreenV2
 import com.tt.invoicecreator.ui.screens.ChooseClientScreenV2
 import com.tt.invoicecreator.ui.screens.ChooseItemScreenV2
 import com.tt.invoicecreator.ui.screens.ChooseModeScreen
+import com.tt.invoicecreator.ui.screens.FilteredInvoicesScreen
 import com.tt.invoicecreator.ui.screens.InvoiceInfoScreenV2
 import com.tt.invoicecreator.ui.screens.InvoicesScreenV2
 import com.tt.invoicecreator.ui.screens.Settings
@@ -50,20 +52,31 @@ fun InvoiceCreatorApp (
         mutableStateOf(AppBarState())
     }
 
+    val uiState by viewModel.uiState.collectAsState()
+
     Scaffold (
 
         topBar = {
-            TopAppBarWithAction(
-                appBarState = appBarState,
-                currentScreen = currentScreen,
-                context = context
-            )
-
+            when(currentScreen){
+                InvoiceCreatorScreen.FilteredInvoicesV2 -> {
+                    TopAppBarWithCustomTitleAndAction(
+                        appBarState = appBarState,
+                        invoiceStatus = uiState.invoiceState
+                    )
+                }
+                else -> {
+                    TopAppBarWithAction(
+                        appBarState = appBarState,
+                        currentScreen = currentScreen,
+                        context = context
+                    )
+                }
+            }
         }
     ) {
         innerPadding ->
 
-        val uiState by viewModel.uiState.collectAsState()
+
 
         NavHost(
             navController = navController,
@@ -168,6 +181,18 @@ fun InvoiceCreatorApp (
                     uiState= uiState,
                     navController = navController
                 )
+            }
+
+            composable(route = InvoiceCreatorScreen.FilteredInvoicesV2.name) {
+                FilteredInvoicesScreen(
+                    viewModel = viewModel,
+                    ignoredOnComposing = {
+                        appBarState = it
+                    },
+                    navController = navController,
+                    invoiceStatus = uiState.invoiceState
+                )
+
             }
 
         }

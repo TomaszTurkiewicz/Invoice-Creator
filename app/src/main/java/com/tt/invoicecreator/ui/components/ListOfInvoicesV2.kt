@@ -9,6 +9,7 @@ import com.tt.invoicecreator.data.InvoiceStatus
 import com.tt.invoicecreator.data.roomV2.entities.InvoiceItemV2
 import com.tt.invoicecreator.data.roomV2.entities.InvoiceV2
 import com.tt.invoicecreator.data.roomV2.entities.PaidV2
+import com.tt.invoicecreator.helpers.FilterInvoices
 import com.tt.invoicecreator.helpers.InvoiceValueCalculator
 
 @Composable
@@ -24,41 +25,44 @@ fun ListOfInvoicesV2(
 ) {
     val newList = when(invoiceStatus) {
         InvoiceStatus.ALL -> list
-        InvoiceStatus.OVERDUE -> list.filter {
-            val paid = paidInvoices?.filter { paid ->
-                paid.invoiceId == it.invoiceId
-            }
-            val amountPaid = InvoiceValueCalculator.calculatePaid(paid)
-
-            val items = itemList.filter { item ->
-                item.invoiceId == it.invoiceId
-            }
-
-
-            it.dueDate != null&&it.dueDate!!< System.currentTimeMillis() && amountPaid < InvoiceValueCalculator.calculateV2(items)
-        }
-        InvoiceStatus.NOT_PAID -> list.filter {
-            val paid = paidInvoices?.filter { paid ->
-                paid.invoiceId == it.invoiceId
-            }
-            val amountPaid = InvoiceValueCalculator.calculatePaid(paid)
-
-            val items = itemList.filter { item ->
-                item.invoiceId == it.invoiceId
-            }
-            amountPaid < InvoiceValueCalculator.calculateV2(items)
-        }
-        InvoiceStatus.PAID -> list.filter {
-            val paid = paidInvoices?.filter { paid ->
-                paid.invoiceId == it.invoiceId
-            }
-            val amountPaid = InvoiceValueCalculator.calculatePaid(paid)
-
-            val items = itemList.filter { item ->
-                item.invoiceId == it.invoiceId
-            }
-            amountPaid >= InvoiceValueCalculator.calculateV2(items)
-        }
+        InvoiceStatus.OVERDUE -> FilterInvoices.getOverdue(list, itemList, paidInvoices)
+//            list.filter {
+//            val paid = paidInvoices?.filter { paid ->
+//                paid.invoiceId == it.invoiceId
+//            }
+//            val amountPaid = InvoiceValueCalculator.calculatePaid(paid)
+//
+//            val items = itemList.filter { item ->
+//                item.invoiceId == it.invoiceId
+//            }
+//
+//
+//            it.dueDate != null&&it.dueDate!!< System.currentTimeMillis() && amountPaid < InvoiceValueCalculator.calculateV2(items)
+//        }
+        InvoiceStatus.NOT_PAID -> FilterInvoices.getNotPaid(list, itemList, paidInvoices)
+//            list.filter {
+//            val paid = paidInvoices?.filter { paid ->
+//                paid.invoiceId == it.invoiceId
+//            }
+//            val amountPaid = InvoiceValueCalculator.calculatePaid(paid)
+//
+//            val items = itemList.filter { item ->
+//                item.invoiceId == it.invoiceId
+//            }
+//            amountPaid < InvoiceValueCalculator.calculateV2(items)
+//        }
+        InvoiceStatus.PAID -> FilterInvoices.getPaid(list, itemList, paidInvoices)
+//            list.filter {
+//            val paid = paidInvoices?.filter { paid ->
+//                paid.invoiceId == it.invoiceId
+//            }
+//            val amountPaid = InvoiceValueCalculator.calculatePaid(paid)
+//
+//            val items = itemList.filter { item ->
+//                item.invoiceId == it.invoiceId
+//            }
+//            amountPaid >= InvoiceValueCalculator.calculateV2(items)
+//        }
         else -> list
     }
 
