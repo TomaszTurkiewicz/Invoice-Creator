@@ -12,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import com.tt.invoicecreator.InvoiceCreatorScreen
 import com.tt.invoicecreator.MainActivity
@@ -19,6 +20,7 @@ import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.data.InvoiceStatus
 import com.tt.invoicecreator.data.roomV2.entities.InvoiceItemV2
 import com.tt.invoicecreator.data.roomV2.entities.InvoiceV2
+import com.tt.invoicecreator.ui.alert_dialogs.PrintInvoiceAlertDialogV2
 import com.tt.invoicecreator.ui.components.ListOfInvoicesV2
 import com.tt.invoicecreator.viewmodel.AppViewModel
 
@@ -27,7 +29,8 @@ fun FilteredInvoicesScreen(
     viewModel: AppViewModel,
     ignoredOnComposing: (AppBarState) -> Unit,
     navController: NavController,
-    invoiceStatus: Enum<InvoiceStatus>
+    invoiceStatus: Enum<InvoiceStatus>,
+    modePro:Boolean
 ) {
 
     val invoiceListV2 by viewModel.invoiceListV2.observeAsState()
@@ -45,6 +48,8 @@ fun FilteredInvoicesScreen(
     val printInvoiceAlertDialog = remember {
         mutableStateOf(false)
     }
+
+    val context = LocalContext.current
 
     LaunchedEffect(key1 = true) {
         ignoredOnComposing(
@@ -98,4 +103,20 @@ fun FilteredInvoicesScreen(
 
 
     )
+
+    if(printInvoiceAlertDialog.value){
+
+        PrintInvoiceAlertDialogV2(
+            context = context,
+            invoiceV2 = invoice.value,
+            invoiceItemV2List = itemList,
+            onDismissRequest = {
+                printInvoiceAlertDialog.value = false
+            },
+            modePro = modePro,
+            goToInfo = {
+                navController.navigate(InvoiceCreatorScreen.InvoiceInfoV2.name)
+            }
+        )
+    }
 }

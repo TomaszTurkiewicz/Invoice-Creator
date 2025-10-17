@@ -87,10 +87,6 @@ fun InvoicesScreenV2(
 
     val user = SharedPreferences.readUserDetails(context)
 
-    val searchAlertDialog = remember {
-        mutableStateOf(false)
-    }
-
     LaunchedEffect(key1 = true) {
         ignoredOnComposing(
             AppBarState(
@@ -258,15 +254,6 @@ fun InvoicesScreenV2(
 
     if(adWatched){
         navController.navigate(InvoiceCreatorScreen.AddInvoiceV2.name)
-    }
-
-    if(searchAlertDialog.value){
-        AlertDialogSearchInvoices(
-            viewModel = viewModel,
-            listOfClients = clientList!!
-        ) {
-            searchAlertDialog.value = false
-        }
     }
 }
 

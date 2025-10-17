@@ -190,7 +190,8 @@ fun InvoiceCreatorApp (
                         appBarState = it
                     },
                     navController = navController,
-                    invoiceStatus = uiState.invoiceState
+                    invoiceStatus = uiState.invoiceState,
+                    modePro = uiState.modePro
                 )
 
             }
