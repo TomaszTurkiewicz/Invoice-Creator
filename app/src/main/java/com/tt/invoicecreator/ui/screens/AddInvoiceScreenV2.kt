@@ -58,7 +58,6 @@ fun AddInvoiceScreenV2(
     modePro:Boolean,
     invoiceList:List<InvoiceV2>?
 ) {
-//    val invoiceList by viewModel.invoiceListV2.observeAsState()
 
 
     val itemInvoiceList = viewModel.getInvoiceItemList()

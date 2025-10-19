@@ -68,6 +68,8 @@ class AppViewModel(
 
     var calculateDueDate = true
 
+    var chosenClientToFilterInvoices: ClientV2? = null
+
 
     fun addItemToInvoice(invoiceItemV2: InvoiceItemV2){
         invoiceItems.add(invoiceItemV2)

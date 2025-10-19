@@ -25,8 +25,10 @@ import com.tt.invoicecreator.ui.screens.AddItemScreenV2
 import com.tt.invoicecreator.ui.screens.ChooseClientScreenV2
 import com.tt.invoicecreator.ui.screens.ChooseItemScreenV2
 import com.tt.invoicecreator.ui.screens.ChooseModeScreen
+import com.tt.invoicecreator.ui.screens.FilteredInvoicesByClientScreen
 import com.tt.invoicecreator.ui.screens.FilteredInvoicesScreen
 import com.tt.invoicecreator.ui.screens.InvoiceInfoScreenV2
+import com.tt.invoicecreator.ui.screens.InvoicesByClientScreen
 import com.tt.invoicecreator.ui.screens.InvoicesScreenV2
 import com.tt.invoicecreator.ui.screens.Settings
 import com.tt.invoicecreator.viewmodel.AppViewModel
@@ -43,6 +45,14 @@ fun InvoiceCreatorApp (
     val backStackEntry by navController.currentBackStackEntryAsState()
 
     val invoiceListV2 by viewModel.invoiceListV2.observeAsState()
+
+    val invoiceItemsCollection by viewModel.invoiceItemListV2.observeAsState()
+
+    val paidInvoicesCollection by viewModel.paidListV2.observeAsState()
+
+    val clientList by viewModel.clientListV2.observeAsState()
+
+    val itemList by viewModel.itemListV2.observeAsState()
 
     val currentScreen = InvoiceCreatorScreen.valueOf(
         backStackEntry?.destination?.route ?: InvoiceCreatorScreen.ChooseMode.name
@@ -82,7 +92,7 @@ fun InvoiceCreatorApp (
             navController = navController,
             startDestination = InvoiceCreatorScreen.ChooseMode.name,
             modifier = Modifier.padding(innerPadding)
-        ){
+        ) {
 
             composable(route = InvoiceCreatorScreen.ChooseItemV2.name) {
                 ChooseItemScreenV2(
@@ -90,7 +100,8 @@ fun InvoiceCreatorApp (
                     ignoredOnComposing = {
                         appBarState = it
                     },
-                    navController = navController
+                    navController = navController,
+                    itemList = itemList
                 )
             }
 
@@ -125,7 +136,11 @@ fun InvoiceCreatorApp (
                     adLoaded = uiState.rewardedAppLoaded,
                     activity = activity,
                     adWatched = uiState.rewardedAdWatched,
-                    invoiceStatus = uiState.invoiceState
+                    invoiceStatus = uiState.invoiceState,
+                    invoiceListV2 = invoiceListV2,
+                    invoiceItemsCollection = invoiceItemsCollection,
+                    paidInvoicesCollection = paidInvoicesCollection,
+                    clientList = clientList
                 )
             }
 
@@ -147,7 +162,8 @@ fun InvoiceCreatorApp (
                     ignoredOnComposing = {
                         appBarState = it
                     },
-                    navController = navController
+                    navController = navController,
+                    clientList = clientList
                 )
             }
 
@@ -178,7 +194,7 @@ fun InvoiceCreatorApp (
                         appBarState = it
                     },
                     viewModel = viewModel,
-                    uiState= uiState,
+                    uiState = uiState,
                     navController = navController
                 )
             }
@@ -191,13 +207,38 @@ fun InvoiceCreatorApp (
                     },
                     navController = navController,
                     invoiceStatus = uiState.invoiceState,
-                    modePro = uiState.modePro
+                    modePro = uiState.modePro,
+                    invoiceItemsCollection = invoiceItemsCollection,
+                    invoiceListV2 = invoiceListV2,
+                    paidInvoicesCollection = paidInvoicesCollection
                 )
 
             }
 
+            composable(route = InvoiceCreatorScreen.InvoicesByClient.name) {
+                InvoicesByClientScreen(
+                    viewModel = viewModel,
+                    ignoredOnComposing = {
+                        appBarState = it
+                    },
+                    navController = navController,
+                    listOfClients = clientList,
+                    listOfInvoices = invoiceListV2
+                )
+            }
+
+            composable(route = InvoiceCreatorScreen.FilteredInvoicesByClient.name) {
+                FilteredInvoicesByClientScreen(
+                    viewModel = viewModel,
+                    ignoredOnComposing = {
+                        appBarState = it
+                    },
+                    navController = navController,
+                    invoiceListV2 = invoiceListV2,
+                    invoiceItemsCollection = invoiceItemsCollection,
+                    paidInvoicesCollection = paidInvoicesCollection
+                )
+            }
         }
     }
-
-
 }

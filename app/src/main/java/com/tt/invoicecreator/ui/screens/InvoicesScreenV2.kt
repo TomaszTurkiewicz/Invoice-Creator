@@ -1,6 +1,5 @@
 package com.tt.invoicecreator.ui.screens
 
-import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -16,26 +14,23 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.VectorProperty
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
-import androidx.room.util.TableInfo
 import com.tt.invoicecreator.InvoiceCreatorScreen
 import com.tt.invoicecreator.MainActivity
 import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.data.InvoiceStatus
 import com.tt.invoicecreator.data.SharedPreferences
+import com.tt.invoicecreator.data.roomV2.entities.ClientV2
 import com.tt.invoicecreator.data.roomV2.entities.InvoiceItemV2
 import com.tt.invoicecreator.data.roomV2.entities.InvoiceV2
+import com.tt.invoicecreator.data.roomV2.entities.PaidV2
 import com.tt.invoicecreator.helpers.FilterInvoices
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogAddMainUser
-import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogSearchInvoices
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogWatchAd
 import com.tt.invoicecreator.ui.alert_dialogs.PrintInvoiceAlertDialogV2
 import com.tt.invoicecreator.ui.components.FilteredInvoicesCardView
@@ -47,20 +42,17 @@ fun InvoicesScreenV2(
     viewModel: AppViewModel,
     ignoredOnComposing: (AppBarState) -> Unit,
     navController: NavController,
-    modePro:Boolean,
-    adLoaded:Boolean,
+    modePro: Boolean,
+    adLoaded: Boolean,
     activity: MainActivity,
     adWatched: Boolean,
-    invoiceStatus: Enum<InvoiceStatus>
+    invoiceStatus: Enum<InvoiceStatus>,
+    invoiceListV2: List<InvoiceV2>?,
+    invoiceItemsCollection: List<InvoiceItemV2>?,
+    paidInvoicesCollection: List<PaidV2>?,
+    clientList: List<ClientV2>?
+
 ) {
-    val invoiceListV2 by viewModel.invoiceListV2.observeAsState()
-
-    val invoiceItemsCollection by viewModel.invoiceItemListV2.observeAsState()
-
-    val paidInvoicesCollection by viewModel.paidListV2.observeAsState()
-
-    val clientList by viewModel.clientListV2.observeAsState()
-
 
     val printInvoiceAlertDialog = remember {
         mutableStateOf(false)
@@ -204,8 +196,12 @@ fun InvoicesScreenV2(
                             header = "BY CLIENT",
                             message = "number of clients:",
                             count = clientList?.size ?: 0
-                        ){
-                            //todo
+                        ){  if(clientList.isNullOrEmpty()){
+                            //do not do anything
+                        }else{
+                            navController.navigate(InvoiceCreatorScreen.InvoicesByClient.name)
+                        }
+
                         }
                     }
                 }

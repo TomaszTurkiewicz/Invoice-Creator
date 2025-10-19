@@ -11,13 +11,12 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.tt.invoicecreator.InvoiceCreatorScreen
 import com.tt.invoicecreator.data.AppBarState
+import com.tt.invoicecreator.data.roomV2.entities.ClientV2
 import com.tt.invoicecreator.ui.components.ListOfClientsV2
 import com.tt.invoicecreator.viewmodel.AppViewModel
 
@@ -25,9 +24,9 @@ import com.tt.invoicecreator.viewmodel.AppViewModel
 fun ChooseClientScreenV2(
     viewModel: AppViewModel,
     ignoredOnComposing: (AppBarState) -> Unit,
-    navController: NavController
+    navController: NavController,
+    clientList:  List<ClientV2>?
 ) {
-    val clientList by viewModel.clientListV2.observeAsState()
 
     LaunchedEffect(key1 = true) {
         ignoredOnComposing(

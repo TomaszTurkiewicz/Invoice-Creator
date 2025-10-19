@@ -8,18 +8,16 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import com.tt.invoicecreator.InvoiceCreatorScreen
-import com.tt.invoicecreator.MainActivity
 import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.data.InvoiceStatus
 import com.tt.invoicecreator.data.roomV2.entities.InvoiceItemV2
 import com.tt.invoicecreator.data.roomV2.entities.InvoiceV2
+import com.tt.invoicecreator.data.roomV2.entities.PaidV2
 import com.tt.invoicecreator.ui.alert_dialogs.PrintInvoiceAlertDialogV2
 import com.tt.invoicecreator.ui.components.ListOfInvoicesV2
 import com.tt.invoicecreator.viewmodel.AppViewModel
@@ -30,12 +28,11 @@ fun FilteredInvoicesScreen(
     ignoredOnComposing: (AppBarState) -> Unit,
     navController: NavController,
     invoiceStatus: Enum<InvoiceStatus>,
-    modePro:Boolean
+    modePro: Boolean,
+    invoiceItemsCollection: List<InvoiceItemV2>?,
+    invoiceListV2: List<InvoiceV2>?,
+    paidInvoicesCollection: List<PaidV2>?
 ) {
-
-    val invoiceListV2 by viewModel.invoiceListV2.observeAsState()
-    val invoiceItemsCollection by viewModel.invoiceItemListV2.observeAsState()
-    val paidInvoicesCollection by viewModel.paidListV2.observeAsState()
 
     val invoice = remember {
         mutableStateOf(InvoiceV2())

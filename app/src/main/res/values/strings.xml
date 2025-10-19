@@ -14,5 +14,7 @@
     <string name="admob_rewarded_ad">ca-app-pub-6785166837488087/4429003394</string>
     <string name="info">INFO</string>
     <string name="filtered_invoices_v2">FILTERED INVOICES V2</string>
+    <string name="invoices_by_client">INVOICES BY CLIENT</string>
+    <string name="filtered_invoices_by_client">FILTERED INVOICES BY CLIENT</string>
 
 </resources>
