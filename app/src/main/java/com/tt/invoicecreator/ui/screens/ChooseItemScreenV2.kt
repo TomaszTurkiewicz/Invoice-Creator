@@ -42,6 +42,7 @@ fun ChooseItemScreenV2(
     LaunchedEffect(key1 = true) {
         ignoredOnComposing(
             AppBarState(
+                title = "CHOOSE ITEM",
                 action = {
                     Row {
                         IconButton(onClick = {

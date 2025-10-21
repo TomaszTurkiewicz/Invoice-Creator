@@ -82,6 +82,7 @@ fun InvoicesScreenV2(
     LaunchedEffect(key1 = true) {
         ignoredOnComposing(
             AppBarState(
+                title = if(!modePro) "ALL INVOICES" else "CHOOSE OPTION",
                 action = {
                     Row {
                         IconButton(onClick = {
@@ -90,8 +91,10 @@ fun InvoicesScreenV2(
                                 navController.navigate(InvoiceCreatorScreen.AddInvoiceV2.name)
                             }
                             else{
-                                activity.loadRewardedAd()
-                                watchAdAlertDialog.value = true
+//                                activity.loadRewardedAd()
+//                                watchAdAlertDialog.value = true
+                                //todo delete line below after testing
+                                navController.navigate(InvoiceCreatorScreen.AddInvoiceV2.name)
                             }
                         }) {
                             Icon(Icons.Default.Add,null)
@@ -252,5 +255,3 @@ fun InvoicesScreenV2(
         navController.navigate(InvoiceCreatorScreen.AddInvoiceV2.name)
     }
 }
-
-//todo: ALL, OVERDUE, NOT PAID, PAID, CLIENT

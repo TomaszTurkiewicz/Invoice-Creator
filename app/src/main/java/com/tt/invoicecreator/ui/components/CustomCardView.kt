@@ -40,4 +40,3 @@ fun CustomCardView(
     }
 
 }
-//todo !!!!

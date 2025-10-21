@@ -45,6 +45,7 @@ fun AddClientScreenV2(
     LaunchedEffect(key1 = true) {
         ignoredOnComposing(
             AppBarState(
+                title = "ADD NEW CLIENT",
                 action = {
                     Row {
                         IconButton(onClick = {

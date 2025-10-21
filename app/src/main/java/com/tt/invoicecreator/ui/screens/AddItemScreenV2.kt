@@ -34,6 +34,7 @@ fun AddItemScreenV2(
     LaunchedEffect(key1 = true) {
         ignoredOnComposing(
             AppBarState(
+                title = "ADD NEW ITEM",
                 action = {
                     Row {
                         IconButton(onClick = {

@@ -46,6 +46,7 @@ fun FilteredInvoicesByClientScreen(
     LaunchedEffect(key1 = true) {
         ignoredOnComposing(
             AppBarState(
+                title = viewModel.chosenClientToFilterInvoices?.clientName ?: "",
                 action = {
                     Row {
                         IconButton(onClick = {

@@ -51,6 +51,12 @@ fun FilteredInvoicesScreen(
     LaunchedEffect(key1 = true) {
         ignoredOnComposing(
             AppBarState(
+                title = when(invoiceStatus){
+                    InvoiceStatus.ALL -> "ALL INVOICES"
+                    InvoiceStatus.OVERDUE -> "OVERDUE INVOICES"
+                    InvoiceStatus.NOT_PAID -> "NOT PAID INVOICES"
+                    else -> "ALL INVOICES"
+                },
                 action = {
                     Row {
                         IconButton(onClick = {

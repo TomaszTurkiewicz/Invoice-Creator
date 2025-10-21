@@ -18,7 +18,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.ui.app_bar.TopAppBarWithAction
-import com.tt.invoicecreator.ui.app_bar.TopAppBarWithCustomTitleAndAction
 import com.tt.invoicecreator.ui.screens.AddClientScreenV2
 import com.tt.invoicecreator.ui.screens.AddInvoiceScreenV2
 import com.tt.invoicecreator.ui.screens.AddItemScreenV2
@@ -67,21 +66,21 @@ fun InvoiceCreatorApp (
     Scaffold (
 
         topBar = {
-            when(currentScreen){
-                InvoiceCreatorScreen.FilteredInvoicesV2 -> {
-                    TopAppBarWithCustomTitleAndAction(
-                        appBarState = appBarState,
-                        invoiceStatus = uiState.invoiceState
-                    )
-                }
-                else -> {
+//            when(currentScreen){
+//                InvoiceCreatorScreen.FilteredInvoicesV2 -> {
+//                    TopAppBarWithCustomTitleAndAction(
+//                        appBarState = appBarState,
+//                        invoiceStatus = uiState.invoiceState
+//                    )
+//                }
+//                else -> {
                     TopAppBarWithAction(
                         appBarState = appBarState,
                         currentScreen = currentScreen,
                         context = context
                     )
-                }
-            }
+//                }
+//            }
         }
     ) {
         innerPadding ->

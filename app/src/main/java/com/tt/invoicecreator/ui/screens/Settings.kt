@@ -32,6 +32,7 @@ fun Settings(
     LaunchedEffect(key1 = true) {
         ignoredOnComposing(
             AppBarState(
+                title = "SETTINGS",
                 action = null
             )
         )

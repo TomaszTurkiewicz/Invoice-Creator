@@ -8,5 +8,6 @@ import androidx.compose.ui.graphics.Color
 data class CustomColorsPalette(
     val material: ColorScheme,
     val invoicePrimary: Color,
-    val primaryDark: Color
+    val primaryDark: Color,
+    val primaryLight: Color
 )

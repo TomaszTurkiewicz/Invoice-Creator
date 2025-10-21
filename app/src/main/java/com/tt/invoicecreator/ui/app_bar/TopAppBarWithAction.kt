@@ -8,12 +8,14 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.tt.invoicecreator.InvoiceCreatorScreen
 import com.tt.invoicecreator.data.AppBarState
+import com.tt.invoicecreator.ui.theme.myColors
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -24,7 +26,7 @@ fun TopAppBarWithAction(
 ) {    TopAppBar(
     title = {
         Text(
-            text = context.getString(currentScreen.title),
+            text = appBarState.title,
             style = MaterialTheme.typography.labelLarge,
             modifier = Modifier
                 .fillMaxWidth()
@@ -35,6 +37,11 @@ fun TopAppBarWithAction(
     actions = {
         appBarState.action?.invoke(this)
     },
+    colors = TopAppBarDefaults.mediumTopAppBarColors(
+        containerColor = MaterialTheme.myColors.primaryLight,
+        titleContentColor = MaterialTheme.myColors.primaryDark,
+        actionIconContentColor = MaterialTheme.myColors.primaryDark
+    ),
     modifier = Modifier.fillMaxWidth()
 )
 

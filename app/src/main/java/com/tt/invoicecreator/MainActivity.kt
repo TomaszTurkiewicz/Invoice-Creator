@@ -145,7 +145,6 @@ class MainActivity : ComponentActivity() {
 /**
  * todo add VAT calculation
  * todo add changing color schema if PRO
- * todo if pro make filters for searching invoices
 * todo alert dialog showing ad change to better explanation what PRO gives, add 2nd button to update to PRO
  * todo add settings screen
  * **/
