@@ -91,10 +91,9 @@ fun InvoicesScreenV2(
                                 navController.navigate(InvoiceCreatorScreen.AddInvoiceV2.name)
                             }
                             else{
-//                                activity.loadRewardedAd()
-//                                watchAdAlertDialog.value = true
-                                //todo delete line below after testing
-                                navController.navigate(InvoiceCreatorScreen.AddInvoiceV2.name)
+                                activity.loadRewardedAd()
+                                watchAdAlertDialog.value = true
+
                             }
                         }) {
                             Icon(Icons.Default.Add,null)
