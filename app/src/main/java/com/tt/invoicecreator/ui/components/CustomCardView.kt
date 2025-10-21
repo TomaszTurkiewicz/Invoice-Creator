@@ -29,7 +29,7 @@ fun CustomCardView(
         shape = RoundedCornerShape(20.dp),
         modifier = modifier
             .fillMaxWidth()
-            .padding(10.dp),
+            .padding(top = 10.dp, start = 10.dp, end = 10.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.myColors.material.primaryContainer),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
     ){

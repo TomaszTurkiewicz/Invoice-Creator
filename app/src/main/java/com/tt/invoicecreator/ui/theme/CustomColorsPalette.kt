@@ -9,5 +9,7 @@ data class CustomColorsPalette(
     val material: ColorScheme,
     val invoicePrimary: Color,
     val primaryDark: Color,
-    val primaryLight: Color
+    val primaryLight: Color,
+    val error: Color,
+    val success: Color
 )

@@ -17,7 +17,9 @@ private val DarkMyColorScheme = CustomColorsPalette(
     ),
     invoicePrimary = Orange,
     primaryDark = Blue700Dark,
-    primaryLight = Blue200Dark
+    primaryLight = Blue200Dark,
+    error = Red700Dark,
+    success = Green700Dark
 )
 
 private val LightMyColorScheme = CustomColorsPalette(
@@ -27,8 +29,10 @@ private val LightMyColorScheme = CustomColorsPalette(
         background = Blue50
     ),
     invoicePrimary = Orange,
-    primaryDark = Blue700,
-    primaryLight = Blue200
+    primaryDark = Blue900,
+    primaryLight = Blue200,
+    error = Red700,
+    success = Green700
 )
 
 val LocalColors = staticCompositionLocalOf { LightMyColorScheme }
