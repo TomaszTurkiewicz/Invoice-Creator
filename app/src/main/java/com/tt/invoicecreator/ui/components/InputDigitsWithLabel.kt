@@ -5,12 +5,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.tt.invoicecreator.ui.components.texts.LabelMediumText
 
 @Composable
 fun InputDigitsWithLabel(
@@ -27,10 +29,10 @@ fun InputDigitsWithLabel(
         modifier = modifier
             .padding(10.dp)
     ){
-        Text(
+        LabelMediumText(
             text = labelText
         )
-        TextField(
+        OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth(),
             value = inputText ?: "",
@@ -48,6 +50,11 @@ fun InputDigitsWithLabel(
                 modifier = Modifier
                     .padding(start = 10.dp),
                 color = MaterialTheme.colorScheme.error
+            )
+        }
+        else{
+            Text(
+                text = ""
             )
         }
     }

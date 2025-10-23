@@ -1,15 +1,14 @@
 package com.tt.invoicecreator.ui.alert_dialogs
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BasicAlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
-import androidx.compose.material3.Text
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableLongStateOf
@@ -17,16 +16,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.tt.invoicecreator.data.roomV2.entities.InvoiceV2
 import com.tt.invoicecreator.helpers.DateAndTime
 import com.tt.invoicecreator.helpers.DecimalFormatter
 import com.tt.invoicecreator.helpers.InvoiceDueDate
 import com.tt.invoicecreator.helpers.InvoiceNumber
+import com.tt.invoicecreator.ui.components.CustomButton
 import com.tt.invoicecreator.ui.components.CustomCardView
 import com.tt.invoicecreator.ui.components.InputDigitsWithLabel
+import com.tt.invoicecreator.ui.components.texts.BodyLargeText
+import com.tt.invoicecreator.ui.components.texts.TitleLargeText
+import com.tt.invoicecreator.ui.theme.myColors
 import com.tt.invoicecreator.viewmodel.AppViewModel
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -59,9 +62,10 @@ fun AlertDialogInvoiceNumberV2(
     }
     val dueDateLong = remember {
         mutableLongStateOf(
-            InvoiceDueDate.getDueDate(viewModel.getInvoiceV2().time,DateAndTime.getDifferenceInDays(
-                viewModel.getInvoiceV2().time,
-                viewModel.getInvoiceV2().dueDate ?: viewModel.getInvoiceV2().time
+            InvoiceDueDate.getDueDate(
+                viewModel.getInvoiceV2().time,DateAndTime.getDifferenceInDays(
+                    viewModel.getInvoiceV2().time,
+                    viewModel.getInvoiceV2().dueDate ?: viewModel.getInvoiceV2().time
             ))
         )
     }
@@ -111,11 +115,11 @@ fun AlertDialogInvoiceNumberV2(
             Column(
                 modifier = Modifier
             ) {
-                Text(
+                TitleLargeText(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp),
-                    text = "TITLE"
+                        .padding(10.dp)
+                        .align(Alignment.CenterHorizontally),
+                    text = "NEW INVOICE NUMBER"
                 )
 
                 Row(
@@ -126,7 +130,7 @@ fun AlertDialogInvoiceNumberV2(
                     InputDigitsWithLabel(
                         modifier = Modifier
                             .fillMaxWidth(0.7f),
-                        labelText = "NEW INVOICE NUMBER",
+                        labelText = "NEW NUMBER",
                         inputText = newNumber.value,
                         isError = newNumber.value == 0.toString() || newNumber.value == "" || numberExist.value,
                         errorText = when (newNumber.value) {
@@ -154,30 +158,44 @@ fun AlertDialogInvoiceNumberV2(
                         }
                     }
 
-                    Text(
+                    BodyLargeText(
                         text = InvoiceNumber.getStringMonthAndYear(viewModel.getInvoiceV2().time),
                         modifier = Modifier
-                            .padding(bottom = 20.dp)
+                            .align(Alignment.CenterVertically)
                     )
                 }
                 if (availableNumbers.size == 5) {
-                    Text(
-                        text = "available numbers:${availableNumbers[0]}, ${availableNumbers[1]}, ${availableNumbers[2]}, ${availableNumbers[3]}, ${availableNumbers[4]}"
+                    BodyLargeText(
+                        text = "available numbers:${availableNumbers[0]}, ${availableNumbers[1]}, ${availableNumbers[2]}, ${availableNumbers[3]}, ${availableNumbers[4]}",
+                        modifier = Modifier
+                            .fillMaxWidth()
+
+
                     )
                 }
 
                 /** due date **/
                 if (modePro) {
                     Column {
-                        Row {
-                            Text(
-                                text = "due date"
+                        Row(
+                            Modifier
+                                .padding(top = 30.dp)
+                        ) {
+                            BodyLargeText(
+                                text = "due date",
+                                modifier = Modifier
+                                    .align(Alignment.CenterVertically)
+                                    .padding(end = 20.dp)
                             )
                             Switch(
                                 checked = dueDateActive.value,
                                 onCheckedChange = {
                                     dueDateActive.value = it
-                                }
+                                },
+                                colors = SwitchDefaults.colors(
+                                    checkedThumbColor = MaterialTheme.myColors.primaryDark,
+                                    checkedTrackColor = MaterialTheme.myColors.primaryLight,
+                            )
                             )
                         }
 
@@ -206,7 +224,7 @@ fun AlertDialogInvoiceNumberV2(
                     }
                 }
 
-                Button(
+                CustomButton(
                     onClick = {
                         viewModel.getInvoiceV2().invoiceNumber = newNumber.value.toInt()
                         viewModel.calculateNumber = false
@@ -225,13 +243,10 @@ fun AlertDialogInvoiceNumberV2(
                             || dueDateString.value != ""
                             && newNumber.value != 0.toString()
                             && newNumber.value != ""
-                            && !numberExist.value
-                ) {
-                    Text(
-                        text = "SAVE"
-                    )
+                            && !numberExist.value,
+                    text = "SAVE"
+                )
 
-                }
             }
 
         }

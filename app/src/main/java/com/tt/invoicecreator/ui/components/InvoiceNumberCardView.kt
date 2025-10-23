@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -16,6 +17,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.tt.invoicecreator.helpers.DateAndTime
 import com.tt.invoicecreator.helpers.InvoiceNumber
+import com.tt.invoicecreator.ui.theme.Typography
+import com.tt.invoicecreator.ui.theme.myColors
 
 
 @Composable
@@ -41,17 +44,23 @@ fun InvoiceNumberCardView(
             Text(
                 text = "Invoice Number: $invoiceNumberString",
                 fontWeight = FontWeight.W500,
+                style = Typography.bodyLarge,
+                color = MaterialTheme.myColors.primaryDark,
                 modifier = Modifier
                     .padding(5.dp))
             Row {
                 Text(
                     text = "Date",
                     fontWeight = FontWeight.W500,
+                    style = Typography.bodyLarge,
+                    color = MaterialTheme.myColors.primaryDark,
                     modifier = Modifier
                         .padding(5.dp))
                 Text(
                     text = DateAndTime.convertLongToDate(time),
                     fontWeight = FontWeight.W500,
+                    style = Typography.bodyLarge,
+                    color = MaterialTheme.myColors.primaryDark,
                     modifier = Modifier
                         .padding(5.dp))
             }
@@ -60,12 +69,16 @@ fun InvoiceNumberCardView(
                     Text(
                         text = "Due date",
                         fontWeight = FontWeight.W500,
+                        style = Typography.bodyLarge,
+                        color = MaterialTheme.myColors.primaryDark,
                         modifier = Modifier
                             .padding(5.dp))
                     if(dueDate!=null){
                         Text(
                             text = DateAndTime.convertLongToDate(dueDate),
                             fontWeight = FontWeight.W500,
+                            style = Typography.bodyLarge,
+                            color = MaterialTheme.myColors.primaryDark,
                             modifier = Modifier
                                 .padding(5.dp))
                     }
@@ -73,6 +86,8 @@ fun InvoiceNumberCardView(
                         Text(
                             text = "----",
                             fontWeight = FontWeight.W500,
+                            style = Typography.bodyLarge,
+                            color = MaterialTheme.myColors.primaryDark,
                             modifier = Modifier
                                 .padding(5.dp))
                     }

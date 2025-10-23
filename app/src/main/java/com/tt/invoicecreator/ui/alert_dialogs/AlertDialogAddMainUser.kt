@@ -7,22 +7,29 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.tt.invoicecreator.data.SharedPreferences
 import com.tt.invoicecreator.helpers.User
 import com.tt.invoicecreator.ui.components.CustomCardView
 import com.tt.invoicecreator.ui.components.InputTextWithLabel
+import com.tt.invoicecreator.ui.components.texts.TitleLargeText
+import com.tt.invoicecreator.ui.theme.Typography
+import com.tt.invoicecreator.ui.theme.myColors
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AlertDialogAddMainUser(
+    title:String,
     user:User,
     closeAlertDialog: () -> Unit,
     canBeDismissed: Boolean
@@ -53,12 +60,13 @@ fun AlertDialogAddMainUser(
                 modifier = Modifier
             )
             {
-                Text(
+                TitleLargeText(
+                    text = title,
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp),
-                    text = "TITLE"
+                        .padding(top = 10.dp)
+                        .align(Alignment.CenterHorizontally),
                 )
+
                 InputTextWithLabel(
                     labelText = "Name",
                     inputText = name.value

@@ -63,6 +63,7 @@ fun Settings(
 
     if(alertDialogUpdateUser.value){
         AlertDialogAddMainUser(
+            title = "EDIT USER",
             user = user,
             closeAlertDialog = {
                 alertDialogUpdateUser.value = false

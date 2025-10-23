@@ -1,9 +1,11 @@
 package com.tt.invoicecreator.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -160,11 +162,17 @@ fun InvoicesScreenV2(
                 )
             }
                 else{
-                    Column() {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        verticalArrangement = Arrangement.SpaceEvenly
+                    ) {
                         FilteredInvoicesCardView(
                             header = "ALL INVOICES",
                             message = "number of all invoices:",
-                            count = invoiceListV2!!.size
+                            count = invoiceListV2!!.size,
+                            modifier = Modifier
+                                .aspectRatio(3f)
 
                         ){
                             viewModel.updateInvoiceStatus(InvoiceStatus.ALL)
@@ -177,7 +185,9 @@ fun InvoicesScreenV2(
                                 invoiceListV2!!,
                                 invoiceItemsCollection!!,
                                 paidInvoicesCollection
-                            ).size
+                            ).size,
+                            modifier = Modifier
+                                .aspectRatio(3f)
                         ){
                             viewModel.updateInvoiceStatus(InvoiceStatus.OVERDUE)
                             navController.navigate(InvoiceCreatorScreen.FilteredInvoicesV2.name)
@@ -189,7 +199,9 @@ fun InvoicesScreenV2(
                                 invoiceListV2!!,
                                 invoiceItemsCollection!!,
                                 paidInvoicesCollection
-                            ).size
+                            ).size,
+                            modifier = Modifier
+                                .aspectRatio(3f)
                         ){
                             viewModel.updateInvoiceStatus(InvoiceStatus.NOT_PAID)
                             navController.navigate(InvoiceCreatorScreen.FilteredInvoicesV2.name)
@@ -197,7 +209,9 @@ fun InvoicesScreenV2(
                         FilteredInvoicesCardView(
                             header = "BY CLIENT",
                             message = "number of clients:",
-                            count = clientList?.size ?: 0
+                            count = clientList?.size ?: 0,
+                            modifier = Modifier
+                                .aspectRatio(3f)
                         ){  if(clientList.isNullOrEmpty()){
                             //do not do anything
                         }else{
@@ -214,6 +228,7 @@ fun InvoicesScreenV2(
 
     if(addMainUSerAlertDialog.value){
         AlertDialogAddMainUser (
+            title = "ADD USER",
             user = user,
             closeAlertDialog = {
                 addMainUSerAlertDialog.value = false
