@@ -36,8 +36,6 @@ fun SingleRowInvoiceV2(
     invoiceItems:List<InvoiceItemV2>,
     paidInvoices: List<PaidV2>?,
     invoiceChosen: (InvoiceV2) -> Unit,
-    itemsChosen: (List<InvoiceItemV2>) -> Unit,
-    paidChosen: (List<PaidV2>?) -> Unit,
     modePro:Boolean
 ) {
 
@@ -51,8 +49,6 @@ fun SingleRowInvoiceV2(
         modifier = Modifier
             .clickable {
                 invoiceChosen(invoice)
-                itemsChosen(invoiceItems)
-                paidChosen(paidInvoices)
             }
     ){
         Column(

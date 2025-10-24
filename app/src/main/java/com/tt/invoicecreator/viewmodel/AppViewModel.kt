@@ -162,21 +162,6 @@ class AppViewModel(
         }
     }
 
-    fun updateInvoiceItemListV2(invoiceItems:List<InvoiceItemV2>){
-        _uiState.update { currentState ->
-            currentState.copy(
-                invoiceItemListV2 = invoiceItems
-            )
-        }
-    }
-
-    fun updatePaidListV2(paidListV2: List<PaidV2>?){
-        _uiState.update { currentState ->
-            currentState.copy(
-                paidListV2 = paidListV2
-            )
-        }
-    }
 
     fun updatePaymentDay(time:Long){
         _uiState.update { currentState ->

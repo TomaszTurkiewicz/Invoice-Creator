@@ -1,14 +1,11 @@
 package com.tt.invoicecreator.ui.alert_dialogs
 
 import android.annotation.SuppressLint
-import android.icu.util.Calendar
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BasicAlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -18,20 +15,21 @@ import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.tt.invoicecreator.data.AppUiState
-import com.tt.invoicecreator.data.roomV2.entities.InvoiceItemV2
 import com.tt.invoicecreator.data.roomV2.entities.PaidV2
-import com.tt.invoicecreator.helpers.DateAndTime
 import com.tt.invoicecreator.helpers.DecimalFormatter
+import com.tt.invoicecreator.helpers.InvoiceValueCalculator
+import com.tt.invoicecreator.ui.components.CustomButton
 import com.tt.invoicecreator.ui.components.CustomCardView
 import com.tt.invoicecreator.ui.components.InputDigitsWithLabel
+import com.tt.invoicecreator.ui.components.texts.BodyLargeText
+import com.tt.invoicecreator.ui.components.texts.TitleLargeText
 import com.tt.invoicecreator.viewmodel.AppViewModel
 
 @SuppressLint("UnrememberedMutableState")
@@ -43,14 +41,14 @@ fun AlertDialogPayInvoiceV2(
     uiState: AppUiState,
     paidListV2: List<PaidV2>?,
     invoiceValue: Double,
-    paid: Double,
+    paidInvoicesCollection: List<PaidV2>?,
     closeAlertDialog: () -> Unit
 ) {
 
     val decimalFormatter = DecimalFormatter()
 
     val amountPaid = remember {
-        mutableStateOf("")
+        mutableStateOf("0")
     }
     val comments = remember {
         mutableStateOf("")
@@ -62,6 +60,12 @@ fun AlertDialogPayInvoiceV2(
     val timeMilisec = remember {
         mutableLongStateOf(System.currentTimeMillis())
     }
+
+    val newPaidList = paidInvoicesCollection?.filter {
+        it.invoiceId == invoiceId
+    }
+
+    val paidAmountAlready = InvoiceValueCalculator.calculatePaid(newPaidList)
 
 
     LaunchedEffect(key1 = true) {
@@ -79,29 +83,35 @@ fun AlertDialogPayInvoiceV2(
             modifier = Modifier
         )
         {
-            Text(
+            TitleLargeText(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp),
-                text = "TITLE"
+                    .align(Alignment.CenterHorizontally),
+                text = "ADD PAYMENT"
             )
             InputDigitsWithLabel(
                 modifier = Modifier
                     .fillMaxWidth(),
-                labelText = "amount",
+                labelText = "AMOUNT",
                 inputText = amountPaid.value,
                 isError = if(amountPaid.value == ""){
-                    invoiceValue < paid + 0.0
+                    true
                 } else {
-                    invoiceValue < paid + amountPaid.value.toDouble()
+                    invoiceValue < paidAmountAlready + amountPaid.value.toDouble()
+//                    invoiceValue < paid + amountPaid.value.toDouble()
+                },
+                errorText = if(amountPaid.value == ""){
+                    "not valid amount"
+                } else {
+                    "paid too much"
                 }
             ) {
                 amountPaid.value = decimalFormatter.cleanup(it)
             }
 
-            Text(
-                text = uiState.paymentDay,
+            BodyLargeText(
+                text = "PAID ON ${uiState.paymentDay}",
                 modifier = Modifier
+                    .padding(start = 10.dp)
                     .clickable{
                         datePicker.value = true
                     }
@@ -110,13 +120,13 @@ fun AlertDialogPayInvoiceV2(
             InputDigitsWithLabel(
                 modifier = Modifier
                     .fillMaxWidth(),
-                labelText = "comments",
+                labelText = "COMMENTS",
                 inputText = comments.value
             ) {
                 comments.value = it
             }
 
-            Button(
+            CustomButton(
                 onClick = {
                     viewModel.savePayment(
                         PaidV2(
@@ -138,19 +148,20 @@ fun AlertDialogPayInvoiceV2(
                             notes = comments.value
                         )
                     )
-                    viewModel.updatePaidListV2(newPaidList)
+
                     closeAlertDialog()
                 },
                 enabled = if(amountPaid.value == ""){
-                    !(invoiceValue < paid + 0.0)
+                    false
+                   // !(invoiceValue < paid + 0.0)
                 } else {
-                    !(invoiceValue < paid + amountPaid.value.toDouble())
-                }
-            ) {
-                Text(
-                    text = "SAVE"
-                )
-            }
+                    !(invoiceValue < paidAmountAlready + amountPaid.value.toDouble())
+       //             !(invoiceValue < paid + amountPaid.value.toDouble())
+                },
+                modifier = Modifier
+                    .fillMaxWidth(),
+                text = "SAVE"
+            )
 
         }
     }

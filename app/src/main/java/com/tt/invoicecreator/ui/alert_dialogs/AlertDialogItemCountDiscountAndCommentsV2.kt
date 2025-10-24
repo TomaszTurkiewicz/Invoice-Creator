@@ -1,26 +1,25 @@
 package com.tt.invoicecreator.ui.alert_dialogs
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BasicAlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.tt.invoicecreator.data.roomV2.entities.InvoiceItemV2
 import com.tt.invoicecreator.data.roomV2.entities.ItemV2
 import com.tt.invoicecreator.helpers.DecimalFormatter
+import com.tt.invoicecreator.ui.components.CustomButton
 import com.tt.invoicecreator.ui.components.CustomCardView
 import com.tt.invoicecreator.ui.components.InputDigitsWithLabel
 import com.tt.invoicecreator.ui.components.InputTextWithLabel
+import com.tt.invoicecreator.ui.components.texts.TitleLargeText
 import com.tt.invoicecreator.viewmodel.AppViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -56,16 +55,15 @@ fun AlertDialogItemCountDiscountAndCommentsV2(
 
             )
             {
-                Text(
+                TitleLargeText(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp),
-                    text = "TITLE"
+                        .align(Alignment.CenterHorizontally),
+                    text = "ADD ITEM"
                 )
                 InputDigitsWithLabel(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    labelText = "Quantity",
+                    labelText = "QUANTITY",
                     inputText = itemCount.value
                 ) {
                     itemCount.value = decimalFormatter.cleanup(it)
@@ -84,7 +82,7 @@ fun AlertDialogItemCountDiscountAndCommentsV2(
                 ) {
                     itemComment.value = it
                 }
-                Button(
+                CustomButton(
                     enabled = itemCount.value.isNotEmpty() && itemDiscount.value.isNotEmpty(),
                     onClick = {
 
@@ -100,13 +98,9 @@ fun AlertDialogItemCountDiscountAndCommentsV2(
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(5.dp)
-                ) {
-                    Text(
-                        text = "SAVE"
-                    )
-
-                }
+                        .padding(5.dp),
+                    text = "SAVE"
+                )
 
             }
         }

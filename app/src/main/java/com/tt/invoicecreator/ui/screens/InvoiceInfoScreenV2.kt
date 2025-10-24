@@ -37,25 +37,32 @@ import com.tt.invoicecreator.viewmodel.AppViewModel
 @Composable
 fun InvoiceInfoScreenV2(
     invoiceV2: InvoiceV2,
-    invoiceItemListV2: List<InvoiceItemV2>,
-    paidListV2: List<PaidV2>?,
+//    invoiceItemListV2: List<InvoiceItemV2>,
     ignoredOnComposing:(AppBarState) -> Unit,
     viewModel: AppViewModel,
     uiState: AppUiState,
-    navController: NavController
+    navController: NavController,
+    paidInvoicesCollection: List<PaidV2>?,
+    invoiceItemsCollection: List<InvoiceItemV2>
     ) {
 
     val payAlertDialog = remember {
         mutableStateOf(false)
     }
 
+    val invoiceItemListV2 = invoiceItemsCollection.filter {
+        it.invoiceId == invoiceV2.invoiceId
+    }
+
     val invoiceValue = remember {
         mutableDoubleStateOf(InvoiceValueCalculator.calculateV2(invoiceItemListV2))
     }
 
-    val paidValue = remember {
-        mutableDoubleStateOf(InvoiceValueCalculator.calculatePaid(paidListV2))
+    val paidListV2 = paidInvoicesCollection?.filter {
+        it.invoiceId == invoiceV2.invoiceId
     }
+
+
 
     LaunchedEffect(key1 = true) {
         ignoredOnComposing(
@@ -212,7 +219,7 @@ fun InvoiceInfoScreenV2(
             paidListV2 = paidListV2,
             uiState = uiState,
             invoiceValue = invoiceValue.doubleValue,
-            paid = paidValue.doubleValue,
+            paidInvoicesCollection = paidInvoicesCollection,
             closeAlertDialog = {
                 payAlertDialog.value = false
             }

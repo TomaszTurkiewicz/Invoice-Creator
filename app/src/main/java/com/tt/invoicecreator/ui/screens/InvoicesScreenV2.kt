@@ -142,21 +142,7 @@ fun InvoicesScreenV2(
                     invoiceChosen = {
                         invoice.value = it
                         viewModel.updateInvoiceV2(it)
-                    },
-                    itemsChosen = {
-                        val size = it.size
-                        itemList.clear()
-                        for(i in 0..size){
-                            if(i<size){
-                                itemList.add(it[i])
-                            }else{
-                                viewModel.updateInvoiceItemListV2(it)
-                                printInvoiceAlertDialog.value = true
-                            }
-                        }
-                    },
-                    paidChosen = {
-                        viewModel.updatePaidListV2(it)
+                        printInvoiceAlertDialog.value = true
                     },
                     modePro = false
                 )
