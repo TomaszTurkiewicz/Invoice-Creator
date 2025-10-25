@@ -11,13 +11,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.tt.invoicecreator.data.SharedPreferences
+import com.tt.invoicecreator.ui.components.CustomButton
 import com.tt.invoicecreator.ui.components.CustomCardView
 import com.tt.invoicecreator.ui.components.InputTextWithLabel
+import com.tt.invoicecreator.ui.components.texts.TitleLargeText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,11 +43,10 @@ fun AlertDialogPaymentMethod(
                 modifier = Modifier
             )
             {
-                Text(
+                TitleLargeText(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp),
-                    text = "TITLE"
+                        .align(Alignment.CenterHorizontally),
+                    text = "PAYMENT METHOD"
                 )
 
                 InputTextWithLabel(
@@ -52,7 +55,7 @@ fun AlertDialogPaymentMethod(
                 ) {
                     paymentMethod.value = it
                 }
-                Button(
+                CustomButton(
                     enabled = paymentMethod.value?.trim()!!.isNotEmpty(),
                     onClick = {
                         SharedPreferences.savePaymentMethod(context, paymentMethod.value!!)
@@ -60,12 +63,9 @@ fun AlertDialogPaymentMethod(
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(5.dp)
-                ) {
-                    Text(
-                        text = "SAVE"
-                    )
-                }
+                        .padding(5.dp),
+                    text = "SAVE"
+                )
             }
         }
     }

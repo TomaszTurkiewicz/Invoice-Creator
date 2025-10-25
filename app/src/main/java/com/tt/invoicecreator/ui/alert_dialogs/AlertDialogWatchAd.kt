@@ -9,11 +9,16 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.tt.invoicecreator.ui.components.CustomButton
 import com.tt.invoicecreator.ui.components.CustomCardView
+import com.tt.invoicecreator.ui.components.texts.BodyLargeText
+import com.tt.invoicecreator.ui.components.texts.TitleLargeText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -32,26 +37,27 @@ fun AlertDialogWatchAd(
                 modifier = Modifier
             )
             {
-                Text(
+                TitleLargeText(
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally),
+                    text = "WATCH ADD"
+                )
+                BodyLargeText(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(5.dp),
-                    text = "TITLE"
+                        .padding(10.dp),
+                    text = "This app is free to use. You don't have to pay anything. So please watch add to be able to add new invoice. Press button below WATCH ADD when it gets available.\nYou can also upgrade app to PRO version. PRO version has few features more. Such as: no need to watch adds, payment history, multiple items in one invoice, etc. Go to SETTINGS, press UPGRADE APP button and follow instruction if you wish to do it."
                 )
-                Text(
+                CustomButton(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(5.dp),
-                    text = "YOU MUST WATCH AD TO USE THIS FEATURE"
-                )
-                Button(
+                        .padding(10.dp),
                     onClick = {
                         watchAdClicked()
                     },
-                    enabled = adLoaded
-                ) {
-                    Text(text = "WATCH AD")
-                }
+                    enabled = adLoaded,
+                    text = "WATCH ADD"
+                )
             }
         }
     }

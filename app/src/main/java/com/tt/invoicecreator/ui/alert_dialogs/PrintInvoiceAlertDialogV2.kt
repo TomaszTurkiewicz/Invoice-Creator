@@ -1,6 +1,7 @@
 package com.tt.invoicecreator.ui.alert_dialogs
 
 import android.content.Context
+import android.graphics.Paint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,14 +13,20 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.tt.invoicecreator.data.roomV2.entities.InvoiceItemV2
 import com.tt.invoicecreator.data.roomV2.entities.InvoiceV2
 import com.tt.invoicecreator.helpers.InvoiceNumber
 import com.tt.invoicecreator.helpers.PdfUtilsV2
+import com.tt.invoicecreator.ui.components.CustomButton
 import com.tt.invoicecreator.ui.components.CustomCardView
+import com.tt.invoicecreator.ui.components.texts.BodyLargeText
+import com.tt.invoicecreator.ui.components.texts.TitleLargeText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,22 +49,21 @@ fun PrintInvoiceAlertDialogV2(
                 modifier = Modifier
             )
             {
-                Text(
+                TitleLargeText(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp),
-                    text = "TITLE"
+                        .align(Alignment.CenterHorizontally),
+                    text = "INVOICE: ${
+                    InvoiceNumber.getStringNumber(
+                        invoiceNumber = invoiceV2.invoiceNumber,
+                        time = invoiceV2.time
+                    )
+                }"
                 )
-                Text(
+                BodyLargeText(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(10.dp),
-                    text = "do You want to print invoice: ${
-                        InvoiceNumber.getStringNumber(
-                            invoiceNumber = invoiceV2.invoiceNumber,
-                            time = invoiceV2.time
-                        )
-                    } ?"
+                    text = "You can print this invoice out. It will be saved in Download folder on Your device. Press PRINT button below. If YOu are using PRO version, you can also press INFO button below. You will be redirected to invoice info page, where You can set payment, etc."
                 )
 
                 Column(
@@ -68,20 +74,19 @@ fun PrintInvoiceAlertDialogV2(
                 ) {
 
                     if (modePro) {
-                        Button(
+                        CustomButton(
                             onClick = {
                                 goToInfo()
                                 onDismissRequest()
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(5.dp)
-                        ) {
-                            Text(text = "INFO")
-                        }
+                                .padding(top = 10.dp),
+                            text = "INFO"
+                        )
                     }
 
-                    Button(
+                    CustomButton(
                         onClick = {
                             PdfUtilsV2.generatePdfV2(
                                 context = context,
@@ -92,21 +97,19 @@ fun PrintInvoiceAlertDialogV2(
                         },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(5.dp)
-                    ) {
-                        Text(text = "PRINT")
-                    }
+                            .padding(top = 10.dp),
+                        text = "PRINT"
+                    )
 
-                    Button(
+                    CustomButton(
                         onClick = {
                             onDismissRequest()
                         },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(5.dp)
-                    ) {
-                        Text(text = "DISMISS")
-                    }
+                            .padding(top = 10.dp, bottom = 10.dp),
+                        text = "DISMISS"
+                    )
                 }
             }
         }
