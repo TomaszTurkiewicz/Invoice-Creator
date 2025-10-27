@@ -12,7 +12,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.tt.invoicecreator.ui.components.texts.TitleLargeText
 import com.tt.invoicecreator.ui.theme.Typography
 import com.tt.invoicecreator.ui.theme.myColors
 
@@ -28,14 +30,11 @@ fun EmptyItemCardViewV2(
                 onClick()
             }
     ){
-        Text(
+        TitleLargeText(
             text = if(showPosition)"Item: $position not chosen yet" else "Item not chosen yet",
-            fontWeight = FontWeight.W700,
-            style = Typography.bodyLarge,
-            color = MaterialTheme.myColors.primaryDark,
             modifier = Modifier
-                .fillMaxWidth(0.7f)
-                .padding(5.dp)
+                .fillMaxWidth()
+                .padding(10.dp)
         )
     }
 }

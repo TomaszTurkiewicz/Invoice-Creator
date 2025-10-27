@@ -12,8 +12,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.tt.invoicecreator.data.roomV2.entities.ClientV2
+import com.tt.invoicecreator.ui.components.texts.BodyLargeText
 
 @Composable
 fun SingleRowClientV2(
@@ -29,27 +31,23 @@ fun SingleRowClientV2(
         Column(
             modifier = Modifier
         ) {
-            Text(
+            BodyLargeText(
                 text = client.clientName,
-                fontWeight = FontWeight.W700,
                 modifier = Modifier
                     .padding(5.dp)
             )
-            Text(
+            BodyLargeText(
                 text = client.clientAddress1,
-                fontWeight = FontWeight.W500,
                 modifier = Modifier
                     .padding(5.dp)
             )
-            Text(
+            BodyLargeText(
                 text = client.clientAddress2,
-                fontWeight = FontWeight.W500,
                 modifier = Modifier
                     .padding(5.dp)
             )
-            Text(
+            BodyLargeText(
                 text = client.clientCity,
-                fontWeight = FontWeight.W500,
                 modifier = Modifier
                     .padding(5.dp)
             )

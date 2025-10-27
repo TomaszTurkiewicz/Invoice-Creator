@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.tt.invoicecreator.data.roomV2.entities.ItemV2
+import com.tt.invoicecreator.ui.components.texts.BodyLargeText
 
 @Composable
 fun SingleRowItemV2(
@@ -31,16 +32,14 @@ fun SingleRowItemV2(
         )
         {
             Row {
-                Text(
+                BodyLargeText(
                     text = item.itemName,
-                    fontWeight = FontWeight.W700,
                     modifier = Modifier
                         .fillMaxWidth(0.7f)
                         .padding(5.dp)
                 )
-                Text(
+                BodyLargeText(
                     text = item.itemValue.toString(),
-                    fontWeight = FontWeight.W700,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(5.dp)

@@ -13,11 +13,13 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
@@ -32,6 +34,8 @@ import com.tt.invoicecreator.helpers.FilterInvoices
 import com.tt.invoicecreator.ui.alert_dialogs.PrintInvoiceAlertDialogV2
 import com.tt.invoicecreator.ui.components.DotShape
 import com.tt.invoicecreator.ui.components.SingleRowInvoiceV2
+import com.tt.invoicecreator.ui.components.texts.BodyLargeText
+import com.tt.invoicecreator.ui.theme.myColors
 import com.tt.invoicecreator.viewmodel.AppViewModel
 
 @Composable
@@ -109,8 +113,14 @@ fun FilteredInvoicesByClientScreen(
                         invoiceFilterState.value = InvoiceStatus.ALL
                     }
             ) {
-                DotShape(enabled = invoiceFilterState.value == InvoiceStatus.ALL)
-                Text(text = "ALL")
+                DotShape(
+                    enabled = invoiceFilterState.value == InvoiceStatus.ALL,
+                    color = MaterialTheme.myColors.primaryDark)
+                BodyLargeText(
+                    text = "ALL",
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                    )
             }
 
             Row(
@@ -120,8 +130,14 @@ fun FilteredInvoicesByClientScreen(
                         invoiceFilterState.value = InvoiceStatus.OVERDUE
                     }
             ) {
-                DotShape(enabled = invoiceFilterState.value == InvoiceStatus.OVERDUE)
-                Text(text = "OVERDUE")
+                DotShape(
+                    enabled = invoiceFilterState.value == InvoiceStatus.OVERDUE,
+                color = MaterialTheme.myColors.primaryDark)
+                BodyLargeText(
+                    text = "OVERDUE",
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                )
             }
 
             Row(
@@ -131,8 +147,13 @@ fun FilteredInvoicesByClientScreen(
                         invoiceFilterState.value = InvoiceStatus.NOT_PAID
                     }
             ) {
-                DotShape(enabled = invoiceFilterState.value == InvoiceStatus.NOT_PAID)
-                Text(text = "NOT PAID")
+                DotShape(enabled = invoiceFilterState.value == InvoiceStatus.NOT_PAID,
+                    color = MaterialTheme.myColors.primaryDark)
+                BodyLargeText(
+                    text = "NOT PAID",
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                )
             }
 
         }

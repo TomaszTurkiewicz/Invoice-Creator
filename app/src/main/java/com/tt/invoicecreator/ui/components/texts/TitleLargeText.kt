@@ -5,18 +5,20 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
+import androidx.compose.ui.text.style.TextAlign
 import com.tt.invoicecreator.ui.theme.Typography
 import com.tt.invoicecreator.ui.theme.myColors
 
 @Composable
 fun TitleLargeText(
     text: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    textAlign: TextAlign = TextAlign.Start
 ) {
     Text(
         text = text,
         modifier = modifier,
         style = Typography.titleLarge,
-        color = MaterialTheme.myColors.primaryDark
-    )
+        color = MaterialTheme.myColors.primaryDark,
+        textAlign = textAlign    )
 }

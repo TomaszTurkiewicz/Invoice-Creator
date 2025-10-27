@@ -14,9 +14,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.tt.invoicecreator.helpers.DateAndTime
 import com.tt.invoicecreator.helpers.InvoiceNumber
+import com.tt.invoicecreator.ui.components.texts.BodyLargeText
 import com.tt.invoicecreator.ui.theme.Typography
 import com.tt.invoicecreator.ui.theme.myColors
 
@@ -41,53 +43,35 @@ fun InvoiceNumberCardView(
     ) {
         Column()
         {
-            Text(
+            BodyLargeText(
                 text = "Invoice Number: $invoiceNumberString",
-                fontWeight = FontWeight.W500,
-                style = Typography.bodyLarge,
-                color = MaterialTheme.myColors.primaryDark,
                 modifier = Modifier
                     .padding(5.dp))
             Row {
-                Text(
+                BodyLargeText(
                     text = "Date",
-                    fontWeight = FontWeight.W500,
-                    style = Typography.bodyLarge,
-                    color = MaterialTheme.myColors.primaryDark,
                     modifier = Modifier
                         .padding(5.dp))
-                Text(
+                BodyLargeText(
                     text = DateAndTime.convertLongToDate(time),
-                    fontWeight = FontWeight.W500,
-                    style = Typography.bodyLarge,
-                    color = MaterialTheme.myColors.primaryDark,
                     modifier = Modifier
                         .padding(5.dp))
             }
             if(modePro){
                 Row{
-                    Text(
+                    BodyLargeText(
                         text = "Due date",
-                        fontWeight = FontWeight.W500,
-                        style = Typography.bodyLarge,
-                        color = MaterialTheme.myColors.primaryDark,
                         modifier = Modifier
                             .padding(5.dp))
                     if(dueDate!=null){
-                        Text(
+                        BodyLargeText(
                             text = DateAndTime.convertLongToDate(dueDate),
-                            fontWeight = FontWeight.W500,
-                            style = Typography.bodyLarge,
-                            color = MaterialTheme.myColors.primaryDark,
                             modifier = Modifier
                                 .padding(5.dp))
                     }
                     else{
-                        Text(
+                        BodyLargeText(
                             text = "----",
-                            fontWeight = FontWeight.W500,
-                            style = Typography.bodyLarge,
-                            color = MaterialTheme.myColors.primaryDark,
                             modifier = Modifier
                                 .padding(5.dp))
                     }

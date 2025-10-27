@@ -13,7 +13,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.tt.invoicecreator.ui.components.texts.BodyLargeText
+import com.tt.invoicecreator.ui.components.texts.TitleLargeText
 import com.tt.invoicecreator.ui.theme.Typography
 import com.tt.invoicecreator.ui.theme.myColors
 import com.tt.invoicecreator.viewmodel.AppViewModel
@@ -33,47 +36,31 @@ fun ClientCardViewV2(
                 onClick()
             }
     ){
-//        if(viewModel.getInvoiceV2().client.clientName != ""){
         if(showCardView()){
             Column() {
-                Text(
+                TitleLargeText(
                     text = clientName,
-                    fontWeight = FontWeight.W700,
-                    style = Typography.bodyLarge,
-                    color = MaterialTheme.myColors.primaryDark,
                     modifier = Modifier
-                        .padding(5.dp))
-                Text(
+                        .padding(start = 10.dp, top = 10.dp, bottom = 5.dp))
+                BodyLargeText(
                     text = clientAddressLine1,
-                    fontWeight = FontWeight.W500,
-                    style = Typography.bodyLarge,
-                    color = MaterialTheme.myColors.primaryDark,
                     modifier = Modifier
-                        .padding(5.dp))
-                Text(
+                        .padding(start = 10.dp, top = 5.dp, bottom = 5.dp))
+                BodyLargeText(
                     text = clientAddressLine2,
-                    fontWeight = FontWeight.W500,
-                    style = Typography.bodyLarge,
-                    color = MaterialTheme.myColors.primaryDark,
                     modifier = Modifier
-                        .padding(5.dp))
-                Text(
+                        .padding(start = 10.dp, top = 5.dp, bottom = 5.dp))
+                BodyLargeText(
                     text = clientCity,
-                    fontWeight = FontWeight.W500,
-                    style = Typography.bodyLarge,
-                    color = MaterialTheme.myColors.primaryDark,
                     modifier = Modifier
-                        .padding(5.dp))
+                        .padding(start = 10.dp, top = 5.dp, bottom = 10.dp))
             }
         }
         else{
-            Text(
+            TitleLargeText(
                 text = "Client not chosen yet",
-                fontWeight = FontWeight.W700,
-                style = Typography.bodyLarge,
-                color = MaterialTheme.myColors.primaryDark,
                 modifier = Modifier
-                    .padding(5.dp))
+                    .padding(10.dp))
         }
     }
 }

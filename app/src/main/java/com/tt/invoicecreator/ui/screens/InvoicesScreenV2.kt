@@ -13,7 +13,6 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -37,6 +36,7 @@ import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogWatchAd
 import com.tt.invoicecreator.ui.alert_dialogs.PrintInvoiceAlertDialogV2
 import com.tt.invoicecreator.ui.components.FilteredInvoicesCardView
 import com.tt.invoicecreator.ui.components.ListOfInvoicesV2
+import com.tt.invoicecreator.ui.components.texts.TitleLargeText
 import com.tt.invoicecreator.viewmodel.AppViewModel
 
 @Composable
@@ -123,13 +123,13 @@ fun InvoicesScreenV2(
         .background(MaterialTheme.colorScheme.background),
         contentAlignment = Alignment.Center){
         if(invoiceListV2.isNullOrEmpty()){
-            Text(
+            TitleLargeText(
                 text = "press + on top of the app",
             )
         }
         else{
             if(invoiceItemsCollection.isNullOrEmpty()){
-                Text(
+                TitleLargeText(
                     text = "LOADING IN PROGRESS...",
                 )
             }else{

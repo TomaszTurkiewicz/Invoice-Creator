@@ -21,6 +21,7 @@ import com.tt.invoicecreator.InvoiceCreatorScreen
 import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.data.roomV2.entities.ItemV2
 import com.tt.invoicecreator.helpers.DecimalFormatter
+import com.tt.invoicecreator.ui.components.CustomButton
 import com.tt.invoicecreator.ui.components.InputDigitsWithLabel
 import com.tt.invoicecreator.ui.components.InputTextWithLabel
 import com.tt.invoicecreator.viewmodel.AppViewModel
@@ -74,7 +75,7 @@ fun AddItemScreenV2(
         ) {
             itemValue.value = decimalFormatter.cleanup(it)
         }
-        Button(
+        CustomButton(
             enabled = itemName.value.trim().isNotEmpty() && itemValue.value.isNotEmpty() && itemValue.value.toDouble() != 0.0,
             onClick ={
                 viewModel.saveItemV2(
@@ -87,10 +88,9 @@ fun AddItemScreenV2(
             },
             modifier = Modifier
                 .padding(5.dp)
-                .fillMaxWidth()
-        ) {
-            Text(text = "SAVE")
-        }
+                .fillMaxWidth(),
+            text = "SAVE"
+        )
     }
 
 }

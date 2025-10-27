@@ -28,8 +28,11 @@ import com.tt.invoicecreator.helpers.DateAndTime
 import com.tt.invoicecreator.helpers.InvoiceNumber
 import com.tt.invoicecreator.helpers.InvoiceValueCalculator
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogPayInvoiceV2
+import com.tt.invoicecreator.ui.components.CustomButton
 import com.tt.invoicecreator.ui.components.CustomCardView
 import com.tt.invoicecreator.ui.components.PaymentHistoryRow
+import com.tt.invoicecreator.ui.components.texts.BodyLargeText
+import com.tt.invoicecreator.ui.components.texts.TitleLargeText
 import com.tt.invoicecreator.ui.theme.Typography
 import com.tt.invoicecreator.ui.theme.myColors
 import com.tt.invoicecreator.viewmodel.AppViewModel
@@ -78,10 +81,8 @@ fun InvoiceInfoScreenV2(
                 .verticalScroll(rememberScrollState())
         )
         {
-            Text(
+            TitleLargeText(
                 text = "Invoice number: ${InvoiceNumber.getStringNumber(invoiceV2.invoiceNumber,invoiceV2.time)}",
-                style = Typography.titleLarge,
-                color = MaterialTheme.myColors.primaryDark,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -91,18 +92,14 @@ fun InvoiceInfoScreenV2(
                 modifier = Modifier
                     .padding(top = 30.dp)
             ) {
-                Text(
+                BodyLargeText(
                     text = "date: ${DateAndTime.convertLongToDate(invoiceV2.time)}",
-                    style = Typography.bodyLarge,
-                    color = MaterialTheme.myColors.primaryDark,
                     modifier = Modifier
                         .padding(end = 10.dp)
                 )
                 if (invoiceV2.dueDate != null) {
-                    Text(
-                        text = "due date: ${DateAndTime.convertLongToDate(invoiceV2.dueDate!!)}",
-                        style = Typography.bodyLarge,
-                        color = MaterialTheme.myColors.primaryDark
+                    BodyLargeText(
+                        text = "due date: ${DateAndTime.convertLongToDate(invoiceV2.dueDate!!)}"
                     )
                 }
             }
@@ -111,33 +108,23 @@ fun InvoiceInfoScreenV2(
                 modifier = Modifier
                     .padding(top = 30.dp)
             ){
-                Text(
+                BodyLargeText(
                     text = "Client:",
-                    style = Typography.bodyLarge,
-                    color = MaterialTheme.myColors.primaryDark,
                     modifier = Modifier
                         .padding(end = 5.dp)
                 )
                 Column {
-                    Text(
-                        text = invoiceV2.client.clientName,
-                        style = Typography.bodyLarge,
-                        color = MaterialTheme.myColors.primaryDark
+                    BodyLargeText(
+                        text = invoiceV2.client.clientName
                     )
-                    Text(
-                        text = invoiceV2.client.clientAddress1,
-                        style = Typography.bodyLarge,
-                        color = MaterialTheme.myColors.primaryDark
+                    BodyLargeText(
+                        text = invoiceV2.client.clientAddress1
                     )
-                    Text(
-                        text = invoiceV2.client.clientAddress2,
-                        style = Typography.bodyLarge,
-                        color = MaterialTheme.myColors.primaryDark
+                    BodyLargeText(
+                        text = invoiceV2.client.clientAddress2
                     )
-                    Text(
-                        text = invoiceV2.client.clientCity,
-                        style = Typography.bodyLarge,
-                        color = MaterialTheme.myColors.primaryDark
+                    BodyLargeText(
+                        text = invoiceV2.client.clientCity
                     )
                 }
             }
@@ -147,23 +134,18 @@ fun InvoiceInfoScreenV2(
                 modifier = Modifier
                     .padding(top = 30.dp)
             ) {
-                Text(
+                BodyLargeText(
                     text = "Value: ${invoiceValue.doubleValue}",
-                    style = Typography.bodyLarge,
-                    color = MaterialTheme.myColors.primaryDark,
                     modifier = Modifier
                         .padding(end = 20.dp)
                 )
                 if(InvoiceValueCalculator.calculatePaid(paidListV2)<InvoiceValueCalculator.calculateV2(invoiceItemListV2)){
-                    Text(
-                        text = "Paid: ${InvoiceValueCalculator.calculatePaid(paidListV2)}",
-                        style = Typography.bodyLarge,
-                        color = MaterialTheme.myColors.primaryDark
+                    BodyLargeText(
+                        text = "Paid: ${InvoiceValueCalculator.calculatePaid(paidListV2)}"
                     )
                 }else{
-                    Text(
+                    BodyLargeText(
                         text = "PAID IN FULL",
-                        style = Typography.bodyLarge,
                         color = MaterialTheme.myColors.success
                     )
                 }
@@ -171,10 +153,8 @@ fun InvoiceInfoScreenV2(
             }
 
 
-            Text(
+            BodyLargeText(
                 text = "Payment History",
-                style = Typography.bodyLarge,
-                color = MaterialTheme.myColors.primaryDark,
                 modifier = Modifier
                     .padding(top = 30.dp, bottom = 10.dp)
             )
@@ -184,29 +164,16 @@ fun InvoiceInfoScreenV2(
             }
 
             if(InvoiceValueCalculator.calculatePaid(paidListV2)<InvoiceValueCalculator.calculateV2(invoiceItemListV2)){
-                Button(
+                CustomButton(
                     onClick = {
                         payAlertDialog.value = true
                     },
                     modifier = Modifier
                         .padding(top = 30.dp)
-                        .fillMaxWidth()
-                ) {
-                    Text(
-                        text = "PAY"
-                    )
-                }
+                        .fillMaxWidth(),
+                    text = "PAY"
+                )
             }
-//        Button(
-//            onClick = {
-//                payAlertDialog.value = true
-//            }
-//        ) {
-//            Text(
-//                text = "PAY"
-//            )
-//        }
-
         }
     }
 

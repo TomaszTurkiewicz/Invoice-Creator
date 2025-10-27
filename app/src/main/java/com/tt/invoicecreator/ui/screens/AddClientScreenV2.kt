@@ -20,6 +20,7 @@ import androidx.navigation.NavController
 import com.tt.invoicecreator.InvoiceCreatorScreen
 import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.data.roomV2.entities.ClientV2
+import com.tt.invoicecreator.ui.components.CustomButton
 import com.tt.invoicecreator.ui.components.InputTextWithLabel
 import com.tt.invoicecreator.viewmodel.AppViewModel
 
@@ -85,7 +86,7 @@ fun AddClientScreenV2(
         ) {
             clientCity.value = it
         }
-        Button(
+        CustomButton(
             enabled = clientName.value.trim().isNotEmpty()
                     && clientAddress1.value.trim().isNotEmpty()
                     && clientAddress2.value.trim().isNotEmpty()
@@ -103,10 +104,9 @@ fun AddClientScreenV2(
             },
             modifier = Modifier
                 .padding(5.dp)
-                .fillMaxWidth()
-        ) {
-            Text(text = "SAVE")
-        }
+                .fillMaxWidth(),
+            text = "SAVE"
+        )
     }
 
 }

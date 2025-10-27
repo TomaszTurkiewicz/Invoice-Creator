@@ -13,7 +13,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.tt.invoicecreator.ui.components.texts.BodyLargeText
 import com.tt.invoicecreator.ui.theme.Typography
 import com.tt.invoicecreator.ui.theme.myColors
 
@@ -34,20 +36,23 @@ fun PaymentMethodCardView(
             modifier = Modifier
         )
         {
-            Text(
+            BodyLargeText(
                 text = "Payment Method",
-                fontWeight = FontWeight.W700,
-                style = Typography.bodyLarge,
-                color = MaterialTheme.myColors.primaryDark,
                 modifier = Modifier
                     .padding(5.dp))
-            Text(
+            BodyLargeText(
                 text = paymentMethod,
-                fontWeight = FontWeight.W500,
-                style = Typography.bodyLarge,
-                color = MaterialTheme.myColors.primaryDark,
                 modifier = Modifier
                     .padding(5.dp))
         }
     }
+}
+
+@Composable
+@Preview
+fun ShowPaymentMethodCardView() {
+    PaymentMethodCardView(
+        onClick = {},
+        paymentMethod = "Cash"
+    )
 }

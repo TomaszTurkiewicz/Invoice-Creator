@@ -7,9 +7,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.tt.invoicecreator.data.roomV2.entities.PaidV2
 import com.tt.invoicecreator.helpers.DateAndTime
+import com.tt.invoicecreator.ui.components.texts.BodyLargeText
 import com.tt.invoicecreator.ui.theme.Typography
 import com.tt.invoicecreator.ui.theme.myColors
 
@@ -21,28 +23,23 @@ fun PaymentHistoryRow(
         modifier = Modifier
             .padding(bottom = 5.dp)
     ) {
-        Text(
+        BodyLargeText(
             text = DateAndTime.convertLongToDate(paidV2.time),
-            style = Typography.bodyLarge,
-            color = MaterialTheme.myColors.primaryDark,
             modifier = Modifier
-                .weight(1f)
+                .padding(end = 10.dp)
+//            modifier = Modifier
+//                .weight(1f)
         )
-        Text(
+        BodyLargeText(
             text = "£"+paidV2.amountPaid.toString(),
-            style = Typography.bodyLarge,
-            color = MaterialTheme.myColors.primaryDark,
             modifier = Modifier
                 .weight(1f),
             textAlign = TextAlign.Start
         )
-        Text(
+        BodyLargeText(
             text = paidV2.notes,
-            style = Typography.bodyLarge,
-            color = MaterialTheme.myColors.primaryDark,
             modifier = Modifier
-                .weight(1f
-                )
+                .weight(2f)
         )
     }
 }

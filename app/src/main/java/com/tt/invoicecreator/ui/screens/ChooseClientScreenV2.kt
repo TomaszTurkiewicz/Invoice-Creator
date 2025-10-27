@@ -18,6 +18,7 @@ import com.tt.invoicecreator.InvoiceCreatorScreen
 import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.data.roomV2.entities.ClientV2
 import com.tt.invoicecreator.ui.components.ListOfClientsV2
+import com.tt.invoicecreator.ui.components.texts.TitleLargeText
 import com.tt.invoicecreator.viewmodel.AppViewModel
 
 @Composable
@@ -57,7 +58,7 @@ fun ChooseClientScreenV2(
         contentAlignment = Alignment.Center)
     {
         if(clientList.isNullOrEmpty()){
-            Text(
+            TitleLargeText(
                 text = "press + on top of the app"
             )
         }

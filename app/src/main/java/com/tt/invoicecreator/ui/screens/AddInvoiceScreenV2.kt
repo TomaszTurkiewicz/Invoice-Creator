@@ -42,6 +42,7 @@ import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogInvoiceNumberV2
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogPaymentMethod
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogSignature
 import com.tt.invoicecreator.ui.components.ClientCardViewV2
+import com.tt.invoicecreator.ui.components.CustomButton
 import com.tt.invoicecreator.ui.components.EmptyItemCardViewV2
 import com.tt.invoicecreator.ui.components.InvoiceNumberCardView
 import com.tt.invoicecreator.ui.components.ItemCardViewV2
@@ -200,7 +201,7 @@ fun AddInvoiceScreenV2(
                     null
                 }
             )
-            Button(
+            CustomButton(
                 enabled = viewModel.getInvoiceV2().client.clientName!="" && viewModel.getInvoiceItemList()
                     .isNotEmpty(),
                 onClick ={
@@ -209,10 +210,9 @@ fun AddInvoiceScreenV2(
                 },
                 modifier = Modifier
                     .padding(5.dp)
-                    .fillMaxWidth()
-            ) {
-                Text(text = "SAVE")
-            }
+                    .fillMaxWidth(),
+                text = "SAVE"
+            )
         }
 
     if(invoiceNumberAlertDialog.value){
