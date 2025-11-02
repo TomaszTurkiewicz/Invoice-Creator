@@ -13,19 +13,19 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="Show (1)">
+      <SelectionState runConfigName="ShowPaymentHistory">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="Show (2)">
+      <SelectionState runConfigName="ShowPaymentMethodCardView">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="Show (3)">
+      <SelectionState runConfigName="ShowClientCardView">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="Show (4)">
+      <SelectionState runConfigName="ShowSignatureAlertDialog">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="ShowItemCardViewV2">
+      <SelectionState runConfigName="ShowSignatureCardView">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

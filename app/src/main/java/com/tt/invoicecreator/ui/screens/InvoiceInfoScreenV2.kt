@@ -40,11 +40,9 @@ import com.tt.invoicecreator.viewmodel.AppViewModel
 @Composable
 fun InvoiceInfoScreenV2(
     invoiceV2: InvoiceV2,
-//    invoiceItemListV2: List<InvoiceItemV2>,
     ignoredOnComposing:(AppBarState) -> Unit,
     viewModel: AppViewModel,
     uiState: AppUiState,
-    navController: NavController,
     paidInvoicesCollection: List<PaidV2>?,
     invoiceItemsCollection: List<InvoiceItemV2>
     ) {

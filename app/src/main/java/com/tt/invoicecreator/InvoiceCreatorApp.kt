@@ -187,14 +187,11 @@ fun InvoiceCreatorApp (
             composable(route = InvoiceCreatorScreen.InvoiceInfoV2.name) {
                 InvoiceInfoScreenV2(
                     invoiceV2 = uiState.invoiceV2,
-//                    invoiceItemListV2 = uiState.invoiceItemListV2,
-     //               paidListV2 = uiState.paidListV2,
                     ignoredOnComposing = {
                         appBarState = it
                     },
                     viewModel = viewModel,
                     uiState = uiState,
-                    navController = navController,
                     paidInvoicesCollection = paidInvoicesCollection,
                     invoiceItemsCollection = invoiceItemsCollection!!
                 )
