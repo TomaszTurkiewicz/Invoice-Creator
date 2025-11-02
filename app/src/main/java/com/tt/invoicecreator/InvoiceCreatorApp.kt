@@ -10,11 +10,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.ui.app_bar.TopAppBarWithAction
@@ -39,10 +37,6 @@ fun InvoiceCreatorApp (
     activity: MainActivity
 ){
 
-    val context = LocalContext.current
-
-    val backStackEntry by navController.currentBackStackEntryAsState()
-
     val invoiceListV2 by viewModel.invoiceListV2.observeAsState()
 
     val invoiceItemsCollection by viewModel.invoiceItemListV2.observeAsState()
@@ -52,10 +46,6 @@ fun InvoiceCreatorApp (
     val clientList by viewModel.clientListV2.observeAsState()
 
     val itemList by viewModel.itemListV2.observeAsState()
-
-    val currentScreen = InvoiceCreatorScreen.valueOf(
-        backStackEntry?.destination?.route ?: InvoiceCreatorScreen.ChooseMode.name
-    )
 
     var appBarState by remember {
         mutableStateOf(AppBarState())
@@ -75,9 +65,7 @@ fun InvoiceCreatorApp (
 //                }
 //                else -> {
                     TopAppBarWithAction(
-                        appBarState = appBarState,
-                        currentScreen = currentScreen,
-                        context = context
+                        appBarState = appBarState
                     )
 //                }
 //            }

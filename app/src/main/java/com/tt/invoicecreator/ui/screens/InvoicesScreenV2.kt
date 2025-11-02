@@ -7,9 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -20,9 +17,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
 import com.tt.invoicecreator.InvoiceCreatorScreen
 import com.tt.invoicecreator.MainActivity
+import com.tt.invoicecreator.R
 import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.data.InvoiceStatus
 import com.tt.invoicecreator.data.SharedPreferences
@@ -98,13 +97,13 @@ fun InvoicesScreenV2(
 
                             }
                         }) {
-                            Icon(Icons.Default.Add,null)
+                            Icon(painter = painterResource(R.drawable.baseline_add_24), null)
                         }
 
                         IconButton(onClick = {
                             navController.navigate(InvoiceCreatorScreen.Settings.name)
                         }) {
-                            Icon(Icons.Default.Settings,null)
+                            Icon(painter = painterResource(R.drawable.baseline_settings_24), null)
                         }
                     }
                 }

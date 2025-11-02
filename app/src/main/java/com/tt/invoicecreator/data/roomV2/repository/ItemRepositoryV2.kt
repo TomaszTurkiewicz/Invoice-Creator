@@ -8,5 +8,4 @@ interface ItemRepositoryV2 {
 
     suspend fun insertItem(itemV2: ItemV2)
 
-    suspend fun deleteItem(itemV2: ItemV2)
 }

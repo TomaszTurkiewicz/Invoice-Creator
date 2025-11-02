@@ -8,5 +8,4 @@ interface InvoiceItemRepositoryV2 {
 
     suspend fun insertInvoiceItem(invoiceItemV2: InvoiceItemV2)
 
-    suspend fun deleteInvoiceItem(invoiceItemV2: InvoiceItemV2)
 }

@@ -1,8 +1,6 @@
 package com.tt.invoicecreator.data
 
-import com.tt.invoicecreator.data.roomV2.entities.InvoiceItemV2
 import com.tt.invoicecreator.data.roomV2.entities.InvoiceV2
-import com.tt.invoicecreator.data.roomV2.entities.PaidV2
 
 data class AppUiState(
     val rewardedAppLoaded: Boolean = false,

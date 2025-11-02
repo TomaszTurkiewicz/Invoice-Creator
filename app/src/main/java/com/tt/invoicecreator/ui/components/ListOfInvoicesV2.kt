@@ -10,7 +10,6 @@ import com.tt.invoicecreator.data.roomV2.entities.InvoiceItemV2
 import com.tt.invoicecreator.data.roomV2.entities.InvoiceV2
 import com.tt.invoicecreator.data.roomV2.entities.PaidV2
 import com.tt.invoicecreator.helpers.FilterInvoices
-import com.tt.invoicecreator.helpers.InvoiceValueCalculator
 
 @Composable
 fun ListOfInvoicesV2(

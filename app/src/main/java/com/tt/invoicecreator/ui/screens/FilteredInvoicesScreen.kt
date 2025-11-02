@@ -1,9 +1,6 @@
 package com.tt.invoicecreator.ui.screens
 
 import androidx.compose.foundation.layout.Row
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
@@ -11,8 +8,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
 import com.tt.invoicecreator.InvoiceCreatorScreen
+import com.tt.invoicecreator.R
 import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.data.InvoiceStatus
 import com.tt.invoicecreator.data.roomV2.entities.InvoiceItemV2
@@ -63,13 +62,13 @@ fun FilteredInvoicesScreen(
                             viewModel.cleanInvoiceV2()
                             navController.navigate(InvoiceCreatorScreen.AddInvoiceV2.name)
                         }) {
-                            Icon(Icons.Default.Add,null)
+                            Icon(painter = painterResource(R.drawable.baseline_add_24), null)
                         }
 
                         IconButton(onClick = {
                             navController.navigate(InvoiceCreatorScreen.Settings.name)
                         }) {
-                            Icon(Icons.Default.Settings,null)
+                            Icon(painter = painterResource(R.drawable.baseline_settings_24), null)
                         }
                     }
                 }

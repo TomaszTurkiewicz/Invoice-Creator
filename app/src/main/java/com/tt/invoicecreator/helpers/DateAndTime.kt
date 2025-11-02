@@ -7,7 +7,7 @@ import java.util.Date
 object DateAndTime {
     fun convertLongToDate(time: Long):String{
         val date = Date(time)
-        val format = SimpleDateFormat("yyyy-MM-dd")
+        val format = SimpleDateFormat("yyyy-MM-dd",java.util.Locale.getDefault())
         return format.format(date)
     }
 

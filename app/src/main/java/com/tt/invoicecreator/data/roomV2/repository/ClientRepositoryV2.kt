@@ -8,6 +8,4 @@ interface ClientRepositoryV2 {
 
     suspend fun insertClient(clientV2: ClientV2)
 
-    suspend fun deleteClient(clientV2: ClientV2)
-
 }

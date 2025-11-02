@@ -1,6 +1,5 @@
 package com.tt.invoicecreator.ui.components
 
-import androidx.compose.foundation.background
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -29,7 +28,7 @@ fun CustomButton(
     ){
         BodyLargeText(
             text = text,
-            color = MaterialTheme.myColors.material.background
+            color =MaterialTheme.myColors.material.background
         )
     }
 }

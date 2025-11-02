@@ -17,7 +17,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import com.tt.invoicecreator.InvoiceCreatorScreen
 import com.tt.invoicecreator.data.AppBarState
-import com.tt.invoicecreator.data.SharedPreferences
 import com.tt.invoicecreator.viewmodel.AppViewModel
 
 @Composable
