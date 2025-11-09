@@ -81,9 +81,11 @@ fun FilteredInvoicesScreen(
         itemList = invoiceItemsCollection!!,
         list = invoiceListV2!!,
         paidInvoices = paidInvoicesCollection,
-        invoiceChosen = {
-            invoice.value = it
-            viewModel.updateInvoiceV2(it)
+        invoiceChosen = { invoiceR, list ->
+            invoice.value = invoiceR
+            viewModel.updateInvoiceV2(invoiceR)
+            itemList.clear()
+            itemList.addAll(list)
             printInvoiceAlertDialog.value = true
         },
         modePro = true
@@ -93,7 +95,6 @@ fun FilteredInvoicesScreen(
     )
 
     if(printInvoiceAlertDialog.value){
-
         PrintInvoiceAlertDialogV2(
             context = context,
             invoiceV2 = invoice.value,

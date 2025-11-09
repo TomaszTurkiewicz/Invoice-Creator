@@ -22,6 +22,19 @@ object InvoiceValueCalculator {
         return sum
     }
 
+    fun checkIfVATList(items:List<InvoiceItemV2>):Boolean{
+        items.forEach{
+            if(it.vat != null){
+                return true
+            }
+        }
+        return false
+    }
+
+    fun checkIfVATOneItem(items:InvoiceItemV2):Boolean{
+        return items.vat != null
+    }
+
     fun calculateNettoV2(items:List<InvoiceItemV2>):Double{
         val value: ArrayList<Double> = ArrayList()
 
@@ -53,8 +66,18 @@ object InvoiceValueCalculator {
         return sum
     }
 
-    fun calculateV2oneItem(itemV2: InvoiceItemV2): Double {
+    fun calculateV2oneNettoItem(itemV2: InvoiceItemV2): Double {
         return itemV2.itemV2.itemValue * itemV2.itemCount - itemV2.itemDiscount
+    }
+
+    fun calculateV2oneVATItem(itemV2: InvoiceItemV2): Double {
+        return (itemV2.itemV2.itemValue * itemV2.itemCount - itemV2.itemDiscount) * (itemV2.vat!!/100)
+    }
+
+    fun calculateV2oneTotalItem(itemV2: InvoiceItemV2): Double {
+        val mVat = if(itemV2.vat == null) 1.0 else (100+itemV2.vat!!)/100
+
+        return (itemV2.itemV2.itemValue * itemV2.itemCount - itemV2.itemDiscount) * mVat
     }
 
     fun calculatePaid(paid:List<PaidV2>?): Double {

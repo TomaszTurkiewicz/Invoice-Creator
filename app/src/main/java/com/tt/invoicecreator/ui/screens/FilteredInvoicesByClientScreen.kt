@@ -170,9 +170,11 @@ fun FilteredInvoicesByClientScreen(
                     invoice = invoice,
                     invoiceItems = thisInvoiceItems!!,
                     paidInvoices = thisPaid,
-                    invoiceChosen = {
-                        invoiceMutable.value = it
-                        viewModel.updateInvoiceV2(it)
+                    invoiceChosen = { invoiceR, list ->
+                        invoiceMutable.value = invoiceR
+                        viewModel.updateInvoiceV2(invoiceR)
+                        itemList.clear()
+                        itemList.addAll(list)
                         printInvoiceAlertDialog.value = true
                     },
                     modePro = true

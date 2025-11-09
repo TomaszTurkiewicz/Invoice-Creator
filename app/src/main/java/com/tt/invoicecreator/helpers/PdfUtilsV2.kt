@@ -31,9 +31,16 @@ class PdfUtilsV2 {
         private const val RIGHT_MARGIN = PAGE_WIDTH- LEFT_MARGIN
         private const val MARGIN_BOTTOM = PAGE_HEIGHT-50f
         private const val DESCRIPTION_RIGHT = 300f
+        private const val DESCRIPTION_RIGHT_VAT = 240f
         private const val QUANTITY_RIGHT = 400f
+        private const val QUANTITY_RIGHT_VAT = 330f
         private const val PRICE_RIGHT = 560f
+        private const val PRICE_RIGHT_VAT = 450f
         private const val DISCOUNT_RIGHT = 660f
+        private const val DISCOUNT_RIGHT_VAT = 520f
+
+        private const val AMOUNT_RIGHT_VAT = 610f
+        private const val VAT_VAT = 670f
         private const val MARGIN_TOP = 50f
         private const val TEXT_SMALL = 15f
         private const val TEXT_BIG = 30f
@@ -56,6 +63,9 @@ class PdfUtilsV2 {
             val page = pdfDocument.startPage(pageInfo)
             val canvas = page.canvas
 
+            val vatBoolean = InvoiceValueCalculator.checkIfVATList(items)
+
+
             drawUserV2(context, user, canvas, paint)
 
             drawInvoiceWordV2(context, canvas, paint)
@@ -66,11 +76,21 @@ class PdfUtilsV2 {
 
             drawInvoiceNumberAndDateV2(canvas, paint, invoiceV2)
 
-            drawTableHeadV2(context, canvas, paint)
+            if(vatBoolean){
+                drawTableHeadVATV2(context, canvas, paint)
 
-            drawItemV2(context, canvas, paint, decimalFormat, items)
+                drawItemVATV2(context, canvas, paint, decimalFormat, items)
 
-            drawTotalV2(context, canvas, paint, items, decimalFormat)
+                drawTotalVATV2(context, canvas, paint, items, decimalFormat)
+            }else{
+                drawTableHeadV2(context, canvas, paint)
+
+                drawItemV2(context, canvas, paint, decimalFormat, items)
+
+                drawTotalV2(context, canvas, paint, items, decimalFormat)
+            }
+
+
 
             drawPaymentOptionsV2(context, canvas, paint)
 
@@ -105,6 +125,323 @@ class PdfUtilsV2 {
                 }
             }
             pdfDocument.close()
+        }
+
+        private fun drawTotalVATV2(
+            context: Context,
+            canvas: Canvas,
+            paint: Paint,
+            items: List<InvoiceItemV2>,
+            decimalFormat: DecimalFormat
+        ) {
+
+            paint.color = context.getColor(R.color.orange_light)
+            paint.style = Paint.Style.FILL_AND_STROKE
+            canvas.drawRect(
+                PRICE_RIGHT_VAT,
+                HEAD_TOP + TABLE_HEIGHT * i,
+                RIGHT_MARGIN,
+                HEAD_TOP + TABLE_HEIGHT *(1+ i),
+                paint
+            )
+
+            paint.color = context.getColor(R.color.black)
+            paint.textAlign = Paint.Align.RIGHT
+            canvas.drawText(
+                "Total",
+                DISCOUNT_RIGHT_VAT -10f,
+                HEAD_TOP + TABLE_HEIGHT*(i-1) + (TABLE_HEIGHT * 1.6f),
+                paint
+            )
+
+            /**AMOUNT**/
+            paint.textAlign = Paint.Align.CENTER
+            canvas.drawText(
+                "£" + decimalFormat.format(InvoiceValueCalculator.calculateNettoV2(items)),
+                Math.average(
+                    DISCOUNT_RIGHT_VAT,
+                    AMOUNT_RIGHT_VAT
+                ),
+                HEAD_TOP + TABLE_HEIGHT*(i-1) + (TABLE_HEIGHT * 1.6f),
+                paint
+            )
+            /**VAT**/
+                canvas.drawText(
+                    "£" + decimalFormat.format(InvoiceValueCalculator.calculateVATV2(items)),
+                    Math.average(
+                        AMOUNT_RIGHT_VAT,
+                        VAT_VAT
+                    ),
+                    HEAD_TOP + TABLE_HEIGHT*(i-1) + (TABLE_HEIGHT * 1.6f),
+                    paint
+                )
+
+            /** TOTAL **/
+            paint.textAlign = Paint.Align.RIGHT
+            canvas.drawText(
+                "£" + decimalFormat.format(InvoiceValueCalculator.calculateV2(items)),
+                RIGHT_MARGIN - 10f,
+                HEAD_TOP + TABLE_HEIGHT*(i-1) + (TABLE_HEIGHT * 1.6f),
+                paint
+            )
+
+
+
+        }
+
+        private fun drawItemVATV2(
+            context: Context,
+            canvas: Canvas,
+            paint: Paint,
+            decimalFormat: DecimalFormat,
+            items: List<InvoiceItemV2>
+        ) {
+
+            paint.textAlign = Paint.Align.LEFT
+            paint.textSize = TEXT_SMALL
+
+            for (itemV2 in items) {
+
+                paint.color = context.getColor(R.color.orange_light)
+                paint.style = Paint.Style.STROKE
+                /** DESCRIPTION**/
+                canvas.drawRect(
+                    LEFT_MARGIN,
+                    HEAD_TOP + TABLE_HEIGHT*i,
+                    DESCRIPTION_RIGHT_VAT,
+                    HEAD_TOP + (TABLE_HEIGHT*i + TABLE_HEIGHT),
+                    paint
+                )
+                /** QUANTITY**/
+                canvas.drawRect(
+                    DESCRIPTION_RIGHT_VAT,
+                    HEAD_TOP + TABLE_HEIGHT*i,
+                    QUANTITY_RIGHT_VAT,
+                    HEAD_TOP + (TABLE_HEIGHT*i + TABLE_HEIGHT),
+                    paint
+                )
+                /** PRICE**/
+                canvas.drawRect(
+                    QUANTITY_RIGHT_VAT,
+                    HEAD_TOP + TABLE_HEIGHT*i,
+                    PRICE_RIGHT_VAT,
+                    HEAD_TOP + (TABLE_HEIGHT*i + TABLE_HEIGHT),
+                    paint
+                )
+                /** DISCOUNT**/
+                canvas.drawRect(
+                    PRICE_RIGHT_VAT,
+                    HEAD_TOP + TABLE_HEIGHT*i,
+                    DISCOUNT_RIGHT_VAT,
+                    HEAD_TOP + (TABLE_HEIGHT*i + TABLE_HEIGHT),
+                    paint
+                )
+                /** AMOUNT **/
+                canvas.drawRect(
+                    DISCOUNT_RIGHT_VAT,
+                    HEAD_TOP + TABLE_HEIGHT*i,
+                    AMOUNT_RIGHT_VAT,
+                    HEAD_TOP + (TABLE_HEIGHT*i + TABLE_HEIGHT),
+                    paint
+                )
+
+                /** VAT **/
+                canvas.drawRect(
+                    AMOUNT_RIGHT_VAT,
+                    HEAD_TOP + TABLE_HEIGHT*i,
+                    VAT_VAT,
+                    HEAD_TOP + (TABLE_HEIGHT*i + TABLE_HEIGHT),
+                    paint
+                )
+                /** TOTAL **/
+                canvas.drawRect(
+                    VAT_VAT,
+                    HEAD_TOP + TABLE_HEIGHT*i,
+                    RIGHT_MARGIN,
+                    HEAD_TOP + (TABLE_HEIGHT*i + TABLE_HEIGHT),
+                    paint
+                )
+
+
+                paint.color = context.getColor(R.color.black)
+                paint.style = Paint.Style.FILL
+                paint.textAlign = Paint.Align.LEFT
+                /** DESCRIPTION**/
+                if (itemV2.comment.isNotEmpty()) {
+                    canvas.drawText(
+                        itemV2.itemV2.itemName,
+                        LEFT_MARGIN + 10f,
+                        HEAD_TOP + TABLE_HEIGHT*(i-1) + (TABLE_HEIGHT * 1.4f),
+                        paint
+                    )
+                    canvas.drawText(
+                        itemV2.comment,
+                        LEFT_MARGIN + 10f,
+                        HEAD_TOP + TABLE_HEIGHT*(i-1) + (TABLE_HEIGHT * 1.8f),
+                        paint
+                    )
+                } else {
+                    canvas.drawText(
+                        itemV2.itemV2.itemName,
+                        LEFT_MARGIN + 10f,
+                        HEAD_TOP + TABLE_HEIGHT*(i-1) + (TABLE_HEIGHT * 1.6f),
+                        paint
+                    )
+                }
+
+                paint.textAlign = Paint.Align.CENTER
+                /** QUANTITY**/
+                canvas.drawText(
+                    itemV2.itemCount.toString(),
+                    Math.average(
+                        DESCRIPTION_RIGHT_VAT,
+                        QUANTITY_RIGHT_VAT
+                    ),
+                    HEAD_TOP + TABLE_HEIGHT*(i-1) + (TABLE_HEIGHT * 1.6f),
+                    paint
+                )
+
+                /** PRICE**/
+                canvas.drawText(
+                    "£" + decimalFormat.format(itemV2.itemV2.itemValue),
+                    Math.average(
+                        QUANTITY_RIGHT_VAT,
+                        PRICE_RIGHT_VAT
+                    ),
+                    HEAD_TOP + TABLE_HEIGHT*(i-1) + (TABLE_HEIGHT * 1.6f),
+                    paint
+                )
+                /** DISCOUNT **/
+                canvas.drawText(
+                    if (itemV2.itemDiscount != 0.0) {
+                        "£" + decimalFormat.format(itemV2.itemDiscount)
+                    } else {
+                        "----"
+                    },
+
+                    Math.average(
+                        PRICE_RIGHT_VAT,
+                        DISCOUNT_RIGHT_VAT
+                    ),
+                    HEAD_TOP + TABLE_HEIGHT*(i-1) + (TABLE_HEIGHT * 1.6f),
+                    paint
+                )
+                /**AMOUNT**/
+                canvas.drawText(
+                    "£" + decimalFormat.format(InvoiceValueCalculator.calculateV2oneNettoItem(itemV2)),
+                    Math.average(
+                        DISCOUNT_RIGHT_VAT,
+                        AMOUNT_RIGHT_VAT
+                    ),
+                    HEAD_TOP + TABLE_HEIGHT*(i-1) + (TABLE_HEIGHT * 1.6f),
+                    paint
+                )
+                /**VAT**/
+                if(InvoiceValueCalculator.checkIfVATOneItem(itemV2)){
+                    canvas.drawText(
+                        "£" + decimalFormat.format(InvoiceValueCalculator.calculateV2oneVATItem(itemV2)),
+                        Math.average(
+                            AMOUNT_RIGHT_VAT,
+                            VAT_VAT
+                        ),
+                        HEAD_TOP + TABLE_HEIGHT*(i-1) + (TABLE_HEIGHT * 1.6f),
+                        paint
+                    )
+                }
+
+                /** TOTAL **/
+                paint.textAlign = Paint.Align.RIGHT
+                canvas.drawText(
+                    "£" + decimalFormat.format(InvoiceValueCalculator.calculateV2oneTotalItem(itemV2)),
+                    RIGHT_MARGIN - 10f,
+                    HEAD_TOP + TABLE_HEIGHT*(i-1) + (TABLE_HEIGHT * 1.6f),
+                    paint
+                )
+                i += 1
+            }
+
+
+        }
+
+        private fun drawTableHeadVATV2(
+            context: Context,
+            canvas: Canvas,
+            paint: Paint
+        ) {
+            paint.color = context.getColor(R.color.orange_light)
+            canvas.drawRect(
+                LEFT_MARGIN,
+                HEAD_TOP,
+                RIGHT_MARGIN,
+                HEAD_TOP + TABLE_HEIGHT,
+                paint
+            )
+
+            paint.textSize = TEXT_SMALL
+            paint.color = context.getColor(R.color.black)
+            paint.style = Paint.Style.FILL_AND_STROKE
+            paint.textAlign = Paint.Align.LEFT
+            canvas.drawText(
+                "Description",
+                LEFT_MARGIN +10f,
+                HEAD_TOP + TABLE_HEIGHT *0.6f,
+                paint
+            )
+            paint.textAlign = Paint.Align.CENTER
+            canvas.drawText(
+                "QTY",
+                Math.average(
+                    DESCRIPTION_RIGHT_VAT,
+                    QUANTITY_RIGHT_VAT
+                ),
+                HEAD_TOP + TABLE_HEIGHT *0.6f,
+                paint
+            )
+
+            canvas.drawText(
+                "Price",
+                Math.average(
+                    QUANTITY_RIGHT_VAT,
+                    PRICE_RIGHT_VAT
+                ),
+                HEAD_TOP + TABLE_HEIGHT *0.6f,
+                paint
+            )
+            canvas.drawText(
+                "Discount",
+                Math.average(
+                    PRICE_RIGHT_VAT,
+                    DISCOUNT_RIGHT_VAT
+                ),
+                HEAD_TOP + TABLE_HEIGHT *0.6f,
+                paint
+            )
+            canvas.drawText(
+                "Amount",
+                Math.average(
+                    DISCOUNT_RIGHT_VAT,
+                    AMOUNT_RIGHT_VAT
+                ),
+                HEAD_TOP + TABLE_HEIGHT *0.6f,
+                paint
+            )
+            canvas.drawText(
+                "VAT",
+                Math.average(
+                    AMOUNT_RIGHT_VAT,
+                    VAT_VAT
+                ),
+                HEAD_TOP + TABLE_HEIGHT *0.6f,
+                paint
+            )
+            paint.textAlign = Paint.Align.RIGHT
+            canvas.drawText(
+                "Total",
+                RIGHT_MARGIN -10f,
+                HEAD_TOP + TABLE_HEIGHT *0.6f,
+                paint
+            )
+
         }
 
         private fun drawSignatureV2(context: Context, canvas: Canvas, paint: Paint) {
@@ -267,7 +604,7 @@ class PdfUtilsV2 {
                     canvas.drawText(
                         itemV2.itemV2.itemName,
                         LEFT_MARGIN + 10f,
-                        HEAD_TOP + TABLE_HEIGHT*(i-1) + (TABLE_HEIGHT * 1.66f),
+                        HEAD_TOP + TABLE_HEIGHT*(i-1) + (TABLE_HEIGHT * 1.6f),
                         paint
                     )
                 }
@@ -308,7 +645,7 @@ class PdfUtilsV2 {
                 )
                 paint.textAlign = Paint.Align.RIGHT
                 canvas.drawText(
-                    "£" + decimalFormat.format(InvoiceValueCalculator.calculateV2oneItem(itemV2)),
+                    "£" + decimalFormat.format(InvoiceValueCalculator.calculateV2oneNettoItem(itemV2)),
                     RIGHT_MARGIN - 10f,
                     HEAD_TOP + TABLE_HEIGHT*(i-1) + (TABLE_HEIGHT * 1.6f),
                     paint

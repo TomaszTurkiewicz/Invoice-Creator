@@ -27,7 +27,7 @@ fun SingleRowInvoiceV2(
     invoice: InvoiceV2,
     invoiceItems:List<InvoiceItemV2>,
     paidInvoices: List<PaidV2>?,
-    invoiceChosen: (InvoiceV2) -> Unit,
+    invoiceChosen: (InvoiceV2, List<InvoiceItemV2>) -> Unit,
     modePro:Boolean
 ) {
 
@@ -40,7 +40,7 @@ fun SingleRowInvoiceV2(
     CustomCardView(
         modifier = Modifier
             .clickable {
-                invoiceChosen(invoice)
+                invoiceChosen(invoice,invoiceItems)
             }
     ) {
         Column(

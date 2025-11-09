@@ -17,7 +17,7 @@ fun ListOfInvoicesV2(
     list:List<InvoiceV2>,
     itemList:List<InvoiceItemV2>,
     paidInvoices: List<PaidV2>?,
-    invoiceChosen: (InvoiceV2) -> Unit,
+    invoiceChosen: (InvoiceV2, List<InvoiceItemV2>) -> Unit,
     modePro:Boolean
 ) {
     val newList = when(invoiceStatus) {
@@ -85,7 +85,8 @@ fun ListOfInvoicesV2(
                     invoiceItems = invoiceItems,
                     paidInvoices = paidItems,
                     invoiceChosen = {
-                        invoiceChosen(it)
+                            invoiceR, list ->
+                        invoiceChosen(invoiceR,list)
                     },
                     modePro = modePro
                 )

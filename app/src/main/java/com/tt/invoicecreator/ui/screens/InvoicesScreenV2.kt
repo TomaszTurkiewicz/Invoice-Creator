@@ -33,8 +33,8 @@ import com.tt.invoicecreator.helpers.FilterInvoices
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogAddMainUser
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogWatchAd
 import com.tt.invoicecreator.ui.alert_dialogs.PrintInvoiceAlertDialogV2
-import com.tt.invoicecreator.ui.components.cards.FilteredInvoicesCardView
 import com.tt.invoicecreator.ui.components.ListOfInvoicesV2
+import com.tt.invoicecreator.ui.components.cards.FilteredInvoicesCardView
 import com.tt.invoicecreator.ui.components.texts.TitleLargeText
 import com.tt.invoicecreator.viewmodel.AppViewModel
 
@@ -135,12 +135,14 @@ fun InvoicesScreenV2(
                 if(!modePro){
                 ListOfInvoicesV2(
                     invoiceStatus = invoiceStatus,
-                    itemList = invoiceItemsCollection!!,
-                    list = invoiceListV2!!,
+                    itemList = invoiceItemsCollection,
+                    list = invoiceListV2,
                     paidInvoices = paidInvoicesCollection,
-                    invoiceChosen = {
-                        invoice.value = it
-                        viewModel.updateInvoiceV2(it)
+                    invoiceChosen = { invoiceR, list ->
+                        invoice.value = invoiceR
+                        itemList.clear()
+                        itemList.addAll(list)
+                        viewModel.updateInvoiceV2(invoiceR)
                         printInvoiceAlertDialog.value = true
                     },
                     modePro = false
@@ -155,7 +157,7 @@ fun InvoicesScreenV2(
                         FilteredInvoicesCardView(
                             header = "ALL INVOICES",
                             message = "number of all invoices:",
-                            count = invoiceListV2!!.size,
+                            count = invoiceListV2.size,
                             modifier = Modifier
                                 .aspectRatio(3f)
 
@@ -167,8 +169,8 @@ fun InvoicesScreenV2(
                             header = "OVERDUE",
                             message = "number of overdue invoices:",
                             count = FilterInvoices.getOverdue(
-                                invoiceListV2!!,
-                                invoiceItemsCollection!!,
+                                invoiceListV2,
+                                invoiceItemsCollection,
                                 paidInvoicesCollection
                             ).size,
                             modifier = Modifier
@@ -181,8 +183,8 @@ fun InvoicesScreenV2(
                             header = "NOT PAID",
                             message = "number of not paid invoices:",
                             count = FilterInvoices.getNotPaid(
-                                invoiceListV2!!,
-                                invoiceItemsCollection!!,
+                                invoiceListV2,
+                                invoiceItemsCollection,
                                 paidInvoicesCollection
                             ).size,
                             modifier = Modifier
@@ -223,7 +225,6 @@ fun InvoicesScreenV2(
              }
 
     if(printInvoiceAlertDialog.value){
-
         PrintInvoiceAlertDialogV2(
             context = context,
             invoiceV2 = invoice.value,
