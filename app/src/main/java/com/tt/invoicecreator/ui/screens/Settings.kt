@@ -13,7 +13,7 @@ import androidx.compose.ui.platform.LocalContext
 import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.data.SharedPreferences
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogAddMainUser
-import com.tt.invoicecreator.ui.components.ClientCardViewV2
+import com.tt.invoicecreator.ui.components.cards.ClientCardViewV2
 
 @Composable
 fun Settings(

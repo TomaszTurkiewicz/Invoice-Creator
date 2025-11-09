@@ -1,4 +1,4 @@
-package com.tt.invoicecreator.ui.components
+package com.tt.invoicecreator.ui.components.cards
 
 import android.graphics.Bitmap
 import androidx.compose.foundation.Image
@@ -25,8 +25,8 @@ fun SignatureCardView(
                 onClick()
             }
             .aspectRatio(4f)
-    ){
-        if(imageBitmap != null){
+    ) {
+        if (imageBitmap != null) {
             Row {
                 BodyLargeText(
                     text = "SIGNATURE",
@@ -42,7 +42,7 @@ fun SignatureCardView(
                 )
             }
 
-        }else{
+        } else {
             TitleLargeText(
                 text = "NO SIGNATURE YET",
                 modifier = Modifier

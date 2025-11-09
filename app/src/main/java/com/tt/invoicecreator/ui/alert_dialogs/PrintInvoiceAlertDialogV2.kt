@@ -16,7 +16,7 @@ import com.tt.invoicecreator.data.roomV2.entities.InvoiceV2
 import com.tt.invoicecreator.helpers.InvoiceNumber
 import com.tt.invoicecreator.helpers.PdfUtilsV2
 import com.tt.invoicecreator.ui.components.CustomButton
-import com.tt.invoicecreator.ui.components.CustomCardView
+import com.tt.invoicecreator.ui.components.cards.CustomCardView
 import com.tt.invoicecreator.ui.components.texts.BodyLargeText
 import com.tt.invoicecreator.ui.components.texts.TitleLargeText
 

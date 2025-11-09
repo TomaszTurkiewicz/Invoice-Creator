@@ -1,4 +1,4 @@
-package com.tt.invoicecreator.ui.components
+package com.tt.invoicecreator.ui.components.cards
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,14 +14,14 @@ fun EmptyItemCardViewV2(
     showPosition:Boolean,
     onClick: () -> Unit
 ) {
-    CustomCardView (
+    CustomCardView(
         modifier = Modifier
             .clickable {
                 onClick()
             }
-    ){
+    ) {
         TitleLargeText(
-            text = if(showPosition)"Item: $position not chosen yet" else "Item not chosen yet",
+            text = if (showPosition) "Item: $position not chosen yet" else "Item not chosen yet",
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(10.dp)

@@ -1,4 +1,4 @@
-package com.tt.invoicecreator.ui.components
+package com.tt.invoicecreator.ui.components.cards
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -28,11 +28,13 @@ fun PaymentMethodCardView(
             BodyLargeText(
                 text = "Payment Method",
                 modifier = Modifier
-                    .padding(5.dp))
+                    .padding(5.dp)
+            )
             BodyLargeText(
                 text = paymentMethod,
                 modifier = Modifier
-                    .padding(5.dp))
+                    .padding(5.dp)
+            )
         }
     }
 }

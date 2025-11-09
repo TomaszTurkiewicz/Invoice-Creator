@@ -23,7 +23,7 @@ import com.tt.invoicecreator.helpers.DecimalFormatter
 import com.tt.invoicecreator.helpers.InvoiceDueDate
 import com.tt.invoicecreator.helpers.InvoiceNumber
 import com.tt.invoicecreator.ui.components.CustomButton
-import com.tt.invoicecreator.ui.components.CustomCardView
+import com.tt.invoicecreator.ui.components.cards.CustomCardView
 import com.tt.invoicecreator.ui.components.InputDigitsWithLabel
 import com.tt.invoicecreator.ui.components.texts.BodyLargeText
 import com.tt.invoicecreator.ui.components.texts.TitleLargeText

@@ -1,4 +1,4 @@
-package com.tt.invoicecreator.ui.components
+package com.tt.invoicecreator.ui.components.cards
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope

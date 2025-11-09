@@ -1,6 +1,7 @@
 package com.tt.invoicecreator.ui.alert_dialogs
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BasicAlertDialog
@@ -16,7 +17,7 @@ import com.tt.invoicecreator.data.roomV2.entities.InvoiceItemV2
 import com.tt.invoicecreator.data.roomV2.entities.ItemV2
 import com.tt.invoicecreator.helpers.DecimalFormatter
 import com.tt.invoicecreator.ui.components.CustomButton
-import com.tt.invoicecreator.ui.components.CustomCardView
+import com.tt.invoicecreator.ui.components.cards.CustomCardView
 import com.tt.invoicecreator.ui.components.InputDigitsWithLabel
 import com.tt.invoicecreator.ui.components.InputTextWithLabel
 import com.tt.invoicecreator.ui.components.texts.TitleLargeText
@@ -26,7 +27,7 @@ import com.tt.invoicecreator.viewmodel.AppViewModel
 @Composable
 fun AlertDialogItemCountDiscountAndCommentsV2(
     itemV2: ItemV2,
-    viewModel: AppViewModel,
+    viewModel: AppViewModel?,
     onDismissRequest: () -> Unit,
     navController: NavController
 ) {
@@ -42,6 +43,9 @@ fun AlertDialogItemCountDiscountAndCommentsV2(
         mutableStateOf("")
     }
 
+    val initialVAT = remember {
+        mutableStateOf("20")
+    }
     val decimalFormatter = DecimalFormatter()
 
     BasicAlertDialog(
@@ -82,16 +86,50 @@ fun AlertDialogItemCountDiscountAndCommentsV2(
                 ) {
                     itemComment.value = it
                 }
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 10.dp)
+
+                ) {
+                    InputDigitsWithLabel(
+                        modifier = Modifier
+                            .fillMaxWidth(0.8f),
+                        labelText = "VAT",
+                        inputText = initialVAT.value,
+                        isError = if(initialVAT.value==""){
+                            true
+                        }
+                        else{
+                            initialVAT.value.toDouble()>=100
+                        },
+                        errorText = if(initialVAT.value==""){
+                            "not valid amount"
+                        }
+                        else{
+                            "too much"
+                        }
+                    ) {
+                        initialVAT.value = decimalFormatter.cleanup(it)
+                    }
+                    TitleLargeText(
+                        text = "%",
+                        modifier = Modifier
+                            .align(Alignment.CenterVertically)
+                    )
+                }
                 CustomButton(
-                    enabled = itemCount.value.isNotEmpty() && itemDiscount.value.isNotEmpty(),
+                    enabled = itemCount.value.isNotEmpty() && itemDiscount.value.isNotEmpty() && initialVAT.value!="" && initialVAT.value.toDouble()<100,
                     onClick = {
 
-                        viewModel.addItemToInvoice(
+                        viewModel?.addItemToInvoice(
                             InvoiceItemV2(
                                 itemV2 = itemV2,
                                 itemCount = itemCount.value.toDouble(),
                                 itemDiscount = itemDiscount.value.toDouble(),
-                                comment = itemComment.value.trim()
+                                comment = itemComment.value.trim(),
+                                vat = initialVAT.value.toDoubleOrNull()
                             )
                         )
                         navController.navigateUp()
@@ -100,6 +138,27 @@ fun AlertDialogItemCountDiscountAndCommentsV2(
                         .fillMaxWidth()
                         .padding(5.dp),
                     text = "SAVE"
+                )
+
+                CustomButton(
+                    enabled = itemCount.value.isNotEmpty() && itemDiscount.value.isNotEmpty(),
+                    onClick = {
+
+                        viewModel?.addItemToInvoice(
+                            InvoiceItemV2(
+                                itemV2 = itemV2,
+                                itemCount = itemCount.value.toDouble(),
+                                itemDiscount = itemDiscount.value.toDouble(),
+                                comment = itemComment.value.trim(),
+                                vat = null
+                            )
+                        )
+                        navController.navigateUp()
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(5.dp),
+                    text = "NO VAT"
                 )
 
             }

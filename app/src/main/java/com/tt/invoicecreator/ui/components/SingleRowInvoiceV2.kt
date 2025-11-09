@@ -18,6 +18,7 @@ import com.tt.invoicecreator.data.roomV2.entities.PaidV2
 import com.tt.invoicecreator.helpers.DateAndTime
 import com.tt.invoicecreator.helpers.InvoiceNumber
 import com.tt.invoicecreator.helpers.InvoiceValueCalculator
+import com.tt.invoicecreator.ui.components.cards.CustomCardView
 import com.tt.invoicecreator.ui.components.texts.BodyLargeText
 import com.tt.invoicecreator.ui.theme.myColors
 
@@ -41,14 +42,19 @@ fun SingleRowInvoiceV2(
             .clickable {
                 invoiceChosen(invoice)
             }
-    ){
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
         )
         {
             BodyLargeText(
-                text = "Invoice number: ${InvoiceNumber.getStringNumber(invoice.invoiceNumber,invoice.time)}",
+                text = "Invoice number: ${
+                    InvoiceNumber.getStringNumber(
+                        invoice.invoiceNumber,
+                        invoice.time
+                    )
+                }",
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -56,7 +62,7 @@ fun SingleRowInvoiceV2(
             BodyLargeText(
                 text = "date: ${DateAndTime.convertLongToDate(invoice.time)}"
             )
-            if(modePro && invoice.dueDate != null){
+            if (modePro && invoice.dueDate != null) {
                 BodyLargeText(
                     text = "due date: ${DateAndTime.convertLongToDate(invoice.dueDate!!)}"
                 )
@@ -73,14 +79,17 @@ fun SingleRowInvoiceV2(
                             .padding(end = 10.dp)
                     )
 
-                    if(modePro){
+                    if (modePro) {
 
-                        if(amountPaid.doubleValue == InvoiceValueCalculator.calculateV2(invoiceItems)){
+                        if (amountPaid.doubleValue == InvoiceValueCalculator.calculateV2(
+                                invoiceItems
+                            )
+                        ) {
                             BodyLargeText(
                                 text = "PAID",
                                 color = MaterialTheme.myColors.success
                             )
-                        }else{
+                        } else {
                             BodyLargeText(
                                 text = "paid: ${amountPaid.doubleValue}",
                                 color = MaterialTheme.myColors.primaryDark
@@ -88,10 +97,11 @@ fun SingleRowInvoiceV2(
                         }
                     }
                 }
-                if(modePro
+                if (modePro
                     && invoice.dueDate != null
                     && invoice.dueDate!! < System.currentTimeMillis()
-                    && amountPaid.doubleValue < InvoiceValueCalculator.calculateV2(invoiceItems)){
+                    && amountPaid.doubleValue < InvoiceValueCalculator.calculateV2(invoiceItems)
+                ) {
                     BodyLargeText(
                         text = "OVERDUE",
                         color = MaterialTheme.myColors.error

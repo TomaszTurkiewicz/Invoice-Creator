@@ -1,4 +1,4 @@
-package com.tt.invoicecreator.ui.components
+package com.tt.invoicecreator.ui.components.cards
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -23,32 +23,36 @@ fun ClientCardViewV2(
             .clickable {
                 onClick()
             }
-    ){
-        if(showCardView()){
+    ) {
+        if (showCardView()) {
             Column {
                 TitleLargeText(
                     text = clientName,
                     modifier = Modifier
-                        .padding(start = 10.dp, top = 10.dp, bottom = 5.dp))
+                        .padding(start = 10.dp, top = 10.dp, bottom = 5.dp)
+                )
                 BodyLargeText(
                     text = clientAddressLine1,
                     modifier = Modifier
-                        .padding(start = 10.dp, top = 5.dp, bottom = 5.dp))
+                        .padding(start = 10.dp, top = 5.dp, bottom = 5.dp)
+                )
                 BodyLargeText(
                     text = clientAddressLine2,
                     modifier = Modifier
-                        .padding(start = 10.dp, top = 5.dp, bottom = 5.dp))
+                        .padding(start = 10.dp, top = 5.dp, bottom = 5.dp)
+                )
                 BodyLargeText(
                     text = clientCity,
                     modifier = Modifier
-                        .padding(start = 10.dp, top = 5.dp, bottom = 10.dp))
+                        .padding(start = 10.dp, top = 5.dp, bottom = 10.dp)
+                )
             }
-        }
-        else{
+        } else {
             TitleLargeText(
                 text = "Client not chosen yet",
                 modifier = Modifier
-                    .padding(10.dp))
+                    .padding(10.dp)
+            )
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.tt.invoicecreator.ui.components
+package com.tt.invoicecreator.ui.components.cards
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -22,7 +22,7 @@ fun FilteredInvoicesCardView(
 ) {
     CustomCardView(
         modifier = modifier
-            .clickable{
+            .clickable {
                 onClick()
             }
     ) {

@@ -34,7 +34,7 @@ import androidx.core.graphics.createBitmap
 import com.tt.invoicecreator.data.PathState
 import com.tt.invoicecreator.data.SignatureFile
 import com.tt.invoicecreator.ui.components.CustomButton
-import com.tt.invoicecreator.ui.components.CustomCardView
+import com.tt.invoicecreator.ui.components.cards.CustomCardView
 import com.tt.invoicecreator.ui.components.DrawingCanvas
 import com.tt.invoicecreator.ui.components.texts.TitleLargeText
 import java.io.File

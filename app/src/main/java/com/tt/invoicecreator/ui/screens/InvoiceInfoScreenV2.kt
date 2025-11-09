@@ -25,8 +25,8 @@ import com.tt.invoicecreator.helpers.InvoiceNumber
 import com.tt.invoicecreator.helpers.InvoiceValueCalculator
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogPayInvoiceV2
 import com.tt.invoicecreator.ui.components.CustomButton
-import com.tt.invoicecreator.ui.components.CustomCardView
 import com.tt.invoicecreator.ui.components.PaymentHistoryRow
+import com.tt.invoicecreator.ui.components.cards.CustomCardView
 import com.tt.invoicecreator.ui.components.texts.BodyLargeText
 import com.tt.invoicecreator.ui.components.texts.TitleLargeText
 import com.tt.invoicecreator.ui.theme.myColors
@@ -52,6 +52,14 @@ fun InvoiceInfoScreenV2(
 
     val invoiceValue = remember {
         mutableDoubleStateOf(InvoiceValueCalculator.calculateV2(invoiceItemListV2))
+    }
+
+    val invoiceNettoValue = remember {
+        mutableDoubleStateOf(InvoiceValueCalculator.calculateNettoV2(invoiceItemListV2))
+    }
+
+    val invoiceVATValue = remember {
+        mutableDoubleStateOf(InvoiceValueCalculator.calculateVATV2(invoiceItemListV2))
     }
 
     val paidListV2 = paidInvoicesCollection?.filter {
@@ -128,7 +136,26 @@ fun InvoiceInfoScreenV2(
                     .padding(top = 30.dp)
             ) {
                 BodyLargeText(
-                    text = "Value: ${invoiceValue.doubleValue}",
+                    text = "Value: ${invoiceNettoValue.doubleValue}",
+                    modifier = Modifier
+                        .padding(end = 20.dp)
+                )
+            }
+            Row(
+                modifier = Modifier
+            ) {
+                BodyLargeText(
+                    text = "VAT: ${invoiceVATValue.doubleValue}",
+                    modifier = Modifier
+                        .padding(end = 20.dp)
+                )
+            }
+
+            Row(
+                modifier = Modifier
+            ) {
+                BodyLargeText(
+                    text = "Total: ${invoiceValue.doubleValue}",
                     modifier = Modifier
                         .padding(end = 20.dp)
                 )
@@ -144,7 +171,6 @@ fun InvoiceInfoScreenV2(
                 }
 
             }
-
 
             BodyLargeText(
                 text = "Payment History",
@@ -187,3 +213,5 @@ fun InvoiceInfoScreenV2(
     }
 
 }
+
+//todo if pro print invoice summary

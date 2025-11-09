@@ -1,4 +1,4 @@
-package com.tt.invoicecreator.ui.components
+package com.tt.invoicecreator.ui.components.cards
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -35,34 +35,39 @@ fun InvoiceNumberCardView(
             BodyLargeText(
                 text = "Invoice Number: $invoiceNumberString",
                 modifier = Modifier
-                    .padding(5.dp))
+                    .padding(5.dp)
+            )
             Row {
                 BodyLargeText(
                     text = "Date",
                     modifier = Modifier
-                        .padding(5.dp))
+                        .padding(5.dp)
+                )
                 BodyLargeText(
                     text = DateAndTime.convertLongToDate(time),
                     modifier = Modifier
-                        .padding(5.dp))
+                        .padding(5.dp)
+                )
             }
-            if(modePro){
-                Row{
+            if (modePro) {
+                Row {
                     BodyLargeText(
                         text = "Due date",
                         modifier = Modifier
-                            .padding(5.dp))
-                    if(dueDate!=null){
+                            .padding(5.dp)
+                    )
+                    if (dueDate != null) {
                         BodyLargeText(
                             text = DateAndTime.convertLongToDate(dueDate),
                             modifier = Modifier
-                                .padding(5.dp))
-                    }
-                    else{
+                                .padding(5.dp)
+                        )
+                    } else {
                         BodyLargeText(
                             text = "----",
                             modifier = Modifier
-                                .padding(5.dp))
+                                .padding(5.dp)
+                        )
                     }
 
                 }

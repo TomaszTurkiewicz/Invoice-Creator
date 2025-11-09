@@ -36,13 +36,13 @@ import com.tt.invoicecreator.helpers.InvoiceNumber
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogInvoiceNumberV2
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogPaymentMethod
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogSignature
-import com.tt.invoicecreator.ui.components.ClientCardViewV2
+import com.tt.invoicecreator.ui.components.cards.ClientCardViewV2
 import com.tt.invoicecreator.ui.components.CustomButton
-import com.tt.invoicecreator.ui.components.EmptyItemCardViewV2
-import com.tt.invoicecreator.ui.components.InvoiceNumberCardView
-import com.tt.invoicecreator.ui.components.ItemCardViewV2
-import com.tt.invoicecreator.ui.components.PaymentMethodCardView
-import com.tt.invoicecreator.ui.components.SignatureCardView
+import com.tt.invoicecreator.ui.components.cards.EmptyItemCardViewV2
+import com.tt.invoicecreator.ui.components.cards.InvoiceNumberCardView
+import com.tt.invoicecreator.ui.components.cards.ItemCardViewV2
+import com.tt.invoicecreator.ui.components.cards.PaymentMethodCardView
+import com.tt.invoicecreator.ui.components.cards.SignatureCardView
 import com.tt.invoicecreator.viewmodel.AppViewModel
 import java.io.File
 

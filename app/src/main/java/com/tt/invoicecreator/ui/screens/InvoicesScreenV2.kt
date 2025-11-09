@@ -33,7 +33,7 @@ import com.tt.invoicecreator.helpers.FilterInvoices
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogAddMainUser
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogWatchAd
 import com.tt.invoicecreator.ui.alert_dialogs.PrintInvoiceAlertDialogV2
-import com.tt.invoicecreator.ui.components.FilteredInvoicesCardView
+import com.tt.invoicecreator.ui.components.cards.FilteredInvoicesCardView
 import com.tt.invoicecreator.ui.components.ListOfInvoicesV2
 import com.tt.invoicecreator.ui.components.texts.TitleLargeText
 import com.tt.invoicecreator.viewmodel.AppViewModel

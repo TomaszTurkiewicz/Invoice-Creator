@@ -1,4 +1,4 @@
-package com.tt.invoicecreator.ui.components
+package com.tt.invoicecreator.ui.components.cards
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,7 +24,7 @@ fun ItemCardViewV2(
             Column {
                 Row {
                     BodyLargeText(
-                        text =invoiceItemV2.itemV2.itemName,
+                        text = invoiceItemV2.itemV2.itemName,
                         modifier = Modifier
                             .weight(3f)
                             .padding(5.dp)
@@ -54,6 +54,23 @@ fun ItemCardViewV2(
                 }
                 Row {
                     BodyLargeText(
+                        text = "VAT",
+                        modifier = Modifier
+                            .padding(5.dp)
+                    )
+                    BodyLargeText(
+                        text = ":",
+                        modifier = Modifier
+                            .padding(5.dp)
+                    )
+                    BodyLargeText(
+                        text = if(invoiceItemV2.vat != null) invoiceItemV2.vat.toString() else "NO VAT",
+                        modifier = Modifier
+                            .padding(5.dp)
+                    )
+                }
+                Row {
+                    BodyLargeText(
                         text = "discount",
                         modifier = Modifier
                             .padding(5.dp)
@@ -69,7 +86,7 @@ fun ItemCardViewV2(
                             .padding(5.dp)
                     )
                 }
-                if(invoiceItemV2.comment != ""){
+                if (invoiceItemV2.comment != "") {
                     BodyLargeText(
                         text = invoiceItemV2.comment,
                         modifier = Modifier
@@ -79,5 +96,5 @@ fun ItemCardViewV2(
 
             }
         }
-}
+    }
 }

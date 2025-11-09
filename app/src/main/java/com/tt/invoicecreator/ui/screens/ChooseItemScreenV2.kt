@@ -72,7 +72,7 @@ fun ChooseItemScreenV2(
         }
         else{
             ListOfItemsV2(
-                list = itemList!!,
+                list = itemList,
                 itemChosen = {
                     itemV2Temp.value = it
 //                    viewModel.addItemToInvoice(it)

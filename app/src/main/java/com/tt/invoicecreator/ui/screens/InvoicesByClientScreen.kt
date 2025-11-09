@@ -19,7 +19,7 @@ import com.tt.invoicecreator.R
 import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.data.roomV2.entities.ClientV2
 import com.tt.invoicecreator.data.roomV2.entities.InvoiceV2
-import com.tt.invoicecreator.ui.components.FilteredInvoicesCardView
+import com.tt.invoicecreator.ui.components.cards.FilteredInvoicesCardView
 import com.tt.invoicecreator.viewmodel.AppViewModel
 
 @Composable
