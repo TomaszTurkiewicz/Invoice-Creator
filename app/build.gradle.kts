@@ -78,5 +78,8 @@ dependencies {
     //Admob
     implementation(libs.play.services.ads)
 
+// Or if you are using a Compose BOM, you might just need:
+    implementation(libs.androidx.compose.material.icons.extended)
+
 
 }

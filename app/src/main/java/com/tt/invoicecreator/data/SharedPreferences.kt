@@ -2,6 +2,7 @@ package com.tt.invoicecreator.data
 
 import android.content.Context
 import androidx.core.content.edit
+import com.tt.invoicecreator.helpers.Currency
 import com.tt.invoicecreator.helpers.User
 
 object SharedPreferences {
@@ -47,6 +48,21 @@ object SharedPreferences {
     fun readPROMode(context: Context):Boolean{
         val sp = context.getSharedPreferences("PRO_MODE", Context.MODE_PRIVATE)
         return sp.getBoolean("pro_mode", false)
+    }
+
+    fun saveCurrency(context: Context, currency:String){
+        val sp = context.getSharedPreferences("CURRENCY", Context.MODE_PRIVATE)
+        sp.edit {
+            putString("currency", currency)
+        }
+    }
+
+    fun readCurrency(context: Context): Currency {
+        val sp = context.getSharedPreferences("CURRENCY", Context.MODE_PRIVATE)
+        // Read the saved currency name, default to GBP if nothing is saved
+        val currencyName = sp.getString("currency", Currency.GBP.name)
+        // Find the matching enum entry, or return GBP if not found
+        return Currency.entries.find { it.name == currencyName } ?: Currency.GBP
     }
 
 }

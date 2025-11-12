@@ -143,7 +143,6 @@ class MainActivity : ComponentActivity() {
 
 
 /**
- * todo add VAT calculation
  * todo add changing color schema if PRO
  * todo add settings screen
  * todo export database if pro

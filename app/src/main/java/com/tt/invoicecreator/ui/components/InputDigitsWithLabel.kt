@@ -20,6 +20,8 @@ fun InputDigitsWithLabel(
     inputText: String?,
     isError: Boolean = false,
     errorText: String = "",
+    leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
     onValueChange: (String) -> Unit
 
 
@@ -41,7 +43,9 @@ fun InputDigitsWithLabel(
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number
             ),
-            isError = isError
+            isError = isError,
+            leadingIcon = leadingIcon,
+            trailingIcon = trailingIcon
         )
         if(isError){
             BodyLargeText(
