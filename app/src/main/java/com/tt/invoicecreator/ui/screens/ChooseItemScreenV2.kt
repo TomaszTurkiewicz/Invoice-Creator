@@ -38,6 +38,14 @@ fun ChooseItemScreenV2(
         mutableStateOf(ItemV2())
     }
 
+    val tempItemList = if(viewModel.getInvoiceItemList().isEmpty()){
+        itemList
+    }else{
+        itemList?.filter { itemV2 ->
+            itemV2.itemCurrency.symbol == viewModel.getInvoiceItemList()[0].itemV2.itemCurrency.symbol
+        }
+    }
+
     LaunchedEffect(key1 = true) {
         ignoredOnComposing(
             AppBarState(
@@ -65,14 +73,14 @@ fun ChooseItemScreenV2(
             .fillMaxSize(),
         contentAlignment = Alignment.Center)
     {
-        if(itemList.isNullOrEmpty()){
+        if(tempItemList.isNullOrEmpty()){
             TitleLargeText(
                 text = "press + on top of the app"
             )
         }
         else{
             ListOfItemsV2(
-                list = itemList,
+                list = tempItemList,
                 itemChosen = {
                     itemV2Temp.value = it
 //                    viewModel.addItemToInvoice(it)

@@ -17,9 +17,10 @@ import com.tt.invoicecreator.data.roomV2.entities.InvoiceItemV2
 import com.tt.invoicecreator.data.roomV2.entities.ItemV2
 import com.tt.invoicecreator.helpers.DecimalFormatter
 import com.tt.invoicecreator.ui.components.CustomButton
-import com.tt.invoicecreator.ui.components.cards.CustomCardView
 import com.tt.invoicecreator.ui.components.InputDigitsWithLabel
 import com.tt.invoicecreator.ui.components.InputTextWithLabel
+import com.tt.invoicecreator.ui.components.cards.CustomCardView
+import com.tt.invoicecreator.ui.components.texts.BodyLargeText
 import com.tt.invoicecreator.ui.components.texts.TitleLargeText
 import com.tt.invoicecreator.viewmodel.AppViewModel
 
@@ -76,7 +77,18 @@ fun AlertDialogItemCountDiscountAndCommentsV2(
                     modifier = Modifier
                         .fillMaxWidth(),
                     labelText = "DISCOUNT",
-                    inputText = itemDiscount.value
+                    inputText = itemDiscount.value,
+                    leadingIcon = if(itemV2.itemCurrency.prefix) {
+                        {  BodyLargeText(itemV2.itemCurrency.symbol)}
+                    }
+                    else{
+                     null
+                    },
+                    trailingIcon = if(!itemV2.itemCurrency.prefix) {
+                        { BodyLargeText(itemV2.itemCurrency.symbol)}}
+                    else{
+                        null
+                    }
                 ) {
                     itemDiscount.value = decimalFormatter.cleanup(it)
                 }

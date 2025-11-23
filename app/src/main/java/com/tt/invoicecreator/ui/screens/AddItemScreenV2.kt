@@ -20,6 +20,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,6 +39,7 @@ import com.tt.invoicecreator.data.SharedPreferences
 import com.tt.invoicecreator.data.roomV2.entities.ItemV2
 import com.tt.invoicecreator.helpers.Currency
 import com.tt.invoicecreator.helpers.DecimalFormatter
+import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogCurrencyChooserBlocked
 import com.tt.invoicecreator.ui.components.CustomButton
 import com.tt.invoicecreator.ui.components.InputDigitsWithLabel
 import com.tt.invoicecreator.ui.components.InputTextWithLabel
@@ -47,17 +49,26 @@ import com.tt.invoicecreator.viewmodel.AppViewModel
 
 @Composable
 fun AddItemScreenV2(
-    viewModel: AppViewModel?,
+    viewModel: AppViewModel,
     ignoredOnComposing: (AppBarState) -> Unit,
     navController: NavController
 ) {
 
     val context = LocalContext.current
     val currency = remember {
-        mutableStateOf(SharedPreferences.readCurrency(context))
+        if(viewModel.getInvoiceItemList().isEmpty()){
+            mutableStateOf(SharedPreferences.readCurrency(context))
+        }else{
+            mutableStateOf(viewModel.getInvoiceItemList()[0].itemV2.itemCurrency)
+        }
+
     }
 
+    val alertDialog = remember {
+        mutableStateOf(false)
+    }
 
+    val chooser = viewModel.getInvoiceItemList().isEmpty()
     LaunchedEffect(key1 = true) {
         ignoredOnComposing(
             AppBarState(
@@ -107,20 +118,24 @@ fun AddItemScreenV2(
             itemValue.value = decimalFormatter.cleanup(it)
         }
 
+
+
         // --- Currency Chooser ---
         CurrencyChooser(
             selectedCurrency = currency.value,
             onCurrencySelected = {
                 currency.value = it
                 SharedPreferences.saveCurrency(context, it.name)
-            }
+            },
+            chooser = chooser,
+            alertDialog = alertDialog
         )
         // ------------------------
 
         CustomButton(
             enabled = itemName.value.trim().isNotEmpty() && itemValue.value.isNotEmpty() && itemValue.value.toDouble() != 0.0,
             onClick ={
-                viewModel?.saveItemV2(
+                viewModel.saveItemV2(
                     ItemV2(
                         itemName = itemName.value.trim(),
                         itemValue = itemValue.value.toDouble(),
@@ -136,12 +151,22 @@ fun AddItemScreenV2(
         )
     }
 
+    if(alertDialog.value){
+        AlertDialogCurrencyChooserBlocked(
+            invoiceItemV2 = viewModel.getInvoiceItemList()[0]
+        ) {
+            alertDialog.value = false
+        }
+    }
+
 }
 
 @Composable
 fun CurrencyChooser(
     selectedCurrency: Currency,
-    onCurrencySelected: (Currency) -> Unit
+    onCurrencySelected: (Currency) -> Unit,
+    chooser:Boolean = true,
+    alertDialog: MutableState<Boolean>
 ) {
     var expanded by remember { mutableStateOf(false) }
     val icon = if (expanded) Icons.Default.ArrowDropUp else Icons.Default.ArrowDropDown
@@ -155,7 +180,13 @@ fun CurrencyChooser(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { expanded = true }
+                .clickable {
+                    if(chooser){
+                        expanded = true
+                    }else{
+                        alertDialog.value = true
+                    }
+                }
                 .clip(RoundedCornerShape(4.dp)) // Matches OutlinedTextField corner radius
                 .border(
                     width = 1.dp,
@@ -169,8 +200,10 @@ fun CurrencyChooser(
             BodyLargeText(
                 text = "${selectedCurrency.name} (${selectedCurrency.symbol})"
             )
-            Icon(icon, contentDescription = "Select Currency")
-        }
+            if(chooser) {
+                Icon(icon, contentDescription = "Select Currency")
+            }
+            }
 
         // The DropdownMenu remains the same but is now anchored to the Box
         DropdownMenu(

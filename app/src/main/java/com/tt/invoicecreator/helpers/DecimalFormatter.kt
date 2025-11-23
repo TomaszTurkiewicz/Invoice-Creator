@@ -17,10 +17,18 @@ class DecimalFormatter(
         val sb = StringBuilder()
 
         var hasDecimalSep = false
+        var decimalCount = 0
 
         for(char in input){
             if(char.isDigit()){
-                sb.append(char)
+                if(hasDecimalSep){
+                    if(decimalCount < 2){
+                        decimalCount++
+                        sb.append(char)
+                    }
+                }else{
+                    sb.append(char)
+                }
                 continue
             }
             if(char == decimalSeparator && !hasDecimalSep && sb.isNotEmpty() && needSeparator){
