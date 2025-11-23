@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.tt.invoicecreator.data.roomV2.entities.InvoiceItemV2
+import com.tt.invoicecreator.helpers.CurrencyFormatter
 import com.tt.invoicecreator.ui.components.texts.BodyLargeText
 
 @Composable
@@ -45,7 +46,8 @@ fun ItemCardViewV2(
 
                     )
                     BodyLargeText(
-                        text = invoiceItemV2.itemV2.itemValue.toString(),
+//                        text = invoiceItemV2.itemV2.itemValue.toString(),
+                        text = CurrencyFormatter().format(invoiceItemV2.itemV2.itemValue, invoiceItemV2.itemV2.itemCurrency),
                         modifier = Modifier
                             .padding(5.dp)
                             .weight(1.5f),
@@ -81,7 +83,8 @@ fun ItemCardViewV2(
                             .padding(5.dp)
                     )
                     BodyLargeText(
-                        text = invoiceItemV2.itemDiscount.toString(),
+//                        text = invoiceItemV2.itemDiscount.toString(),
+                        text = CurrencyFormatter().format(invoiceItemV2.itemDiscount, invoiceItemV2.itemV2.itemCurrency),
                         modifier = Modifier
                             .padding(5.dp)
                     )

@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.tt.invoicecreator.data.roomV2.entities.InvoiceItemV2
 import com.tt.invoicecreator.data.roomV2.entities.InvoiceV2
 import com.tt.invoicecreator.data.roomV2.entities.PaidV2
+import com.tt.invoicecreator.helpers.CurrencyFormatter
 import com.tt.invoicecreator.helpers.DateAndTime
 import com.tt.invoicecreator.helpers.InvoiceNumber
 import com.tt.invoicecreator.helpers.InvoiceValueCalculator
@@ -74,7 +75,8 @@ fun SingleRowInvoiceV2(
             Column {
                 Row {
                     BodyLargeText(
-                        text = "value: ${InvoiceValueCalculator.calculateV2(invoiceItems)}",
+//                        text = "value: ${InvoiceValueCalculator.calculateV2(invoiceItems)}",
+                        text = "value: ${CurrencyFormatter().format(InvoiceValueCalculator.calculateV2(invoiceItems), invoiceItems[0].itemV2.itemCurrency)}",
                         modifier = Modifier
                             .padding(end = 10.dp)
                     )
@@ -91,7 +93,8 @@ fun SingleRowInvoiceV2(
                             )
                         } else {
                             BodyLargeText(
-                                text = "paid: ${amountPaid.doubleValue}",
+//                                text = "paid: ${amountPaid.doubleValue}",
+                                text = "paid: ${CurrencyFormatter().format(amountPaid.doubleValue, invoiceItems[0].itemV2.itemCurrency)}",
                                 color = MaterialTheme.myColors.primaryDark
                             )
                         }

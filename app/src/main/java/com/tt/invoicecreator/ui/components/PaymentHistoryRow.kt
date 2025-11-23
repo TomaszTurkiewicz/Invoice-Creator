@@ -7,12 +7,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.tt.invoicecreator.data.roomV2.entities.PaidV2
+import com.tt.invoicecreator.helpers.Currency
+import com.tt.invoicecreator.helpers.CurrencyFormatter
 import com.tt.invoicecreator.helpers.DateAndTime
 import com.tt.invoicecreator.ui.components.texts.BodyLargeText
 
 @Composable
 fun PaymentHistoryRow(
-    paidV2: PaidV2
+    paidV2: PaidV2,
+    currency: Currency
 ) {
     Row(
         modifier = Modifier
@@ -26,7 +29,8 @@ fun PaymentHistoryRow(
 //                .weight(1f)
         )
         BodyLargeText(
-            text = "£"+paidV2.amountPaid.toString(),
+//            text = "£"+paidV2.amountPaid.toString(),
+            text = CurrencyFormatter().format(paidV2.amountPaid, currency),
             modifier = Modifier
                 .weight(1f),
             textAlign = TextAlign.Start

@@ -20,6 +20,7 @@ import com.tt.invoicecreator.data.AppUiState
 import com.tt.invoicecreator.data.roomV2.entities.InvoiceItemV2
 import com.tt.invoicecreator.data.roomV2.entities.InvoiceV2
 import com.tt.invoicecreator.data.roomV2.entities.PaidV2
+import com.tt.invoicecreator.helpers.CurrencyFormatter
 import com.tt.invoicecreator.helpers.DateAndTime
 import com.tt.invoicecreator.helpers.InvoiceNumber
 import com.tt.invoicecreator.helpers.InvoiceValueCalculator
@@ -136,7 +137,8 @@ fun InvoiceInfoScreenV2(
                     .padding(top = 30.dp)
             ) {
                 BodyLargeText(
-                    text = "Value: ${invoiceNettoValue.doubleValue}",
+//                    text = "Value: ${invoiceNettoValue.doubleValue}",
+                    text = "Value: ${CurrencyFormatter().format(invoiceNettoValue.doubleValue, invoiceItemListV2[0].itemV2.itemCurrency)}",
                     modifier = Modifier
                         .padding(end = 20.dp)
                 )
@@ -145,7 +147,8 @@ fun InvoiceInfoScreenV2(
                 modifier = Modifier
             ) {
                 BodyLargeText(
-                    text = "VAT: ${invoiceVATValue.doubleValue}",
+//                    text = "VAT: ${invoiceVATValue.doubleValue}",
+                    text = "VAT: ${CurrencyFormatter().format(invoiceVATValue.doubleValue, invoiceItemListV2[0].itemV2.itemCurrency)}",
                     modifier = Modifier
                         .padding(end = 20.dp)
                 )
@@ -155,13 +158,15 @@ fun InvoiceInfoScreenV2(
                 modifier = Modifier
             ) {
                 BodyLargeText(
-                    text = "Total: ${invoiceValue.doubleValue}",
+//                    text = "Total: ${invoiceValue.doubleValue}",
+                    text = "Total: ${CurrencyFormatter().format(invoiceValue.doubleValue, invoiceItemListV2[0].itemV2.itemCurrency)}",
                     modifier = Modifier
                         .padding(end = 20.dp)
                 )
                 if(InvoiceValueCalculator.calculatePaid(paidListV2)<InvoiceValueCalculator.calculateV2(invoiceItemListV2)){
                     BodyLargeText(
-                        text = "Paid: ${InvoiceValueCalculator.calculatePaid(paidListV2)}"
+//                        text = "Paid: ${InvoiceValueCalculator.calculatePaid(paidListV2)}"
+                        text = "Paid: ${CurrencyFormatter().format(InvoiceValueCalculator.calculatePaid(paidListV2), invoiceItemListV2[0].itemV2.itemCurrency)}"
                     )
                 }else{
                     BodyLargeText(
@@ -179,7 +184,10 @@ fun InvoiceInfoScreenV2(
             )
 
             paidListV2?.forEach { paidV2 ->
-                PaymentHistoryRow(paidV2)
+                PaymentHistoryRow(
+                    paidV2 = paidV2,
+                    currency = invoiceItemListV2[0].itemV2.itemCurrency
+                )
             }
 
             if(InvoiceValueCalculator.calculatePaid(paidListV2)<InvoiceValueCalculator.calculateV2(invoiceItemListV2)){
@@ -206,6 +214,7 @@ fun InvoiceInfoScreenV2(
             uiState = uiState,
             invoiceValue = invoiceValue.doubleValue,
             paidInvoicesCollection = paidInvoicesCollection,
+            currency = invoiceItemListV2[0].itemV2.itemCurrency,
             closeAlertDialog = {
                 payAlertDialog.value = false
             }

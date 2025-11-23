@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.tt.invoicecreator.data.roomV2.entities.ItemV2
+import com.tt.invoicecreator.helpers.CurrencyFormatter
 import com.tt.invoicecreator.ui.components.cards.CustomCardView
 import com.tt.invoicecreator.ui.components.texts.BodyLargeText
 
@@ -19,12 +20,8 @@ fun SingleRowItemV2(
     itemChosen: (ItemV2) -> Unit
 ) {
 
-    // Determine the text format based on the currency prefix
-    val valueText = if (item.itemCurrency.prefix) {
-        "${item.itemCurrency.symbol}${item.itemValue}"
-    } else {
-        "${item.itemValue}${item.itemCurrency.symbol}"
-    }
+    val newFormattedValue = CurrencyFormatter().format(item.itemValue, item.itemCurrency)
+
 
     CustomCardView(
         modifier = Modifier
@@ -45,7 +42,7 @@ fun SingleRowItemV2(
                     .padding(5.dp)
             )
             BodyLargeText(
-                text = valueText, // Use the new formatted value text
+                text = newFormattedValue, // Use the new formatted value text
                 modifier = Modifier
                     .padding(5.dp),
                 textAlign = TextAlign.End // Align the value to the right

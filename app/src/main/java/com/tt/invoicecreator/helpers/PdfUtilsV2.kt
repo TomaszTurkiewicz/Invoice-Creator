@@ -21,7 +21,6 @@ import com.tt.invoicecreator.data.SignatureFile
 import com.tt.invoicecreator.data.roomV2.entities.InvoiceItemV2
 import com.tt.invoicecreator.data.roomV2.entities.InvoiceV2
 import java.io.File
-import java.text.DecimalFormat
 
 class PdfUtilsV2 {
     companion object{
@@ -58,7 +57,7 @@ class PdfUtilsV2 {
 
             val pdfDocument = PdfDocument()
             val paint = Paint()
-            val decimalFormat = DecimalFormat("#.00")
+//            val decimalFormat = DecimalFormat("#.00")
             val pageInfo: PdfDocument.PageInfo? = PdfDocument.PageInfo.Builder(PAGE_WIDTH, PAGE_HEIGHT,1).create()
             val page = pdfDocument.startPage(pageInfo)
             val canvas = page.canvas
@@ -79,15 +78,15 @@ class PdfUtilsV2 {
             if(vatBoolean){
                 drawTableHeadVATV2(context, canvas, paint)
 
-                drawItemVATV2(context, canvas, paint, decimalFormat, items)
+                drawItemVATV2(context, canvas, paint, items)
 
-                drawTotalVATV2(context, canvas, paint, items, decimalFormat)
+                drawTotalVATV2(context, canvas, paint, items)
             }else{
                 drawTableHeadV2(context, canvas, paint)
 
-                drawItemV2(context, canvas, paint, decimalFormat, items)
+                drawItemV2(context, canvas, paint, items)
 
-                drawTotalV2(context, canvas, paint, items, decimalFormat)
+                drawTotalV2(context, canvas, paint, items)
             }
 
 
@@ -131,8 +130,7 @@ class PdfUtilsV2 {
             context: Context,
             canvas: Canvas,
             paint: Paint,
-            items: List<InvoiceItemV2>,
-            decimalFormat: DecimalFormat
+            items: List<InvoiceItemV2>
         ) {
 
             paint.color = context.getColor(R.color.orange_light)
@@ -157,7 +155,8 @@ class PdfUtilsV2 {
             /**AMOUNT**/
             paint.textAlign = Paint.Align.CENTER
             canvas.drawText(
-                "£" + decimalFormat.format(InvoiceValueCalculator.calculateNettoV2(items)),
+ //               "£" + decimalFormat.format(InvoiceValueCalculator.calculateNettoV2(items)),
+                CurrencyFormatter().format(InvoiceValueCalculator.calculateNettoV2(items), items[0].itemV2.itemCurrency),
                 Math.average(
                     DISCOUNT_RIGHT_VAT,
                     AMOUNT_RIGHT_VAT
@@ -167,7 +166,8 @@ class PdfUtilsV2 {
             )
             /**VAT**/
                 canvas.drawText(
-                    "£" + decimalFormat.format(InvoiceValueCalculator.calculateVATV2(items)),
+//                    "£" + decimalFormat.format(InvoiceValueCalculator.calculateVATV2(items)),
+                    CurrencyFormatter().format(InvoiceValueCalculator.calculateVATV2(items), items[0].itemV2.itemCurrency),
                     Math.average(
                         AMOUNT_RIGHT_VAT,
                         VAT_VAT
@@ -179,7 +179,8 @@ class PdfUtilsV2 {
             /** TOTAL **/
             paint.textAlign = Paint.Align.RIGHT
             canvas.drawText(
-                "£" + decimalFormat.format(InvoiceValueCalculator.calculateV2(items)),
+//                "£" + decimalFormat.format(InvoiceValueCalculator.calculateV2(items)),
+                CurrencyFormatter().format(InvoiceValueCalculator.calculateV2(items), items[0].itemV2.itemCurrency),
                 RIGHT_MARGIN - 10f,
                 HEAD_TOP + TABLE_HEIGHT*(i-1) + (TABLE_HEIGHT * 1.6f),
                 paint
@@ -193,7 +194,6 @@ class PdfUtilsV2 {
             context: Context,
             canvas: Canvas,
             paint: Paint,
-            decimalFormat: DecimalFormat,
             items: List<InvoiceItemV2>
         ) {
 
@@ -303,7 +303,8 @@ class PdfUtilsV2 {
 
                 /** PRICE**/
                 canvas.drawText(
-                    "£" + decimalFormat.format(itemV2.itemV2.itemValue),
+//                    "£" + decimalFormat.format(itemV2.itemV2.itemValue),
+                    CurrencyFormatter().format(itemV2.itemV2.itemValue,itemV2.itemV2.itemCurrency),
                     Math.average(
                         QUANTITY_RIGHT_VAT,
                         PRICE_RIGHT_VAT
@@ -314,7 +315,7 @@ class PdfUtilsV2 {
                 /** DISCOUNT **/
                 canvas.drawText(
                     if (itemV2.itemDiscount != 0.0) {
-                        "£" + decimalFormat.format(itemV2.itemDiscount)
+                        CurrencyFormatter().format(itemV2.itemDiscount,itemV2.itemV2.itemCurrency)
                     } else {
                         "----"
                     },
@@ -328,7 +329,8 @@ class PdfUtilsV2 {
                 )
                 /**AMOUNT**/
                 canvas.drawText(
-                    "£" + decimalFormat.format(InvoiceValueCalculator.calculateV2oneNettoItem(itemV2)),
+//                    "£" + decimalFormat.format(InvoiceValueCalculator.calculateV2oneNettoItem(itemV2)),
+                    CurrencyFormatter().format(InvoiceValueCalculator.calculateV2oneNettoItem(itemV2),itemV2.itemV2.itemCurrency),
                     Math.average(
                         DISCOUNT_RIGHT_VAT,
                         AMOUNT_RIGHT_VAT
@@ -339,7 +341,8 @@ class PdfUtilsV2 {
                 /**VAT**/
                 if(InvoiceValueCalculator.checkIfVATOneItem(itemV2)){
                     canvas.drawText(
-                        "£" + decimalFormat.format(InvoiceValueCalculator.calculateV2oneVATItem(itemV2)),
+//                        "£" + decimalFormat.format(InvoiceValueCalculator.calculateV2oneVATItem(itemV2)),
+                        CurrencyFormatter().format(InvoiceValueCalculator.calculateV2oneVATItem(itemV2),itemV2.itemV2.itemCurrency),
                         Math.average(
                             AMOUNT_RIGHT_VAT,
                             VAT_VAT
@@ -352,7 +355,8 @@ class PdfUtilsV2 {
                 /** TOTAL **/
                 paint.textAlign = Paint.Align.RIGHT
                 canvas.drawText(
-                    "£" + decimalFormat.format(InvoiceValueCalculator.calculateV2oneTotalItem(itemV2)),
+//                    "£" + decimalFormat.format(InvoiceValueCalculator.calculateV2oneTotalItem(itemV2)),
+                    CurrencyFormatter().format(InvoiceValueCalculator.calculateV2oneTotalItem(itemV2),itemV2.itemV2.itemCurrency),
                     RIGHT_MARGIN - 10f,
                     HEAD_TOP + TABLE_HEIGHT*(i-1) + (TABLE_HEIGHT * 1.6f),
                     paint
@@ -502,8 +506,7 @@ class PdfUtilsV2 {
             context: Context,
             canvas: Canvas,
             paint: Paint,
-            items: List<InvoiceItemV2>,
-            decimalFormat: DecimalFormat
+            items: List<InvoiceItemV2>
         ) {
             paint.color = context.getColor(R.color.orange_light)
             paint.style = Paint.Style.FILL_AND_STROKE
@@ -525,7 +528,8 @@ class PdfUtilsV2 {
             )
 
             canvas.drawText(
-                "£"+decimalFormat.format(InvoiceValueCalculator.calculateV2(items)),
+ //               "£"+decimalFormat.format(InvoiceValueCalculator.calculateV2(items)),
+                CurrencyFormatter().format(InvoiceValueCalculator.calculateV2(items), items[0].itemV2.itemCurrency),
                 RIGHT_MARGIN -10f,
                 HEAD_TOP + TABLE_HEIGHT*(i-1) + (TABLE_HEIGHT * 1.6f),
                 paint
@@ -537,7 +541,6 @@ class PdfUtilsV2 {
             context: Context,
             canvas: Canvas,
             paint: Paint,
-            decimalFormat: DecimalFormat,
             items: List<InvoiceItemV2>
         ) {
             paint.textAlign = Paint.Align.LEFT
@@ -621,7 +624,8 @@ class PdfUtilsV2 {
                 )
 
                 canvas.drawText(
-                    "£" + decimalFormat.format(itemV2.itemV2.itemValue),
+//                    "£" + decimalFormat.format(itemV2.itemV2.itemValue),
+                    CurrencyFormatter().format(itemV2.itemV2.itemValue,itemV2.itemV2.itemCurrency),
                     Math.average(
                         QUANTITY_RIGHT,
                         PRICE_RIGHT
@@ -631,7 +635,8 @@ class PdfUtilsV2 {
                 )
                 canvas.drawText(
                     if (itemV2.itemDiscount != 0.0) {
-                        "£" + decimalFormat.format(itemV2.itemDiscount)
+//                        "£" + decimalFormat.format(itemV2.itemDiscount)
+                        CurrencyFormatter().format(itemV2.itemDiscount,itemV2.itemV2.itemCurrency)
                     } else {
                         "----"
                     },
@@ -645,7 +650,8 @@ class PdfUtilsV2 {
                 )
                 paint.textAlign = Paint.Align.RIGHT
                 canvas.drawText(
-                    "£" + decimalFormat.format(InvoiceValueCalculator.calculateV2oneNettoItem(itemV2)),
+//                    "£" + decimalFormat.format(InvoiceValueCalculator.calculateV2oneNettoItem(itemV2)),
+                    CurrencyFormatter().format(InvoiceValueCalculator.calculateV2oneNettoItem(itemV2),itemV2.itemV2.itemCurrency),
                     RIGHT_MARGIN - 10f,
                     HEAD_TOP + TABLE_HEIGHT*(i-1) + (TABLE_HEIGHT * 1.6f),
                     paint

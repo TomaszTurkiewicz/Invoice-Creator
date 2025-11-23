@@ -23,11 +23,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.tt.invoicecreator.data.AppUiState
 import com.tt.invoicecreator.data.roomV2.entities.PaidV2
+import com.tt.invoicecreator.helpers.Currency
 import com.tt.invoicecreator.helpers.DecimalFormatter
 import com.tt.invoicecreator.helpers.InvoiceValueCalculator
 import com.tt.invoicecreator.ui.components.CustomButton
-import com.tt.invoicecreator.ui.components.cards.CustomCardView
 import com.tt.invoicecreator.ui.components.InputDigitsWithLabel
+import com.tt.invoicecreator.ui.components.cards.CustomCardView
 import com.tt.invoicecreator.ui.components.texts.BodyLargeText
 import com.tt.invoicecreator.ui.components.texts.TitleLargeText
 import com.tt.invoicecreator.viewmodel.AppViewModel
@@ -42,6 +43,7 @@ fun AlertDialogPayInvoiceV2(
     paidListV2: List<PaidV2>?,
     invoiceValue: Double,
     paidInvoicesCollection: List<PaidV2>?,
+    currency: Currency,
     closeAlertDialog: () -> Unit
 ) {
 
@@ -93,6 +95,12 @@ fun AlertDialogPayInvoiceV2(
                     .fillMaxWidth(),
                 labelText = "AMOUNT",
                 inputText = amountPaid.value,
+                leadingIcon = if (currency.prefix) {
+                    { BodyLargeText(currency.symbol) }
+                } else null,
+                trailingIcon = if (!currency.prefix) {
+                    { BodyLargeText(currency.symbol) }
+                } else null,
                 isError = if(amountPaid.value == ""){
                     true
                 } else {
