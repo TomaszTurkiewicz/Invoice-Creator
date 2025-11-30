@@ -24,7 +24,8 @@ import java.io.OutputStream
 object BackupManager {
     fun exportDatabaseToJson(
         context: Context,
-        viewModel: AppViewModel
+        viewModel: AppViewModel,
+        onProgress: (String?) -> Unit
     ) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -32,20 +33,31 @@ object BackupManager {
                 // Note: You might need to add 'suspend' functions to your DAO or use .first() on Flows
                 // This assumes your ViewModel exposes lists or you can access DAOs.
                 // For this example, let's assume we access lists via ViewModel helpers or DAOs.
+                onProgress("Exporting Invoices...")
                 val allInvoices = viewModel.getAllInvoicesDirectly()
+
+                onProgress("Exporting Invoice Items...")
                 val allInvoiceItems = viewModel.getAllInvoiceItemsDirectly()
+
+                onProgress("Exporting Items...")
                 val allItems = viewModel.getAllItemsDirectly()
+
+                onProgress("Exporting Clients...")
                 val allClients = viewModel.getAllClientsDirectly()
+
+                onProgress("Exporting Paid Status...")
                 val allPaid = viewModel.getAllPaidDirectly()
 
+                onProgress("Exporting User Details...")
                 val user = SharedPreferences.readUserDetails(context)
                 val paymentMethod = SharedPreferences.readPaymentMethod(context)
 
-
+                onProgress("Exporting Signature...")
                 val signaturePAth = SignatureFile.getFilePath(context)
                 val signatureBase64 = convertFileToBase64(signaturePAth)
 
                 // 2. Create the Backup Object
+                onProgress("Creating Backup Object...")
                 val backupData = BackupData(
                     invoices = allInvoices,
                     invoiceItems = allInvoiceItems,
@@ -58,6 +70,7 @@ object BackupManager {
                 )
 
                 // 3. Convert to JSON
+                onProgress("Saving File...")
                 val gson = Gson()
                 val jsonString = gson.toJson(backupData)
 
@@ -65,6 +78,7 @@ object BackupManager {
                 val fileName = "InvoiceCreator_Backup_${System.currentTimeMillis()}.json"
                 saveFileToDownloads(context, fileName, jsonString)
 
+                onProgress(null)
                 withContext(Dispatchers.Main) {
                     Toast.makeText(context, "Backup saved to Downloads!", Toast.LENGTH_LONG).show()
                 }
@@ -116,10 +130,12 @@ object BackupManager {
     fun importDatabaseFromJson(
         context: Context,
         uri: Uri,
-        viewModel: AppViewModel
+        viewModel: AppViewModel,
+        onProgress: (String?) -> Unit
     ){
         CoroutineScope(Dispatchers.IO).launch {
             try {
+                onProgress("Reading File...")
                 val content = StringBuilder()
                 context.contentResolver.openInputStream(uri)?.use {inputStream ->
                     BufferedReader(InputStreamReader(inputStream)).use { reader ->
@@ -137,31 +153,43 @@ object BackupManager {
 
                 viewModel.clearAllTables()
                 // Restore Invoices
+                onProgress("Restoring Invoices...")
                 backupData.invoices.forEach { viewModel.insertWithIdInvoiceV2(it) }
 
                 // Restore Items
+                onProgress("Restoring Items...")
                 backupData.items.forEach { viewModel.insertWithIdItemV2(it) } // Assuming saveItemV2 handles insert/update
 
                 // Restore Invoice Items (Links)
+                onProgress("Restoring Invoice Items...")
                 backupData.invoiceItems.forEach { viewModel.insertWithIdInvoiceItemV2(it) }
 
                 // Restore Clients
+                onProgress("Restoring Clients...")
                 backupData.clients.forEach { viewModel.insertWithIdClientV2(it) }
 
                 // Restore Paid status
+                onProgress("Restoring Paid Status...")
                 backupData.paid.forEach { viewModel.insertWithIdPaidV2(it) }
 
+                // Restore User Details
+                onProgress("Restoring User Details...")
                 SharedPreferences.saveUserDetails(context,backupData.user)
 
+                // Restore Payment Method
+                onProgress("Restoring Payment Method...")
                 if(backupData.paymentMethod != null) {
                     SharedPreferences.savePaymentMethod(context, backupData.paymentMethod)
                 }
 
+                // Restore Signature
+                onProgress("Restoring Signature...")
                 if(backupData.signatureBase64 != null){
                     val signaturePath = SignatureFile.getFilePath(context)
                     convertBase64ToFile(backupData.signatureBase64,signaturePath)
                 }
 
+                onProgress(null)
                 withContext(Dispatchers.Main) {
                     Toast.makeText(context, "Backup Restored Successfully!", Toast.LENGTH_LONG).show()
                 }

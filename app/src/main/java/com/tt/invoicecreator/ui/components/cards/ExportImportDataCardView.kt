@@ -11,18 +11,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.tt.invoicecreator.data.roomV2.backups.BackupManager
 import com.tt.invoicecreator.ui.components.CustomButton
 import com.tt.invoicecreator.ui.components.texts.BodyLargeText
 import com.tt.invoicecreator.ui.components.texts.TitleLargeText
 import com.tt.invoicecreator.viewmodel.AppViewModel
 
 @Composable
-fun ExportImportData(
+fun ExportImportDataCardView(
     modePro: Boolean,
     context: Context,
     viewModel: AppViewModel,
-    importLauncher: ManagedActivityResultLauncher<Array<String>, Uri?>
+    importLauncher: ManagedActivityResultLauncher<Array<String>, Uri?>,
+    onExportClick: () -> Unit
 ) {
     CustomCardView(
 
@@ -55,7 +55,8 @@ fun ExportImportData(
                     modifier = Modifier
                         .fillMaxWidth(),
                     onClick = {
-                        BackupManager.exportDatabaseToJson(context, viewModel)
+                        onExportClick()
+//                        BackupManager.exportDatabaseToJson(context, viewModel)
                     }
                 )
 
