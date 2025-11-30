@@ -5,8 +5,11 @@ import android.content.Context
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Base64
 import android.widget.Toast
 import com.google.gson.Gson
+import com.tt.invoicecreator.data.SharedPreferences
+import com.tt.invoicecreator.data.SignatureFile
 import com.tt.invoicecreator.viewmodel.AppViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -35,6 +38,12 @@ object BackupManager {
                 val allClients = viewModel.getAllClientsDirectly()
                 val allPaid = viewModel.getAllPaidDirectly()
 
+                val user = SharedPreferences.readUserDetails(context)
+                val paymentMethod = SharedPreferences.readPaymentMethod(context)
+
+
+                val signaturePAth = SignatureFile.getFilePath(context)
+                val signatureBase64 = convertFileToBase64(signaturePAth)
 
                 // 2. Create the Backup Object
                 val backupData = BackupData(
@@ -42,7 +51,10 @@ object BackupManager {
                     invoiceItems = allInvoiceItems,
                     items = allItems,
                     clients = allClients,
-                    paid = allPaid
+                    paid = allPaid,
+                    user = user,
+                    paymentMethod = paymentMethod,
+                    signatureBase64 = signatureBase64
                 )
 
                 // 3. Convert to JSON
@@ -139,6 +151,17 @@ object BackupManager {
                 // Restore Paid status
                 backupData.paid.forEach { viewModel.insertWithIdPaidV2(it) }
 
+                SharedPreferences.saveUserDetails(context,backupData.user)
+
+                if(backupData.paymentMethod != null) {
+                    SharedPreferences.savePaymentMethod(context, backupData.paymentMethod)
+                }
+
+                if(backupData.signatureBase64 != null){
+                    val signaturePath = SignatureFile.getFilePath(context)
+                    convertBase64ToFile(backupData.signatureBase64,signaturePath)
+                }
+
                 withContext(Dispatchers.Main) {
                     Toast.makeText(context, "Backup Restored Successfully!", Toast.LENGTH_LONG).show()
                 }
@@ -154,4 +177,31 @@ object BackupManager {
             }
         }
     }
-}
+
+    private fun convertBase64ToFile(base64String: String, filePath: String) {
+        try {
+            val bytes = Base64.decode(base64String, Base64.DEFAULT)
+            val file = File(filePath)
+
+            file.parentFile?.mkdirs()
+            FileOutputStream(file).use { stream ->
+                stream.write(bytes)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            }
+        }
+
+    private fun convertFileToBase64(filePath: String): String? {
+        val file = File(filePath)
+        if(!file.exists()) return null
+
+        return try {
+            val bytes = file.readBytes()
+            Base64.encodeToString(bytes, Base64.DEFAULT)
+            } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+    }
