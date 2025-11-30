@@ -17,8 +17,8 @@ import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.data.SharedPreferences
 import com.tt.invoicecreator.data.roomV2.backups.BackupManager
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogAddMainUser
-import com.tt.invoicecreator.ui.components.CustomButton
 import com.tt.invoicecreator.ui.components.cards.ClientCardViewV2
+import com.tt.invoicecreator.ui.components.cards.ExportImportData
 import com.tt.invoicecreator.viewmodel.AppViewModel
 
 @Composable
@@ -69,23 +69,12 @@ fun Settings(
             }
         )
 
-        if(modePro){
-            CustomButton(
-                text = "EXPORT DATA (BACKUP)",
-                onClick = {
-                    BackupManager.exportDatabaseToJson(context, viewModel)
-                }
-            )
-        }
-
-        if(modePro){
-            CustomButton(
-                text = "IMPORT DATA (RESTORE)",
-                onClick = {
-                    importLauncher.launch(arrayOf("application/json"))
-                }
-            )
-        }
+        ExportImportData(
+            modePro = modePro,
+            context = context,
+            viewModel = viewModel,
+            importLauncher = importLauncher
+        )
     }
 
     if(alertDialogUpdateUser.value){
