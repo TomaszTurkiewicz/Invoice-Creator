@@ -16,4 +16,13 @@ interface PaidDaoV2 {
     @Query("Select * from PaidV2")
     fun getPaid(): Flow<List<PaidV2>>
 
+    @Query("Select * from PaidV2")
+    suspend fun getPaidDirectly():List<PaidV2>
+
+    @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
+    suspend fun insertWithId(paidV2: PaidV2)
+
+    @Query("DELETE FROM paidV2")
+    suspend fun deleteAll()
+
 }

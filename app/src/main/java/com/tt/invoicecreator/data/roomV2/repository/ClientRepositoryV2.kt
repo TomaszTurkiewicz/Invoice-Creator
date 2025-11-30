@@ -8,4 +8,9 @@ interface ClientRepositoryV2 {
 
     suspend fun insertClient(clientV2: ClientV2)
 
+    suspend fun getAllClientsDirectly() : List<ClientV2>
+
+    suspend fun insertWithId(clientV2: ClientV2)
+
+    suspend fun deleteAllClients()
 }

@@ -8,4 +8,10 @@ interface InvoiceItemRepositoryV2 {
 
     suspend fun insertInvoiceItem(invoiceItemV2: InvoiceItemV2)
 
+    suspend fun getAllInvoiceItemsDirectly() : List<InvoiceItemV2>
+
+    suspend fun insertWithId(invoiceItemV2: InvoiceItemV2)
+
+    suspend fun deleteAllInvoiceItems()
+
 }

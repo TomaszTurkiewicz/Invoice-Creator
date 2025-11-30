@@ -9,5 +9,12 @@ class OfflineClientRepositoryV2 (private val clientDaoV2: ClientDaoV2) : ClientR
     override fun getAllClients(): Flow<List<ClientV2>> = clientDaoV2.getClients()
 
     override suspend fun insertClient(clientV2: ClientV2) = clientDaoV2.insert(clientV2)
+    override suspend fun getAllClientsDirectly(): List<ClientV2> = clientDaoV2.getClientsDirectly()
+
+    override suspend fun insertWithId(clientV2: ClientV2) = clientDaoV2.insertWithId(clientV2)
+
+    override suspend fun deleteAllClients() = clientDaoV2.deleteAll()
+
+
 
 }

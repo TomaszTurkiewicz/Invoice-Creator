@@ -33,11 +33,12 @@ import com.tt.invoicecreator.data.roomV2.entities.InvoiceV2
 import com.tt.invoicecreator.helpers.DateAndTime
 import com.tt.invoicecreator.helpers.InvoiceDueDate
 import com.tt.invoicecreator.helpers.InvoiceNumber
+import com.tt.invoicecreator.helpers.PdfUtilsV2
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogInvoiceNumberV2
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogPaymentMethod
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogSignature
-import com.tt.invoicecreator.ui.components.cards.ClientCardViewV2
 import com.tt.invoicecreator.ui.components.CustomButton
+import com.tt.invoicecreator.ui.components.cards.ClientCardViewV2
 import com.tt.invoicecreator.ui.components.cards.EmptyItemCardViewV2
 import com.tt.invoicecreator.ui.components.cards.InvoiceNumberCardView
 import com.tt.invoicecreator.ui.components.cards.ItemCardViewV2
@@ -201,12 +202,17 @@ fun AddInvoiceScreenV2(
                     .isNotEmpty(),
                 onClick ={
                     viewModel.saveInvoiceV2()
+                    PdfUtilsV2.generatePdfV2(
+                        context = context,
+                        invoiceV2 = viewModel.getInvoiceV2(),
+                        items = viewModel.getInvoiceItemList()
+                    )
                     navController.navigateUp()
                 },
                 modifier = Modifier
                     .padding(5.dp)
                     .fillMaxWidth(),
-                text = "SAVE"
+                text = "SAVE AND PRINT"
             )
         }
 

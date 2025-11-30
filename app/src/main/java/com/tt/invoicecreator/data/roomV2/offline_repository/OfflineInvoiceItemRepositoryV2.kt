@@ -10,5 +10,12 @@ class OfflineInvoiceItemRepositoryV2 (private val invoiceItemDaoV2: InvoiceItemD
     override fun getAllInvoiceItems(): Flow<List<InvoiceItemV2>> = invoiceItemDaoV2.getInvoiceItems()
 
     override suspend fun insertInvoiceItem(invoiceItemV2: InvoiceItemV2) = invoiceItemDaoV2.insert(invoiceItemV2)
+    override suspend fun getAllInvoiceItemsDirectly(): List<InvoiceItemV2> = invoiceItemDaoV2.getInvoiceItemsDirectly()
+
+    override suspend fun insertWithId(invoiceItemV2: InvoiceItemV2) = invoiceItemDaoV2.insertWithId(invoiceItemV2)
+
+    override suspend fun deleteAllInvoiceItems() = invoiceItemDaoV2.deleteAll()
+
+
 
 }

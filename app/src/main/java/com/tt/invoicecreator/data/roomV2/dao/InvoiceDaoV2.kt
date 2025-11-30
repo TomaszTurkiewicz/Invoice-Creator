@@ -15,4 +15,14 @@ interface InvoiceDaoV2 {
 
     @Query("Select * from invoicev2")
     fun getInvoices(): Flow<List<InvoiceV2>>
+
+    @Query("Select * from invoicev2")
+    suspend fun getInvoicesDirectly():List<InvoiceV2>
+
+    @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
+    suspend fun insertWithId(invoiceV2: InvoiceV2)
+
+    @Query("DELETE FROM invoiceV2")
+    suspend fun deleteAll()
+
 }

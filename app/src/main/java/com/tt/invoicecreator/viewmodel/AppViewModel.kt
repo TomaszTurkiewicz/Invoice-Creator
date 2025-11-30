@@ -70,6 +70,26 @@ class AppViewModel(
 
     var chosenClientToFilterInvoices: ClientV2? = null
 
+    suspend fun getAllInvoicesDirectly():List<InvoiceV2>{
+        return invoiceRepositoryV2.getAllInvoicesDirectly()
+    }
+
+    suspend fun getAllInvoiceItemsDirectly():List<InvoiceItemV2> {
+        return invoiceItemRepositoryV2.getAllInvoiceItemsDirectly()
+    }
+
+    suspend fun getAllItemsDirectly():List<ItemV2> {
+        return itemRepositoryV2.getAllItemsDirectly()
+    }
+
+    suspend fun getAllClientsDirectly():List<ClientV2> {
+        return clientRepositoryV2.getAllClientsDirectly()
+    }
+
+    suspend fun getAllPaidDirectly():List<PaidV2> {
+        return paidRepositoryV2.getAllPaidDirectly()
+    }
+
 
     fun addItemToInvoice(invoiceItemV2: InvoiceItemV2){
         invoiceItems.add(invoiceItemV2)
@@ -92,6 +112,44 @@ class AppViewModel(
     fun saveClientV2(clientV2: ClientV2){
         coroutine.launch {
             clientRepositoryV2.insertClient(clientV2)
+        }
+    }
+
+    suspend fun clearAllTables(){
+        itemRepositoryV2.deleteAllItems()
+        clientRepositoryV2.deleteAllClients()
+        invoiceRepositoryV2.deleteAllInvoices()
+        invoiceItemRepositoryV2.deleteAllInvoiceItems()
+        paidRepositoryV2.deleteAllPaid()
+    }
+
+    fun insertWithIdItemV2(itemV2: ItemV2){
+        coroutine.launch {
+            itemRepositoryV2.insertWithId(itemV2)
+        }
+    }
+
+    fun insertWithIdClientV2(clientV2: ClientV2){
+        coroutine.launch {
+            clientRepositoryV2.insertWithId(clientV2)
+        }
+    }
+
+    fun insertWithIdInvoiceV2(invoiceV2: InvoiceV2) {
+        coroutine.launch {
+            invoiceRepositoryV2.insertWithId(invoiceV2)
+        }
+    }
+
+    fun insertWithIdInvoiceItemV2(invoiceItemV2: InvoiceItemV2) {
+        coroutine.launch {
+            invoiceItemRepositoryV2.insertWithId(invoiceItemV2)
+        }
+    }
+
+    fun insertWithIdPaidV2(paidV2: PaidV2) {
+        coroutine.launch {
+            paidRepositoryV2.insertWithId(paidV2)
         }
     }
 

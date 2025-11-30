@@ -18,4 +18,14 @@ interface ItemDaoV2 {
 
     @Delete
     suspend fun deleteItem(itemV2: ItemV2)
+
+    @Query("Select * from ItemV2")
+    suspend fun getAllItems() : List<ItemV2>
+
+    @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
+    suspend fun insertWithId(itemV2: ItemV2)
+
+    @Query("DELETE FROM itemV2")
+    suspend fun deleteAll()
+
 }

@@ -9,4 +9,10 @@ interface PaidRepositoryV2 {
 
     suspend fun insertPaid(paidV2: PaidV2)
 
+    suspend fun getAllPaidDirectly() : List<PaidV2>
+
+    suspend fun insertWithId(paidV2: PaidV2)
+
+    suspend fun deleteAllPaid()
+
 }

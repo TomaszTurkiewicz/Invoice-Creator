@@ -8,4 +8,10 @@ interface ItemRepositoryV2 {
 
     suspend fun insertItem(itemV2: ItemV2)
 
+    suspend fun getAllItemsDirectly() : List<ItemV2>
+
+    suspend fun insertWithId(itemV2: ItemV2)
+
+    suspend fun deleteAllItems()
+
 }

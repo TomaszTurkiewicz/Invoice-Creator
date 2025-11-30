@@ -1,5 +1,8 @@
 package com.tt.invoicecreator.ui.screens
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
@@ -12,12 +15,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.data.SharedPreferences
+import com.tt.invoicecreator.data.roomV2.backups.BackupManager
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogAddMainUser
+import com.tt.invoicecreator.ui.components.CustomButton
 import com.tt.invoicecreator.ui.components.cards.ClientCardViewV2
+import com.tt.invoicecreator.viewmodel.AppViewModel
 
 @Composable
 fun Settings(
-    ignoredOnComposing: (AppBarState) -> Unit
+    ignoredOnComposing: (AppBarState) -> Unit,
+    modePro: Boolean,
+    viewModel: AppViewModel
 ) {
     val context = LocalContext.current
     val user = SharedPreferences.readUserDetails(context)
@@ -28,6 +36,15 @@ fun Settings(
                 action = null
             )
         )
+    }
+
+    val importLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenDocument()
+    ) {
+        uri: Uri? ->
+        uri?.let { selectedUri ->
+            BackupManager.importDatabaseFromJson(context, selectedUri,viewModel)
+        }
     }
 
     val alertDialogUpdateUser = remember {
@@ -51,6 +68,24 @@ fun Settings(
                 alertDialogUpdateUser.value = true
             }
         )
+
+        if(modePro){
+            CustomButton(
+                text = "EXPORT DATA (BACKUP)",
+                onClick = {
+                    BackupManager.exportDatabaseToJson(context, viewModel)
+                }
+            )
+        }
+
+        if(modePro){
+            CustomButton(
+                text = "IMPORT DATA (RESTORE)",
+                onClick = {
+                    importLauncher.launch(arrayOf("application/json"))
+                }
+            )
+        }
     }
 
     if(alertDialogUpdateUser.value){

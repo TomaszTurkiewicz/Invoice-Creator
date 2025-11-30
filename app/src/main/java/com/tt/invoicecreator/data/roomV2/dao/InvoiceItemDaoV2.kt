@@ -19,4 +19,14 @@ interface InvoiceItemDaoV2 {
 
     @Delete
     suspend fun deleteInvoiceItem(invoiceItemV2: InvoiceItemV2)
+
+    @Query("Select * from invoiceitemv2")
+    suspend fun getInvoiceItemsDirectly():List<InvoiceItemV2>
+
+    @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
+    suspend fun insertWithId(invoiceItemV2: InvoiceItemV2)
+
+    @Query("DELETE FROM invoiceItemV2")
+    suspend fun deleteAll()
+
 }

@@ -20,4 +20,12 @@ interface ClientDaoV2 {
     @Delete
     suspend fun deleteClient(clientV2: ClientV2)
 
+    @Query("Select * from clientv2")
+    suspend fun getClientsDirectly():List<ClientV2>
+
+    @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
+    suspend fun insertWithId(clientV2: ClientV2)
+
+    @Query("DELETE FROM clientV2")
+    suspend fun deleteAll()
 }

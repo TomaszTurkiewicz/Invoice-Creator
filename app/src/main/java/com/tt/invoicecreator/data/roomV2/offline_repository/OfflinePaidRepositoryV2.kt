@@ -10,4 +10,12 @@ class OfflinePaidRepositoryV2 (private val paidDaoV2: PaidDaoV2) : PaidRepositor
     override fun getAllPaid(): Flow<List<PaidV2>> = paidDaoV2.getPaid()
 
     override suspend fun insertPaid(paidV2: PaidV2) = paidDaoV2.insert(paidV2)
+    override suspend fun getAllPaidDirectly(): List<PaidV2> = paidDaoV2.getPaidDirectly()
+
+    override suspend fun insertWithId(paidV2: PaidV2) = paidDaoV2.insertWithId(paidV2)
+
+    override suspend fun deleteAllPaid() = paidDaoV2.deleteAll()
+
+
+
 }

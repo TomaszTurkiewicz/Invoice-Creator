@@ -168,7 +168,9 @@ fun InvoiceCreatorApp (
                 Settings(
                     ignoredOnComposing = {
                         appBarState = it
-                    }
+                    },
+                    uiState.modePro,
+                    viewModel = viewModel
                 )
             }
 
