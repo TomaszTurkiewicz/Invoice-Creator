@@ -20,6 +20,7 @@ import com.tt.invoicecreator.data.SharedPreferences
 import com.tt.invoicecreator.data.SignatureFile
 import com.tt.invoicecreator.data.roomV2.entities.InvoiceItemV2
 import com.tt.invoicecreator.data.roomV2.entities.InvoiceV2
+import com.tt.invoicecreator.data.roomV2.entities.PaidV2
 import java.io.File
 
 class PdfUtilsV2 {
@@ -48,11 +49,12 @@ class PdfUtilsV2 {
         private const val TABLE_HEIGHT = 60f
         private var i = 1
 
-        fun generatePdfV2(
+        fun generateInvoicePdfV2(
             context: Context,
             invoiceV2: InvoiceV2,
             items:List<InvoiceItemV2>
-        ){
+        )
+        {
             val user = SharedPreferences.readUserDetails(context)
 
             val pdfDocument = PdfDocument()
@@ -124,6 +126,228 @@ class PdfUtilsV2 {
                 }
             }
             pdfDocument.close()
+        }
+
+        fun generateInfoPdfV2(
+            context: Context,
+            invoiceV2: InvoiceV2,
+            items: List<InvoiceItemV2>,
+            paidList: List<PaidV2>?
+        )
+        {
+            val pdfDocument = PdfDocument()
+            val pageInfo = PdfDocument.PageInfo.Builder(PAGE_WIDTH, PAGE_HEIGHT,1).create()
+            val myPage = pdfDocument.startPage(pageInfo)
+            val canvas = myPage.canvas
+
+
+            // --- PAINTS ---
+            val titlePaint = Paint().apply {
+                textAlign = Paint.Align.CENTER
+                textSize = 36f
+                isFakeBoldText = true
+                color = context.getColor(R.color.black)
+            }
+
+            val headerPaint = Paint().apply {
+                textSize = 20f
+                isFakeBoldText = true
+                color = context.getColor(R.color.dark_gray)
+            }
+
+            val bodyPaint = Paint().apply {
+                textSize = 18f
+                color = context.getColor(R.color.black)
+            }
+
+            val accentPaint = Paint().apply {
+                textSize = 18f
+                color = context.getColor(R.color.orange_light)
+                isFakeBoldText = true
+            }
+
+            val linePaint = Paint().apply {
+                color = context.getColor(R.color.light_gray)
+                strokeWidth = 2f
+            }
+
+            var y = MARGIN_TOP + 40f
+
+            // --- HEADER ---
+
+            canvas.drawText("INVOICE SUMMARY", (PAGE_WIDTH/2).toFloat(), y ,titlePaint)
+            y+=60f
+
+            // Invoice # and Date
+            val dateString = DateAndTime.convertLongToDate(invoiceV2.time)
+            val invNumber = InvoiceNumber.getStringNumber(invoiceV2.invoiceNumber,invoiceV2.time)
+            canvas.drawText("Invoice #: $invNumber", LEFT_MARGIN, y, headerPaint)
+            bodyPaint.textAlign = Paint.Align.RIGHT
+            canvas.drawText("Date: $dateString", RIGHT_MARGIN, y, bodyPaint)
+            y+=30f
+
+            if(invoiceV2.dueDate != null){
+                val dueDateString = DateAndTime.convertLongToDate(invoiceV2.dueDate!!)
+                canvas.drawText("Due: $dueDateString", RIGHT_MARGIN, y, bodyPaint)
+                y+=30f
+            }
+            bodyPaint.textAlign = Paint.Align.LEFT
+
+            // divider line
+            y += 10f
+            canvas.drawLine(LEFT_MARGIN, y, RIGHT_MARGIN, y, linePaint)
+            y += 40f
+
+            // --- CLIENT INFO ---
+            canvas.drawText("Bill To:", LEFT_MARGIN, y, accentPaint)
+            y += 30f
+            canvas.drawText(invoiceV2.client.clientName, LEFT_MARGIN, y, headerPaint)
+            y += 25f
+            canvas.drawText(invoiceV2.client.clientAddress1, LEFT_MARGIN, y, bodyPaint)
+            y += 25f
+            if (invoiceV2.client.clientAddress2.isNotEmpty()) {
+                canvas.drawText(invoiceV2.client.clientAddress2, LEFT_MARGIN, y, bodyPaint)
+                y += 25f
+            }
+            canvas.drawText(invoiceV2.client.clientCity, LEFT_MARGIN, y, bodyPaint)
+            y += 60f
+
+            // FINANCIAL SUMMARY
+            canvas.drawText("FINANCIAL BREAKDOWN", LEFT_MARGIN, y, accentPaint)
+            y += 20f
+            canvas.drawLine(LEFT_MARGIN, y, RIGHT_MARGIN, y, linePaint)
+            y += 40f
+
+            val currency = items.firstOrNull()?.itemV2?.itemCurrency ?: Currency.GBP
+            val formatter = CurrencyFormatter()
+
+            // Calculations
+            val totalNet = InvoiceValueCalculator.calculateNettoV2(items)
+            val totalVAT = InvoiceValueCalculator.calculateVATV2(items)
+            val totalGross = InvoiceValueCalculator.calculateV2(items)
+            val totalPaid = InvoiceValueCalculator.calculatePaid(paidList)
+            val remaining = totalGross - totalPaid
+
+            val labelX = LEFT_MARGIN + 20f
+            val valueX = RIGHT_MARGIN - 20f
+
+            canvas.drawText("Total Net Value", labelX, y, bodyPaint)
+            bodyPaint.textAlign = Paint.Align.RIGHT
+            canvas.drawText(formatter.format(totalNet, currency), valueX, y, bodyPaint)
+            bodyPaint.textAlign = Paint.Align.LEFT
+            y += 35f
+
+            // VAT
+            canvas.drawText("Total VAT:", labelX, y, bodyPaint)
+            bodyPaint.textAlign = Paint.Align.RIGHT
+            canvas.drawText(formatter.format(totalVAT, currency), valueX, y, bodyPaint)
+            bodyPaint.textAlign = Paint.Align.LEFT
+            y += 35f
+
+            // Line
+            canvas.drawLine(labelX, y, RIGHT_MARGIN, y, linePaint)
+            y += 35f
+
+            // Gross (Bold)
+            canvas.drawText("TOTAL GROSS:", labelX, y, headerPaint)
+            headerPaint.textAlign = Paint.Align.RIGHT
+            canvas.drawText(formatter.format(totalGross, currency), valueX, y, headerPaint)
+            headerPaint.textAlign = Paint.Align.LEFT
+            y += 60f
+
+            // --- PAYMENT STATUS
+
+            // Payment History Box Background
+            val boxTop = y
+            val boxColor = Paint().apply {
+                color = context.getColor(R.color.light_gray_background)
+            } // Ensure this color exists or use Color.LTGRAY
+            // We estimate box height based on items. Base height 150 + 30 per item
+            val listSize = paidList?.size ?: 0
+            val boxHeight = 120f + (listSize * 30f)
+
+            canvas.drawRect(LEFT_MARGIN, boxTop, RIGHT_MARGIN, boxTop + boxHeight, boxColor)
+
+            y += 40f
+            canvas.drawText("PAYMENT HISTORY:", LEFT_MARGIN + 20f, y, headerPaint)
+            y += 40f
+
+            if (paidList.isNullOrEmpty()) {
+                canvas.drawText("No payments recorded.", LEFT_MARGIN + 20f, y, bodyPaint)
+            } else {
+                for (payment in paidList) {
+                    val pDate = DateAndTime.convertLongToDate(payment.time)
+                    val pAmount = formatter.format(payment.amountPaid, currency)
+                    canvas.drawText("- Paid on $pDate:   $pAmount", LEFT_MARGIN + 20f, y, bodyPaint)
+                    y += 30f
+                }
+            }
+
+            // Status Result (Green or Red)
+            y = boxTop + boxHeight + 50f
+            val statusPaint = Paint().apply {
+                textSize = 24f
+                isFakeBoldText = true
+                color =
+                    if (remaining <= 0.01) context.getColor(R.color.green) else context.getColor(R.color.red) // Ensure colors exist
+            }
+
+            val statusText = if (remaining <= 0.01) "STATUS: PAID IN FULL" else "STATUS: UNPAID (${
+                formatter.format(
+                    remaining,
+                    currency
+                )
+            } DUE)"
+            canvas.drawText(statusText, LEFT_MARGIN, y, statusPaint)
+
+            // --- FOOTER ---
+
+            val footerPaint = Paint().apply {
+                textSize = 14f
+                color = context.getColor(R.color.dark_gray)
+                textAlign = Paint.Align.CENTER
+            }
+
+            canvas.drawText(
+                "Generated by Invoice Creator App - Summary Info",
+                (PAGE_WIDTH / 2).toFloat(),
+                MARGIN_BOTTOM,
+                footerPaint
+            )
+
+            // Finish Page
+            pdfDocument.finishPage(myPage)
+
+            // Write File
+            val fileName = "Info_${invoiceV2.invoiceNumber}_${invoiceV2.time}.pdf"
+
+            // Save logic similar to your existing generateInvoicePdfV2
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                val uri = createDownloadUri(context, fileName)
+                if (uri != null) {
+                    try {
+                        context.contentResolver.openOutputStream(uri, "w")?.use { outputStream ->
+                            pdfDocument.writeTo(outputStream)
+                            // Note: Toast should be handled on Main thread by the caller
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+            } else {
+                val downloadsFolder =
+                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                val file = File(downloadsFolder, fileName)
+                try {
+                    file.outputStream().use { outputStream ->
+                        pdfDocument.writeTo(outputStream)
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+            pdfDocument.close()
+
         }
 
         private fun drawTotalVATV2(

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -19,6 +20,9 @@ import com.tt.invoicecreator.ui.components.CustomButton
 import com.tt.invoicecreator.ui.components.cards.CustomCardView
 import com.tt.invoicecreator.ui.components.texts.BodyLargeText
 import com.tt.invoicecreator.ui.components.texts.TitleLargeText
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,6 +34,8 @@ fun PrintInvoiceAlertDialogV2(
     modePro: Boolean,
     goToInfo: () -> Unit
 ) {
+
+    val scope = rememberCoroutineScope()
 
 
     BasicAlertDialog(
@@ -56,7 +62,7 @@ fun PrintInvoiceAlertDialogV2(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(10.dp),
-                    text = "You can print this invoice out. It will be saved in Download folder on Your device. Press PRINT button below. If YOu are using PRO version, you can also press INFO button below. You will be redirected to invoice info page, where You can set payment, etc."
+                    text = "You can print this invoice out. It will be saved in Download folder on Your device. Press PRINT button below. If You are using PRO version, you can also press INFO button below. You will be redirected to invoice info page, where You can set payment, etc."
                 )
 
                 Column(
@@ -81,12 +87,16 @@ fun PrintInvoiceAlertDialogV2(
 
                     CustomButton(
                         onClick = {
-                            PdfUtilsV2.generatePdfV2(
-                                context = context,
-                                invoiceV2 = invoiceV2,
-                                items = invoiceItemV2List
-                            )
-                            onDismissRequest()
+                            scope.launch(Dispatchers.IO) {
+                                PdfUtilsV2.generateInvoicePdfV2(
+                                    context = context,
+                                    invoiceV2 = invoiceV2,
+                                    items = invoiceItemV2List
+                                )
+                                withContext(Dispatchers.Main){
+                                    onDismissRequest()
+                                }
+                            }
                         },
                         modifier = Modifier
                             .fillMaxWidth()

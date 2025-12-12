@@ -1,5 +1,6 @@
 package com.tt.invoicecreator.ui.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,7 +13,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.tt.invoicecreator.data.AppBarState
@@ -24,6 +27,7 @@ import com.tt.invoicecreator.helpers.CurrencyFormatter
 import com.tt.invoicecreator.helpers.DateAndTime
 import com.tt.invoicecreator.helpers.InvoiceNumber
 import com.tt.invoicecreator.helpers.InvoiceValueCalculator
+import com.tt.invoicecreator.helpers.PdfUtilsV2
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogPayInvoiceV2
 import com.tt.invoicecreator.ui.components.CustomButton
 import com.tt.invoicecreator.ui.components.PaymentHistoryRow
@@ -32,6 +36,9 @@ import com.tt.invoicecreator.ui.components.texts.BodyLargeText
 import com.tt.invoicecreator.ui.components.texts.TitleLargeText
 import com.tt.invoicecreator.ui.theme.myColors
 import com.tt.invoicecreator.viewmodel.AppViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun InvoiceInfoScreenV2(
@@ -42,6 +49,11 @@ fun InvoiceInfoScreenV2(
     paidInvoicesCollection: List<PaidV2>?,
     invoiceItemsCollection: List<InvoiceItemV2>
     ) {
+
+    val scope = rememberCoroutineScope()
+
+    val context = LocalContext.current
+
 
     val payAlertDialog = remember {
         mutableStateOf(false)
@@ -201,6 +213,26 @@ fun InvoiceInfoScreenV2(
                     text = "PAY"
                 )
             }
+
+            CustomButton(
+                onClick = {
+                    scope.launch(Dispatchers.IO){
+                        PdfUtilsV2.generateInfoPdfV2(
+                            context = context,
+                            invoiceV2 = invoiceV2,
+                            items = invoiceItemListV2,
+                            paidList = paidListV2
+                        )
+                        withContext(Dispatchers.Main){
+                            Toast.makeText(context, "Info is generated...", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                },
+                modifier = Modifier
+                    .padding(top = 30.dp)
+                    .fillMaxWidth(),
+                text = "PRINT INFO"
+            )
         }
     }
 

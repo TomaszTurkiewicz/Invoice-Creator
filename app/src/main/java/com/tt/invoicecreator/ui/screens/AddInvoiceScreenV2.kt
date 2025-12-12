@@ -18,6 +18,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -45,6 +46,9 @@ import com.tt.invoicecreator.ui.components.cards.ItemCardViewV2
 import com.tt.invoicecreator.ui.components.cards.PaymentMethodCardView
 import com.tt.invoicecreator.ui.components.cards.SignatureCardView
 import com.tt.invoicecreator.viewmodel.AppViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 
 @Composable
@@ -56,6 +60,7 @@ fun AddInvoiceScreenV2(
     invoiceList:List<InvoiceV2>?
 ) {
 
+    val scope = rememberCoroutineScope()
 
     val itemInvoiceList = viewModel.getInvoiceItemList()
 
@@ -202,12 +207,17 @@ fun AddInvoiceScreenV2(
                     .isNotEmpty(),
                 onClick ={
                     viewModel.saveInvoiceV2()
-                    PdfUtilsV2.generatePdfV2(
-                        context = context,
-                        invoiceV2 = viewModel.getInvoiceV2(),
-                        items = viewModel.getInvoiceItemList()
-                    )
-                    navController.navigateUp()
+                    scope.launch(Dispatchers.IO){
+                        PdfUtilsV2.generateInvoicePdfV2(
+                            context = context,
+                            invoiceV2 = viewModel.getInvoiceV2(),
+                            items = viewModel.getInvoiceItemList()
+                        )
+                        withContext(Dispatchers.Main){
+                            navController.navigateUp()
+                        }
+                    }
+
                 },
                 modifier = Modifier
                     .padding(5.dp)
