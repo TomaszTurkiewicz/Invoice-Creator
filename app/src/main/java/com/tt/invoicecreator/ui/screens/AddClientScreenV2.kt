@@ -28,7 +28,8 @@ import com.tt.invoicecreator.viewmodel.AppViewModel
 fun AddClientScreenV2(
     viewModel: AppViewModel,
     ignoredOnComposing: (AppBarState) -> Unit,
-    navController: NavController
+    navController: NavController,
+    modePro: Boolean
 ) {
     val clientName = remember {
         mutableStateOf("")
@@ -46,6 +47,7 @@ fun AddClientScreenV2(
     LaunchedEffect(key1 = true) {
         ignoredOnComposing(
             AppBarState(
+                pro = modePro,
                 title = "ADD NEW CLIENT",
                 action = {
                     Row {

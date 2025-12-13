@@ -91,6 +91,7 @@ fun AddInvoiceScreenV2(
     LaunchedEffect(key1 = true) {
         ignoredOnComposing(
             AppBarState(
+                pro = modePro,
                 title = "ADD INVOICE",
                 action = {
                     Row {

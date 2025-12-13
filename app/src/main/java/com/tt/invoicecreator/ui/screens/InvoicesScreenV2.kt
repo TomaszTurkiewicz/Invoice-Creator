@@ -83,6 +83,7 @@ fun InvoicesScreenV2(
     LaunchedEffect(key1 = true) {
         ignoredOnComposing(
             AppBarState(
+                pro = modePro,
                 title = if(!modePro) "ALL INVOICES" else "CHOOSE OPTION",
                 action = {
                     Row {

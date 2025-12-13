@@ -24,9 +24,7 @@ fun ExportImportDataCardView(
     importLauncher: ManagedActivityResultLauncher<Array<String>, Uri?>,
     onExportClick: () -> Unit
 ) {
-    CustomCardView(
 
-    ) {
         Column {
             TitleLargeText(
                 text = "CHANGING DEVICE?",
@@ -83,4 +81,3 @@ fun ExportImportDataCardView(
         }
 
     }
-}

@@ -170,7 +170,7 @@ fun AlertDialogItemCountDiscountAndCommentsV2(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(5.dp),
-                    text = "NO VAT"
+                    text = "SAVE NO VAT"
                 )
 
             }

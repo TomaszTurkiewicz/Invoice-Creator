@@ -1,6 +1,7 @@
 package com.tt.invoicecreator.ui.app_bar
 
 
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -21,15 +22,28 @@ fun TopAppBarWithAction(
     appBarState: AppBarState
 ) {    TopAppBar(
     title = {
-        Text(
-            text = appBarState.title,
-            style = MaterialTheme.typography.labelLarge,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(end = 10.dp),
-            textAlign = TextAlign.Center
-        )
-    },
+        Row(
+
+        ) {
+            if(appBarState.pro){
+                Text(
+                    text = "PRO",
+                    style = MaterialTheme.typography.labelLarge,
+                    modifier = Modifier
+                        .padding(end = 10.dp),
+                    textAlign = TextAlign.Center)
+            }
+
+            Text(
+                text = appBarState.title,
+                style = MaterialTheme.typography.labelLarge,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(end = 10.dp),
+                textAlign = TextAlign.Center
+                )
+            }
+            },
     actions = {
         appBarState.action?.invoke(this)
     },

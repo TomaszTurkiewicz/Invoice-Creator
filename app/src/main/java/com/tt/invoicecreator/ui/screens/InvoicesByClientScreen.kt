@@ -33,6 +33,7 @@ fun InvoicesByClientScreen(
     LaunchedEffect(key1 = true) {
         ignoredOnComposing(
             AppBarState(
+                pro = false,
                 title = "CHOOSE CLIENT",
                 action = {
                     Row {
