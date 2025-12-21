@@ -27,8 +27,7 @@ fun ChooseItemScreenV2(
     viewModel: AppViewModel,
     ignoredOnComposing: (AppBarState) -> Unit,
     navController: NavController,
-    itemList: List<ItemV2>?,
-    modePro: Boolean
+    itemList: List<ItemV2>?
 ) {
 
     val alertDialog = remember {
@@ -50,7 +49,6 @@ fun ChooseItemScreenV2(
     LaunchedEffect(key1 = true) {
         ignoredOnComposing(
             AppBarState(
-                pro = modePro,
                 title = "CHOOSE ITEM",
                 action = {
                     Row {

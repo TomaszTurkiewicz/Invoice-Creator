@@ -24,14 +24,12 @@ fun ChooseClientScreenV2(
     viewModel: AppViewModel,
     ignoredOnComposing: (AppBarState) -> Unit,
     navController: NavController,
-    clientList:  List<ClientV2>?,
-    modePro: Boolean
+    clientList:  List<ClientV2>?
 ) {
 
     LaunchedEffect(key1 = true) {
         ignoredOnComposing(
             AppBarState(
-                pro = modePro,
                 title = "CHOOSE CLIENT",
                 action = {
                     Row {

@@ -1,37 +1,63 @@
 package com.tt.invoicecreator.ui.app_bar
 
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.tt.invoicecreator.data.AppBarState
+import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogStar
 import com.tt.invoicecreator.ui.theme.myColors
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppBarWithAction(
-    appBarState: AppBarState
-) {    TopAppBar(
+    appBarState: AppBarState,
+    modePro: Boolean = false
+) {
+    val starAlertDialog = remember {
+        mutableStateOf(false)
+    }
+
+    TopAppBar(
     title = {
         Row(
 
         ) {
-            if(appBarState.pro){
-                Text(
-                    text = "PRO",
-                    style = MaterialTheme.typography.labelLarge,
+            if(modePro){
+                Icon(
+                    imageVector = Icons.Default.Star,
+                    contentDescription = "Pro mode",
+                    tint = MaterialTheme.myColors.material.primary,
                     modifier = Modifier
-                        .padding(end = 10.dp),
-                    textAlign = TextAlign.Center)
+                        .size(24.dp)
+                        .clickable(
+                            onClick = {
+                                starAlertDialog.value = true
+                            }
+                        )
+                )
+//                Text(
+//                    text = "PRO",
+//                    style = MaterialTheme.typography.labelLarge,
+//                    modifier = Modifier
+//                        .padding(end = 10.dp),
+//                    textAlign = TextAlign.Center)
             }
 
             Text(
@@ -55,4 +81,10 @@ fun TopAppBarWithAction(
     modifier = Modifier.fillMaxWidth()
 )
 
+    if(starAlertDialog.value){
+        AlertDialogStar {
+            starAlertDialog.value = false
+        }
+    }
 }
+

@@ -50,7 +50,6 @@ fun FilteredInvoicesScreen(
     LaunchedEffect(key1 = true) {
         ignoredOnComposing(
             AppBarState(
-                pro = modePro,
                 title = when(invoiceStatus){
                     InvoiceStatus.ALL -> "ALL INVOICES"
                     InvoiceStatus.OVERDUE -> "OVERDUE INVOICES"

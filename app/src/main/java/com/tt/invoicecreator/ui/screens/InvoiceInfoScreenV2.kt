@@ -119,7 +119,6 @@ fun InvoiceInfoScreenV2(
     LaunchedEffect(key1 = true) {
         ignoredOnComposing(
             AppBarState(
-                pro = true,
                 title = "INFO",
                 action = null
             )

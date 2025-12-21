@@ -65,7 +65,8 @@ fun InvoiceCreatorApp (
 //                }
 //                else -> {
                     TopAppBarWithAction(
-                        appBarState = appBarState
+                        appBarState = appBarState,
+                        modePro = uiState.modePro
                     )
 //                }
 //            }
@@ -88,7 +89,6 @@ fun InvoiceCreatorApp (
                         appBarState = it
                     },
                     navController = navController,
-                    modePro = uiState.modePro,
                     itemList = itemList
                 )
             }
@@ -99,7 +99,6 @@ fun InvoiceCreatorApp (
                     ignoredOnComposing = {
                         appBarState = it
                     },
-                    modePro = uiState.modePro,
                     navController = navController
                 )
             }
@@ -152,7 +151,6 @@ fun InvoiceCreatorApp (
                         appBarState = it
                     },
                     navController = navController,
-                    modePro = uiState.modePro,
                     clientList = clientList
                 )
             }
@@ -163,7 +161,6 @@ fun InvoiceCreatorApp (
                     ignoredOnComposing = {
                         appBarState = it
                     },
-                    modePro = uiState.modePro,
                     navController = navController
                 )
             }

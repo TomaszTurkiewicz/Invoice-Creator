@@ -51,8 +51,7 @@ import com.tt.invoicecreator.viewmodel.AppViewModel
 fun AddItemScreenV2(
     viewModel: AppViewModel,
     ignoredOnComposing: (AppBarState) -> Unit,
-    navController: NavController,
-    modePro: Boolean
+    navController: NavController
 ) {
 
     val context = LocalContext.current
@@ -73,7 +72,6 @@ fun AddItemScreenV2(
     LaunchedEffect(key1 = true) {
         ignoredOnComposing(
             AppBarState(
-                pro = modePro,
                 title = "ADD NEW ITEM",
                 action = {
                     Row {

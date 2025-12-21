@@ -36,10 +36,10 @@ import androidx.compose.ui.unit.dp
 import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.data.SharedPreferences
 import com.tt.invoicecreator.data.roomV2.backups.BackupManager
+import com.tt.invoicecreator.helpers.SettingsSection
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogAddMainUser
 import com.tt.invoicecreator.ui.components.CustomButton
-import com.tt.invoicecreator.ui.components.SettingsExpandableCard
-import com.tt.invoicecreator.ui.components.SettingsSection
+import com.tt.invoicecreator.ui.components.ExpandableCard
 import com.tt.invoicecreator.ui.components.cards.ExportImportDataCardView
 import com.tt.invoicecreator.ui.components.texts.BodyLargeText
 import com.tt.invoicecreator.ui.theme.myColors
@@ -67,7 +67,6 @@ fun Settings(
     LaunchedEffect(key1 = true) {
         ignoredOnComposing(
             AppBarState(
-                pro = modePro,
                 title = "SETTINGS",
                 action = null
             )
@@ -116,7 +115,7 @@ fun Settings(
                 .verticalScroll(rememberScrollState())
         )
         {
-            SettingsExpandableCard(
+            ExpandableCard(
                 title = if(user.userName.isNullOrEmpty()) "Set User Profile" else user.userName,
                 icon = Icons.Default.Person,
                 isExpanded = expandedSection == SettingsSection.USER,
@@ -157,7 +156,7 @@ fun Settings(
             }
 
 
-            SettingsExpandableCard(
+            ExpandableCard(
                 title = "CHANGING DEVICE",
                 icon = Icons.Default.CloudUpload,
                 isExpanded = expandedSection == SettingsSection.BACKUP,
@@ -203,7 +202,7 @@ fun Settings(
                 )
             }
 
-            SettingsExpandableCard(
+            ExpandableCard(
                 title = if(modePro) "UNSUBSCRIBE" else "SUBSCRIBE",
                 icon = if(modePro) Icons.Default.Unsubscribe else Icons.Default.Subscriptions,
                 isExpanded = expandedSection == SettingsSection.SUBSCRIBE_UNSUBSCRIBE,
@@ -215,7 +214,7 @@ fun Settings(
                     }
                 }
             ){
-                Column() {
+                Column {
                     BodyLargeText(
                         text = if(modePro) "Unsubscribing means that You will be able still use this app but without some important features. Are You sure You want to do this?" else "Subscribing means You will gain access to additional features this app offers. Subscription is not for free, but it's worth it.",
                         modifier = Modifier
