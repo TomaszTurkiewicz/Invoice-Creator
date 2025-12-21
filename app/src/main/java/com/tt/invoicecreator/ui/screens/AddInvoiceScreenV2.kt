@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.CreditCard
 import androidx.compose.material.icons.filled.Work
@@ -46,16 +47,17 @@ import com.tt.invoicecreator.data.SharedPreferences
 import com.tt.invoicecreator.data.SignatureFile
 import com.tt.invoicecreator.data.roomV2.entities.InvoiceV2
 import com.tt.invoicecreator.helpers.AddInvoiceSection
+import com.tt.invoicecreator.helpers.CurrencyFormatter
 import com.tt.invoicecreator.helpers.DateAndTime
 import com.tt.invoicecreator.helpers.InvoiceDueDate
 import com.tt.invoicecreator.helpers.InvoiceNumber
+import com.tt.invoicecreator.helpers.InvoiceValueCalculator
 import com.tt.invoicecreator.helpers.PdfUtilsV2
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogInvoiceNumberV2
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogPaymentMethod
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogSignature
 import com.tt.invoicecreator.ui.components.CustomButton
 import com.tt.invoicecreator.ui.components.ExpandableWithCompletedIconCard
-import com.tt.invoicecreator.ui.components.cards.EmptyItemCardViewV2
 import com.tt.invoicecreator.ui.components.cards.ItemCardViewV2
 import com.tt.invoicecreator.ui.components.texts.BodyLargeText
 import com.tt.invoicecreator.viewmodel.AppViewModel
@@ -130,10 +132,11 @@ fun AddInvoiceScreenV2(
         viewModel.getInvoiceV2().time = time.longValue
 
         if (viewModel.calculateNumber) {
-            viewModel.getInvoiceV2().invoiceNumber = InvoiceNumber.getNewNumberV2(viewModel.getInvoiceV2().time,invoiceList)
+            viewModel.getInvoiceV2().invoiceNumber =
+                InvoiceNumber.getNewNumberV2(viewModel.getInvoiceV2().time, invoiceList)
         }
 
-        if(viewModel.calculateDueDate && modePro){
+        if (viewModel.calculateDueDate && modePro) {
             viewModel.getInvoiceV2().dueDate = InvoiceDueDate.getDueDate(time.longValue)
         }
     }
@@ -157,12 +160,15 @@ fun AddInvoiceScreenV2(
 
             // Invoice number and date
             ExpandableWithCompletedIconCard(
-                title = "# ${InvoiceNumber
-                    .getStringNumber(
-                        viewModel
-                            .getInvoiceV2()
-                            .invoiceNumber,
-                        time.longValue)}",
+                title = "# ${
+                    InvoiceNumber
+                        .getStringNumber(
+                            viewModel
+                                .getInvoiceV2()
+                                .invoiceNumber,
+                            time.longValue
+                        )
+                }",
                 icon = Icons.Default.CalendarMonth,
                 isExpanded = expandableSection == AddInvoiceSection.NUMBER,
                 onExpandClick = {
@@ -184,16 +190,7 @@ fun AddInvoiceScreenV2(
                         )
                 )
                 {
-//                    BodyLargeText(
-//                        text = "Invoice Number: ${InvoiceNumber
-//                            .getStringNumber(
-//                                viewModel
-//                                    .getInvoiceV2()
-//                                    .invoiceNumber,
-//                                time.longValue)}",
-//                        modifier = Modifier
-//                            .padding(5.dp)
-//                    )
+
                     Row {
                         BodyLargeText(
                             text = "Date",
@@ -248,15 +245,15 @@ fun AddInvoiceScreenV2(
                 isCompleted = viewModel.getInvoiceV2().client.clientName != ""
             )
             {
-                if(viewModel.getInvoiceV2().client.clientName != ""){
-                    Column (
+                if (viewModel.getInvoiceV2().client.clientName != "") {
+                    Column(
                         modifier = Modifier
                             .clickable(
-                               onClick = {
-                                   navController.navigate(InvoiceCreatorScreen.ChooseClientV2.name)
-                               }
+                                onClick = {
+                                    navController.navigate(InvoiceCreatorScreen.ChooseClientV2.name)
+                                }
                             )
-                    ){
+                    ) {
                         BodyLargeText(
                             text = viewModel.getInvoiceV2().client.clientAddress1,
                             modifier = Modifier
@@ -273,8 +270,7 @@ fun AddInvoiceScreenV2(
                                 .padding(start = 10.dp, top = 5.dp, bottom = 10.dp)
                         )
                     }
-                }
-                else{
+                } else {
                     BodyLargeText(
                         text = "not chosen yet",
                         modifier = Modifier
@@ -287,172 +283,292 @@ fun AddInvoiceScreenV2(
 
             }
 
-
-            itemInvoiceList.forEach { itemInvoice ->
-                ItemCardViewV2(
-                    itemInvoice
-                )
-            }
-
-            if (!modePro) {
-                if (itemInvoiceList.isEmpty()) {
-                    EmptyItemCardViewV2(
-                        position = 0,
-                        showPosition = false,
-                        onClick = {
-                            navController.navigate(InvoiceCreatorScreen.ChooseItemV2.name)
-                        }
-                    )
-                }
-            } else {
-                if (itemInvoiceList.size < 10) {
-                    EmptyItemCardViewV2(
-                        position = if (itemInvoiceList.isEmpty()) 1 else itemInvoiceList.size + 1,
-                        showPosition = true,
-                        onClick = {
-                            navController.navigate(InvoiceCreatorScreen.ChooseItemV2.name)
-                        }
-                    )
-                }
-            }
-
-            // Payment method
             ExpandableWithCompletedIconCard(
-                title = "Payment Method",
-                icon = Icons.Default.CreditCard,
-                isExpanded = expandableSection == AddInvoiceSection.PAYMENT_METHOD,
-                onExpandClick = {
-                    expandableSection = if (expandableSection == AddInvoiceSection.PAYMENT_METHOD) {
-                        AddInvoiceSection.NONE
-                    } else{
-                        AddInvoiceSection.PAYMENT_METHOD
+                title = if (itemInvoiceList.isEmpty()) "Invoice items" else {
+                    if (itemInvoiceList.size == 1) {
+                        "${itemInvoiceList[0].itemV2.itemName} - ${
+                            CurrencyFormatter().format(
+                            InvoiceValueCalculator.calculateV2(
+                                itemInvoiceList
+                            ), itemInvoiceList[0].itemV2.itemCurrency)
+                        }"
+                    } else {
+                        "Items: ${itemInvoiceList.size} / ${
+                            CurrencyFormatter().format(InvoiceValueCalculator.calculateV2(
+                                itemInvoiceList
+                            ), itemInvoiceList[0].itemV2.itemCurrency)
+                        }"
                     }
                 },
-                isCompleted = viewModel.paymentMethod != "no payment method specified yet"
-            )
-            {
-                BodyLargeText(
-                    text = viewModel.paymentMethod,
-                    modifier = Modifier
-                        .padding(5.dp)
-                        .clickable(
-                            onClick = {
-                                invoicePaymentMethodAlertDialog.value = true
-                            }
-                        )
-                )
-            }
-
-            // Signature
-            ExpandableWithCompletedIconCard(
-                title = "Signature",
-                icon = ImageVector.vectorResource(id = R.drawable.signature_24dp_1f1f1f_fill0_wght400_grad0_opsz24),
-                isExpanded = expandableSection == AddInvoiceSection.SIGNATURE,
+                icon = Icons.Default.AttachMoney,
+                isExpanded = expandableSection == AddInvoiceSection.ITEMS,
                 onExpandClick = {
-                    expandableSection = if(expandableSection == AddInvoiceSection.SIGNATURE){
+                    expandableSection = if (expandableSection == AddInvoiceSection.ITEMS) {
                         AddInvoiceSection.NONE
-                    } else{
-                        AddInvoiceSection.SIGNATURE
+                    } else {
+                        AddInvoiceSection.ITEMS
                     }
                 },
-                isCompleted = file!!.exists()
+                isCompleted = itemInvoiceList.isNotEmpty()
             )
             {
-                if(file.exists()){
-                    val options = BitmapFactory.Options()
-                    options.inPreferredConfig = Bitmap.Config.ARGB_8888
-                    image.value = BitmapFactory.decodeFile(file.path, options)
-                    val imageBitmap = image.value
-                    if(imageBitmap != null){
-                        Box(
+                if (!modePro) {
+                    if (itemInvoiceList.isEmpty()) {
+                        BodyLargeText(
+                            text = "Add item to invoice",
                             modifier = Modifier
-                                .fillMaxWidth(),
-                            contentAlignment = Alignment.Center
+                                .clickable(
+                                    onClick = {
+                                        navController.navigate(InvoiceCreatorScreen.ChooseItemV2.name)
+                                    }
+                                ))
+                    } else {
+                        Column(
+                            modifier = Modifier
+                                .clickable(
+                                    onClick = {
+                                        navController.navigate(InvoiceCreatorScreen.ChooseItemV2.name)
+                                    }
+                                )
                         ) {
-                            Image(
-                                modifier = Modifier
-                                    .clickable(
-                                        onClick = {
-                                            invoiceSignatureAlertDialog.value = true
-                                        }
-                                    ),
-                                bitmap = imageBitmap.asImageBitmap(),
-                                contentDescription = ""
+                            Row {
+                                BodyLargeText(
+                                    text = itemInvoiceList[0].itemV2.itemName,
+                                    modifier = Modifier
+                                        .weight(3f)
+                                        .padding(5.dp)
+                                )
+                                BodyLargeText(
+                                    text = itemInvoiceList[0].itemCount.toString(),
+                                    modifier = Modifier
+                                        .padding(5.dp)
+                                        .weight(1f),
+                                    textAlign = TextAlign.End
+                                )
+                                BodyLargeText(
+                                    text = "x",
+                                    modifier = Modifier
+                                        .padding(5.dp)
+                                        .weight(0.5f),
+                                    textAlign = TextAlign.Center
+
+                                )
+                                BodyLargeText(
+//                        text = invoiceItemV2.itemV2.itemValue.toString(),
+                                    text = CurrencyFormatter().format(itemInvoiceList[0].itemV2.itemValue, itemInvoiceList[0].itemV2.itemCurrency),
+                                    modifier = Modifier
+                                        .padding(5.dp)
+                                        .weight(1.5f),
+                                    textAlign = TextAlign.Start
+                                )
+                            }
+                            Row {
+                                BodyLargeText(
+                                    text = "VAT",
+                                    modifier = Modifier
+                                        .padding(5.dp)
+                                )
+                                BodyLargeText(
+                                    text = ":",
+                                    modifier = Modifier
+                                        .padding(5.dp)
+                                )
+                                BodyLargeText(
+                                    text = if(itemInvoiceList[0].vat != null) itemInvoiceList[0].vat.toString() else "NO VAT",
+                                    modifier = Modifier
+                                        .padding(5.dp)
+                                )
+                            }
+                            Row {
+                                BodyLargeText(
+                                    text = "discount",
+                                    modifier = Modifier
+                                        .padding(5.dp)
+                                )
+                                BodyLargeText(
+                                    text = ":",
+                                    modifier = Modifier
+                                        .padding(5.dp)
+                                )
+                                BodyLargeText(
+//                        text = invoiceItemV2.itemDiscount.toString(),
+                                    text = CurrencyFormatter().format(itemInvoiceList[0].itemDiscount, itemInvoiceList[0].itemV2.itemCurrency),
+                                    modifier = Modifier
+                                        .padding(5.dp)
+                                )
+                            }
+                            if (itemInvoiceList[0].comment != "") {
+                                BodyLargeText(
+                                    text = itemInvoiceList[0].comment,
+                                    modifier = Modifier
+                                        .padding(5.dp)
+                                )
+                            }
+                        }
+
+                    }
+
+                } else{
+                    Column() {
+                        BodyLargeText(
+                            text = "Add item to invoice +",
+                            modifier = Modifier
+                                .clickable(
+                                    onClick = {
+                                        navController.navigate(InvoiceCreatorScreen.ChooseItemV2.name)
+                                    }
+                                ))
+                        itemInvoiceList.forEach { itemInvoice ->
+                            ItemCardViewV2(
+                                itemInvoice
                             )
                         }
                     }
+                }
+            }
 
-                } else {
-                    BodyLargeText(
-                        text = "Create signature",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable(
-                            onClick = {
-                                invoiceSignatureAlertDialog.value = true
+                // Payment method
+                ExpandableWithCompletedIconCard(
+                    title = "Payment Method",
+                    icon = Icons.Default.CreditCard,
+                    isExpanded = expandableSection == AddInvoiceSection.PAYMENT_METHOD,
+                    onExpandClick = {
+                        expandableSection =
+                            if (expandableSection == AddInvoiceSection.PAYMENT_METHOD) {
+                                AddInvoiceSection.NONE
+                            } else {
+                                AddInvoiceSection.PAYMENT_METHOD
                             }
-                        ),
-                        textAlign = TextAlign.Center
+                    },
+                    isCompleted = viewModel.paymentMethod != "no payment method specified yet"
+                )
+                {
+                    BodyLargeText(
+                        text = viewModel.paymentMethod,
+                        modifier = Modifier
+                            .padding(5.dp)
+                            .clickable(
+                                onClick = {
+                                    invoicePaymentMethodAlertDialog.value = true
+                                }
+                            )
                     )
                 }
 
-            }
-
-            // Save button
-            CustomButton(
-                enabled = viewModel.getInvoiceV2().client.clientName != "" && viewModel.getInvoiceItemList()
-                    .isNotEmpty(),
-                onClick = {
-                    viewModel.saveInvoiceV2()
-                    scope.launch(Dispatchers.IO) {
-                        PdfUtilsV2.generateInvoicePdfV2(
-                            context = context,
-                            invoiceV2 = viewModel.getInvoiceV2(),
-                            items = viewModel.getInvoiceItemList()
-                        )
-                        withContext(Dispatchers.Main) {
-                            navController.navigateUp()
+                // Signature
+                ExpandableWithCompletedIconCard(
+                    title = "Signature",
+                    icon = ImageVector.vectorResource(id = R.drawable.signature_24dp_1f1f1f_fill0_wght400_grad0_opsz24),
+                    isExpanded = expandableSection == AddInvoiceSection.SIGNATURE,
+                    onExpandClick = {
+                        expandableSection = if (expandableSection == AddInvoiceSection.SIGNATURE) {
+                            AddInvoiceSection.NONE
+                        } else {
+                            AddInvoiceSection.SIGNATURE
                         }
+                    },
+                    isCompleted = file!!.exists()
+                )
+                {
+                    if (file.exists()) {
+                        val options = BitmapFactory.Options()
+                        options.inPreferredConfig = Bitmap.Config.ARGB_8888
+                        image.value = BitmapFactory.decodeFile(file.path, options)
+                        val imageBitmap = image.value
+                        if (imageBitmap != null)
+                        {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Image(
+                                    modifier = Modifier
+                                        .clickable(
+                                            onClick = {
+                                                invoiceSignatureAlertDialog.value = true
+                                            }
+                                        ),
+                                    bitmap = imageBitmap.asImageBitmap(),
+                                    contentDescription = ""
+                                )
+                            }
+                        }
+
+                    } else {
+                        BodyLargeText(
+                            text = "Create signature",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable(
+                                    onClick = {
+                                        invoiceSignatureAlertDialog.value = true
+                                    }
+                                ),
+                            textAlign = TextAlign.Center
+                        )
                     }
 
+                }
+
+                // Save button
+                CustomButton(
+                    enabled = viewModel.getInvoiceV2().client.clientName != "" && viewModel.getInvoiceItemList()
+                        .isNotEmpty(),
+                    onClick = {
+                        viewModel.saveInvoiceV2()
+                        scope.launch(Dispatchers.IO) {
+                            PdfUtilsV2.generateInvoicePdfV2(
+                                context = context,
+                                invoiceV2 = viewModel.getInvoiceV2(),
+                                items = viewModel.getInvoiceItemList()
+                            )
+                            withContext(Dispatchers.Main) {
+                                navController.navigateUp()
+                            }
+                        }
+
+                    },
+                    modifier = Modifier
+                        .padding(5.dp)
+                        .fillMaxWidth(),
+                    text = "SAVE AND PRINT"
+                )
+            }
+        }
+
+
+        if (invoiceNumberAlertDialog.value) {
+            AlertDialogInvoiceNumberV2(
+                onDismissRequest = {
+                    invoiceNumberAlertDialog.value = false
                 },
-                modifier = Modifier
-                    .padding(5.dp)
-                    .fillMaxWidth(),
-                text = "SAVE AND PRINT"
+                viewModel = viewModel,
+                modePro = modePro,
+                listOfThisMonthAndYearInvoices = invoiceList?.filter { invoiceV2 ->
+                    val invoiceMAY = DateAndTime.monthAndYear(invoiceV2.time)
+                    val currentMAY = DateAndTime.monthAndYear(time.longValue)
+                    invoiceMAY.year == currentMAY.year && invoiceMAY.month == currentMAY.month
+                }
+            )
+        }
+
+        if (invoicePaymentMethodAlertDialog.value) {
+            AlertDialogPaymentMethod(
+                onDismissRequest = {
+                    invoicePaymentMethodAlertDialog.value = false
+                }
+            )
+        }
+
+        if (invoiceSignatureAlertDialog.value) {
+            AlertDialogSignature(
+                onDismissRequest = {
+                    invoiceSignatureAlertDialog.value = false
+                }
             )
         }
     }
 
-
-    if(invoiceNumberAlertDialog.value){
-        AlertDialogInvoiceNumberV2(
-            onDismissRequest = {
-                invoiceNumberAlertDialog.value = false
-            },
-            viewModel = viewModel,
-            modePro = modePro,
-            listOfThisMonthAndYearInvoices = invoiceList?.filter { invoiceV2 ->
-                val invoiceMAY = DateAndTime.monthAndYear(invoiceV2.time)
-                val currentMAY = DateAndTime.monthAndYear(time.longValue)
-                invoiceMAY.year == currentMAY.year && invoiceMAY.month == currentMAY.month
-            }
-        )
-    }
-
-    if(invoicePaymentMethodAlertDialog.value){
-        AlertDialogPaymentMethod (
-            onDismissRequest = {
-                invoicePaymentMethodAlertDialog.value = false
-            }
-        )
-    }
-
-    if(invoiceSignatureAlertDialog.value){
-        AlertDialogSignature (
-            onDismissRequest = {
-                invoiceSignatureAlertDialog.value = false
-            }
-        )
-    }
-}
+// TODO: items list better ui
+// TODO: delete item from list button (X) and logic
