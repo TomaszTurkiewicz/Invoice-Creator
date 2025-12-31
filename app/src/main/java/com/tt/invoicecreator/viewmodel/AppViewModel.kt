@@ -1,6 +1,7 @@
 package com.tt.invoicecreator.viewmodel
 
 import android.content.Context
+import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
@@ -60,7 +61,9 @@ class AppViewModel(
 
     private val coroutine = CoroutineScope(Dispatchers.Main)
 
-    private val invoiceItems: ArrayList<InvoiceItemV2> = ArrayList()
+//    private val invoiceItems: ArrayList<InvoiceItemV2> = ArrayList()
+    private val invoiceItems = mutableStateListOf<InvoiceItemV2>()
+
 
     var paymentMethod:String = ""
 
@@ -95,7 +98,15 @@ class AppViewModel(
         invoiceItems.add(invoiceItemV2)
     }
 
-    fun getInvoiceItemList():List<InvoiceItemV2>{
+    fun updateItemInInvoice(index:Int,invoiceItemV2: InvoiceItemV2){
+        invoiceItems[index] = invoiceItemV2
+    }
+
+    fun removeItemFromInvoice(invoiceItemV2: InvoiceItemV2){
+        invoiceItems.remove(invoiceItemV2)
+    }
+
+    fun getInvoiceItemList(): MutableList<InvoiceItemV2>{
         return this.invoiceItems
     }
 
@@ -145,6 +156,11 @@ class AppViewModel(
         coroutine.launch {
             invoiceItemRepositoryV2.insertWithId(invoiceItemV2)
         }
+    }
+
+    fun deleteInvoiceItemV2(invoiceItemV2: InvoiceItemV2) {
+        invoiceItems.remove(invoiceItemV2)
+
     }
 
     fun insertWithIdPaidV2(paidV2: PaidV2) {

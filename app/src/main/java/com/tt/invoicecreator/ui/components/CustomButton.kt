@@ -13,7 +13,8 @@ fun CustomButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    text: String
+    text: String,
+    makeItWarning:Boolean = false
 ) {
     Button(
         onClick = {
@@ -21,7 +22,7 @@ fun CustomButton(
         },
         modifier = modifier,
         colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.myColors.primaryDark,
+            containerColor = if(makeItWarning)MaterialTheme.myColors.error else MaterialTheme.myColors.primaryDark,
             contentColor = MaterialTheme.myColors.primaryLight,
         ),
         enabled = enabled

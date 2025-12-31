@@ -16,6 +16,4 @@ class OfflineInvoiceItemRepositoryV2 (private val invoiceItemDaoV2: InvoiceItemD
 
     override suspend fun deleteAllInvoiceItems() = invoiceItemDaoV2.deleteAll()
 
-
-
 }

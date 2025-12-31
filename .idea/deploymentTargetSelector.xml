@@ -13,10 +13,10 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="SingleRowItemV2Preview">
+      <SelectionState runConfigName="ShowButton">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="ExportImportDataPreview">
+      <SelectionState runConfigName="ShowAlertDialog">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

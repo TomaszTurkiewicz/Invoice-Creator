@@ -16,6 +16,7 @@ import androidx.navigation.NavController
 import com.tt.invoicecreator.InvoiceCreatorScreen
 import com.tt.invoicecreator.R
 import com.tt.invoicecreator.data.AppBarState
+import com.tt.invoicecreator.data.roomV2.entities.InvoiceItemV2
 import com.tt.invoicecreator.data.roomV2.entities.ItemV2
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogItemCountDiscountAndCommentsV2
 import com.tt.invoicecreator.ui.components.ListOfItemsV2
@@ -92,12 +93,27 @@ fun ChooseItemScreenV2(
 
     if(alertDialog.value){
         AlertDialogItemCountDiscountAndCommentsV2(
+            title = "ADD ITEM",
             itemV2 = itemV2Temp.value,
-            viewModel = viewModel,
             onDismissRequest = {
                 alertDialog.value = false
             },
-            navController = navController
+            onButtonClicked = { itemV2, itemCount, itemDiscount, itemComment, isVat, vat ->
+                viewModel.addItemToInvoice(
+                    InvoiceItemV2(
+                        itemV2 = itemV2,
+                        itemCount = itemCount.toDouble(),
+                        itemDiscount = itemDiscount.toDouble(),
+                        comment = itemComment,
+                        vat = if(isVat){
+                            vat.toDoubleOrNull()
+                        }else{
+                            null
+                        }
+                    )
+                    )
+                navController.navigateUp()
+            }
         )
     }
 
