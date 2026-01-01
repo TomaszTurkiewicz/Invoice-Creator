@@ -462,6 +462,3 @@ fun AddInvoiceScreenV2(
         )
     }
 }
-
-// TODO: items list better ui
-// TODO: delete item from list button (X) and logic

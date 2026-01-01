@@ -7,6 +7,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -15,6 +17,7 @@ import com.tt.invoicecreator.InvoiceCreatorScreen
 import com.tt.invoicecreator.R
 import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.data.roomV2.entities.ClientV2
+import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogFourInputTextsWithLabelAndTwoButtons
 import com.tt.invoicecreator.ui.components.ListOfClientsV2
 import com.tt.invoicecreator.ui.components.texts.TitleLargeText
 import com.tt.invoicecreator.viewmodel.AppViewModel
@@ -24,8 +27,14 @@ fun ChooseClientScreenV2(
     viewModel: AppViewModel,
     ignoredOnComposing: (AppBarState) -> Unit,
     navController: NavController,
-    clientList:  List<ClientV2>?
+    clientList:  List<ClientV2>?,
+    onClientChosenClick: (ClientV2) -> Unit,
+    onEditClientClicked: (ClientV2) -> Unit
 ) {
+
+    val addClientAlertDialog = remember {
+        mutableStateOf(false)
+    }
 
     LaunchedEffect(key1 = true) {
         ignoredOnComposing(
@@ -34,7 +43,8 @@ fun ChooseClientScreenV2(
                 action = {
                     Row {
                         IconButton(onClick = {
-                            navController.navigate(InvoiceCreatorScreen.AddClientV2.name)
+                            addClientAlertDialog.value = true
+//                            navController.navigate(InvoiceCreatorScreen.AddClientV2.name)
                         }) {
                             Icon(painter = painterResource(R.drawable.baseline_add_24), null)
                         }
@@ -62,12 +72,43 @@ fun ChooseClientScreenV2(
         }
         else{
             ListOfClientsV2(
-                list = clientList!!,
+                list = clientList,
                 clientChosen = {
-                    viewModel.getInvoiceV2().client = it
-                    navController.navigateUp()
+                    onClientChosenClick(it)
+//                    viewModel.getInvoiceV2().client = it
+//                    navController.navigateUp()
+                },
+                editClient = {
+                    onEditClientClicked(it)
                 }
             )
+        }
+    }
+
+    if(addClientAlertDialog.value){
+        AlertDialogFourInputTextsWithLabelAndTwoButtons(
+            title = "ADD NEW CLIENT",
+            labelOne = "Client name",
+            labelTwo = "Client address line 1",
+            labelThree = "Client address line 2",
+            labelFour = "Client city",
+            buttonTextOne = "SAVE",
+            secondButtonEnabled = false,
+            onDismissRequest = {
+                addClientAlertDialog.value = false
+            },
+            firstButtonAction = { firstLine, secondLine, thirdLine, fourthLine ->
+                viewModel.saveClientV2(
+                    ClientV2(
+                        clientName = firstLine,
+                        clientAddress1 = secondLine,
+                        clientAddress2 = thirdLine,
+                        clientCity = fourthLine
+                )
+                )
+            }
+        ) {
+            // do nothing
         }
     }
 }

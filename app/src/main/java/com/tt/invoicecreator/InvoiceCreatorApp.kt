@@ -16,7 +16,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.ui.app_bar.TopAppBarWithAction
-import com.tt.invoicecreator.ui.screens.AddClientScreenV2
 import com.tt.invoicecreator.ui.screens.AddInvoiceScreenV2
 import com.tt.invoicecreator.ui.screens.AddItemScreenV2
 import com.tt.invoicecreator.ui.screens.ChooseClientScreenV2
@@ -79,6 +78,7 @@ fun InvoiceCreatorApp (
         NavHost(
             navController = navController,
             startDestination = InvoiceCreatorScreen.ChooseMode.name,
+//            startDestination = InvoiceCreatorScreen.InvoicesV2.name,
             modifier = Modifier.padding(innerPadding)
         ) {
 
@@ -151,19 +151,26 @@ fun InvoiceCreatorApp (
                         appBarState = it
                     },
                     navController = navController,
-                    clientList = clientList
+                    clientList = clientList,
+                    onClientChosenClick = {
+                        viewModel.getInvoiceV2().client = it
+                        navController.navigateUp()
+                    },
+                    onEditClientClicked = {
+                        // todo
+                    }
                 )
             }
 
-            composable(route = InvoiceCreatorScreen.AddClientV2.name) {
-                AddClientScreenV2(
-                    viewModel = viewModel,
-                    ignoredOnComposing = {
-                        appBarState = it
-                    },
-                    navController = navController
-                )
-            }
+//            composable(route = InvoiceCreatorScreen.AddClientV2.name) {
+//                AddClientScreenV2(
+//                    viewModel = viewModel,
+//                    ignoredOnComposing = {
+//                        appBarState = it
+//                    },
+//                    navController = navController
+//                )
+//            }
 
             composable(route = InvoiceCreatorScreen.Settings.name) {
                 Settings(
