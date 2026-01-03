@@ -29,6 +29,7 @@ import com.tt.invoicecreator.data.roomV2.entities.ClientV2
 import com.tt.invoicecreator.data.roomV2.entities.InvoiceItemV2
 import com.tt.invoicecreator.data.roomV2.entities.InvoiceV2
 import com.tt.invoicecreator.data.roomV2.entities.PaidV2
+import com.tt.invoicecreator.helpers.FilterClients
 import com.tt.invoicecreator.helpers.FilterInvoices
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogAddMainUser
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogWatchAd
@@ -54,6 +55,10 @@ fun InvoicesScreenV2(
     clientList: List<ClientV2>?
 
 ) {
+    val clientsWithInvoices = FilterClients.withInvoices(
+        clientList,
+        invoiceListV2
+    )
 
     val printInvoiceAlertDialog = remember {
         mutableStateOf(false)
@@ -196,10 +201,10 @@ fun InvoicesScreenV2(
                         FilteredInvoicesCardView(
                             header = "BY CLIENT",
                             message = "number of clients:",
-                            count = clientList?.size ?: 0,
+                            count = clientsWithInvoices?.size ?: 0,
                             modifier = Modifier
                                 .aspectRatio(3f)
-                        ){  if(clientList.isNullOrEmpty()){
+                        ){  if(clientsWithInvoices.isNullOrEmpty()){
                             //do not do anything
                         }else{
                             navController.navigate(InvoiceCreatorScreen.InvoicesByClient.name)

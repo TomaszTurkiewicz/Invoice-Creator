@@ -17,6 +17,7 @@ import com.tt.invoicecreator.InvoiceCreatorScreen
 import com.tt.invoicecreator.R
 import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.data.roomV2.entities.ClientV2
+import com.tt.invoicecreator.helpers.FilterClients
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogFourInputTextsWithLabelAndTwoButtons
 import com.tt.invoicecreator.ui.components.ListOfClientsV2
 import com.tt.invoicecreator.ui.components.texts.TitleLargeText
@@ -43,9 +44,8 @@ fun ChooseClientScreenV2(
         mutableStateOf(ClientV2())
     }
 
-    val clientsInUse = clientList?.filter { it ->
-        it.clientInUse
-    }
+    val clientsInUse = FilterClients.getInUse(clientList)
+
 
     LaunchedEffect(key1 = true) {
         ignoredOnComposing(

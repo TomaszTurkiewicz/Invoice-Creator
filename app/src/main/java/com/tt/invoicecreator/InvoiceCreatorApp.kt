@@ -15,6 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.tt.invoicecreator.data.AppBarState
+import com.tt.invoicecreator.helpers.FilterClients
 import com.tt.invoicecreator.ui.app_bar.TopAppBarWithAction
 import com.tt.invoicecreator.ui.screens.AddInvoiceScreenV2
 import com.tt.invoicecreator.ui.screens.AddItemScreenV2
@@ -215,7 +216,7 @@ fun InvoiceCreatorApp (
                         appBarState = it
                     },
                     navController = navController,
-                    listOfClients = clientList,
+                    listOfClients = FilterClients.withInvoices(clientList,invoiceListV2),
                     listOfInvoices = invoiceListV2
                 )
             }
