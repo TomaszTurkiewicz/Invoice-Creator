@@ -270,4 +270,4 @@ fun Settings(
 //todo add upgrade button !!!
 // todo go to client base to edit
 // todo go to item base to edit
-// todo finish edit client from add invoice screen - change add client from screen to alert dialog? it will help editing client :)
+// todo edit item from add invoice screen, change it to alert dialog :)

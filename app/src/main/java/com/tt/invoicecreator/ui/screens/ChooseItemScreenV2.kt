@@ -19,6 +19,7 @@ import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.data.roomV2.entities.InvoiceItemV2
 import com.tt.invoicecreator.data.roomV2.entities.ItemV2
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogItemCountDiscountAndCommentsV2
+import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogItemWithCurrency
 import com.tt.invoicecreator.ui.components.ListOfItemsV2
 import com.tt.invoicecreator.ui.components.texts.TitleLargeText
 import com.tt.invoicecreator.viewmodel.AppViewModel
@@ -32,6 +33,10 @@ fun ChooseItemScreenV2(
 ) {
 
     val alertDialog = remember {
+        mutableStateOf(false)
+    }
+
+    val alertDialogAddItemToDatabase = remember {
         mutableStateOf(false)
     }
 
@@ -54,7 +59,8 @@ fun ChooseItemScreenV2(
                 action = {
                     Row {
                         IconButton(onClick = {
-                            navController.navigate(InvoiceCreatorScreen.AddItemV2.name)
+                            alertDialogAddItemToDatabase.value = true
+//                            navController.navigate(InvoiceCreatorScreen.AddItemV2.name)
                         }) {
                             Icon(painter = painterResource(R.drawable.baseline_add_24), null)
                         }
@@ -113,6 +119,26 @@ fun ChooseItemScreenV2(
                     )
                     )
                 navController.navigateUp()
+            }
+        )
+    }
+
+    if(alertDialogAddItemToDatabase.value){
+        AlertDialogItemWithCurrency(
+            viewModel = viewModel,
+            title = "ADD ITEM",
+            buttonTextOne = "SAVE",
+            firstButtonAction = { itemName, itemValue, currency ->
+                viewModel.saveItemV2(
+                    ItemV2(
+                        itemName = itemName,
+                        itemValue = itemValue,
+                        itemCurrency = currency
+                    )
+                )
+            },
+            onDismissRequest = {
+                alertDialogAddItemToDatabase.value = false
             }
         )
     }

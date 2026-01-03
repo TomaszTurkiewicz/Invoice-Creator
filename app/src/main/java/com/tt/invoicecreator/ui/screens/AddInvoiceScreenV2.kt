@@ -107,7 +107,7 @@ fun AddInvoiceScreenV2(
 
     var expandableSection by remember { mutableStateOf(AddInvoiceSection.NONE) }
 
-    val editItemAlertDialog = remember {
+    val editItemBeforeInsertingAlertDialog = remember {
         mutableStateOf(false)
     }
 
@@ -275,7 +275,7 @@ fun AddInvoiceScreenV2(
                     onEditClicked = { index, itemInvoiceV2 ->
                         indexToEdit.value = index
                         invoiceItemToEdit.value = itemInvoiceV2
-                        editItemAlertDialog.value = true
+                        editItemBeforeInsertingAlertDialog.value = true
                     }
                 )
             }
@@ -423,7 +423,7 @@ fun AddInvoiceScreenV2(
             }
         )
     }
-    if (editItemAlertDialog.value) {
+    if (editItemBeforeInsertingAlertDialog.value) {
         AlertDialogItemCountDiscountAndCommentsV2(
             title = "EDIT ITEM",
             itemV2 = invoiceItemToEdit.value.itemV2,
@@ -438,7 +438,7 @@ fun AddInvoiceScreenV2(
             isVat = invoiceItemToEdit.value.vat != null,
             deleteButton = true,
             onDismissRequest = {
-                editItemAlertDialog.value = false
+                editItemBeforeInsertingAlertDialog.value = false
             },
             onButtonClicked = { itemV2, itemCount, itemDiscount, itemComment, isVat, vat ->
                 viewModel.updateItemInInvoice(
