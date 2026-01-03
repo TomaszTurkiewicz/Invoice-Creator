@@ -31,8 +31,15 @@ fun ChooseItemScreenV2(
     navController: NavController,
     itemList: List<ItemV2>?
 ) {
+    val itemListInUse = itemList?.filter {
+        it.inUse
+    }
 
     val alertDialog = remember {
+        mutableStateOf(false)
+    }
+
+    val editAlertDialog = remember {
         mutableStateOf(false)
     }
 
@@ -44,10 +51,14 @@ fun ChooseItemScreenV2(
         mutableStateOf(ItemV2())
     }
 
+    val editItem = remember {
+        mutableStateOf(ItemV2())
+    }
+
     val tempItemList = if(viewModel.getInvoiceItemList().isEmpty()){
-        itemList
+        itemListInUse
     }else{
-        itemList?.filter { itemV2 ->
+        itemListInUse?.filter { itemV2 ->
             itemV2.itemCurrency.symbol == viewModel.getInvoiceItemList()[0].itemV2.itemCurrency.symbol
         }
     }
@@ -92,6 +103,10 @@ fun ChooseItemScreenV2(
                     itemV2Temp.value = it
 //                    viewModel.addItemToInvoice(it)
                     alertDialog.value = true
+                },
+                onEditClicked = {
+                    editItem.value = it
+                    editAlertDialog.value = true
                 }
             )
         }
@@ -139,6 +154,34 @@ fun ChooseItemScreenV2(
             },
             onDismissRequest = {
                 alertDialogAddItemToDatabase.value = false
+            }
+        )
+    }
+
+    if(editAlertDialog.value){
+        AlertDialogItemWithCurrency(
+            viewModel = viewModel,
+            title = "EDIT ITEM",
+            itemName = editItem.value.itemName,
+            itemValue = editItem.value.itemValue.toString(),
+            buttonTextOne = "UPDATE",
+            buttonTextTwo = "DELETE",
+            secondButtonEnabled = true,
+            firstButtonAction = { itemName, itemValue, currency ->
+                viewModel.updateItem(editItem.value.copy(inUse = false))
+                viewModel.saveItemV2(
+                    ItemV2(
+                        itemName = itemName,
+                        itemValue = itemValue,
+                        itemCurrency = currency
+                    )
+                )
+            },
+            secondButtonAction = {
+                viewModel.updateItem(editItem.value.copy(inUse = false))
+            },
+            onDismissRequest = {
+                editAlertDialog.value = false
             }
         )
     }

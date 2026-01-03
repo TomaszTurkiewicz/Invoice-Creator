@@ -14,4 +14,7 @@ interface ItemRepositoryV2 {
 
     suspend fun deleteAllItems()
 
+    suspend fun update(itemV2: ItemV2)
+
+
 }

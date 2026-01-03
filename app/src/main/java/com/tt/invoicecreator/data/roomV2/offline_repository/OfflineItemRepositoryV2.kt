@@ -15,5 +15,7 @@ class OfflineItemRepositoryV2 (private val itemDaoV2: ItemDaoV2): ItemRepository
     override suspend fun insertWithId(itemV2: ItemV2) = itemDaoV2.insertWithId(itemV2)
 
     override suspend fun deleteAllItems() = itemDaoV2.deleteAll()
+    override suspend fun update(itemV2: ItemV2) = itemDaoV2.update(itemV2)
+
 
 }

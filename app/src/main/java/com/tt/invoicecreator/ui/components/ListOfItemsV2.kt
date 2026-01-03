@@ -10,7 +10,8 @@ import com.tt.invoicecreator.data.roomV2.entities.ItemV2
 @Composable
 fun ListOfItemsV2(
     list:List<ItemV2>,
-    itemChosen: (ItemV2) -> Unit
+    itemChosen: (ItemV2) -> Unit,
+    onEditClicked: (ItemV2) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -23,6 +24,9 @@ fun ListOfItemsV2(
                 item = item,
                 itemChosen = {
                     itemChosen(it)
+                },
+                onEditClicked = {
+                    onEditClicked(it)
                 }
             )
 

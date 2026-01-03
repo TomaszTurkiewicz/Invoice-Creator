@@ -127,9 +127,9 @@ fun ChooseClientScreenV2(
                 )
             },
             secondButtonAction = {
-                tempClient.value.copy(
-                    clientInUse = false
-                )
+//                tempClient.value.copy(
+//                    clientInUse = false
+//                )
                 viewModel.updateClient(tempClient.value.copy(clientInUse = false))
             }
         )

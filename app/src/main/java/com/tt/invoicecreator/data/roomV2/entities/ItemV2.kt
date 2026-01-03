@@ -11,5 +11,6 @@ data class ItemV2 (
     val itemId:Int = 0,
     var itemName: String = "",
     var itemValue: Double = 0.0,
-    var itemCurrency: Currency = Currency.GBP
+    var itemCurrency: Currency = Currency.GBP,
+    var inUse:Boolean = true
 )
