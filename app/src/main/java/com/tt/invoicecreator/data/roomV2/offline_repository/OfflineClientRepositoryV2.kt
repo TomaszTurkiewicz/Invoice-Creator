@@ -15,6 +15,8 @@ class OfflineClientRepositoryV2 (private val clientDaoV2: ClientDaoV2) : ClientR
 
     override suspend fun deleteAllClients() = clientDaoV2.deleteAll()
 
+    override suspend fun updateClient(clientV2: ClientV2) = clientDaoV2.update(clientV2)
+
 
 
 }

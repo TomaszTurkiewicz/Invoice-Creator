@@ -23,7 +23,9 @@ fun CustomIconButton(
     contentDescription: String? = null
 ) {
     Button(
-        onClick = onClick,
+        onClick = {
+            onClick()
+        },
         modifier = modifier.size(40.dp), // Forces the button to be square-ish
         shape = RoundedCornerShape(4.dp),
         colors = ButtonDefaults.buttonColors(

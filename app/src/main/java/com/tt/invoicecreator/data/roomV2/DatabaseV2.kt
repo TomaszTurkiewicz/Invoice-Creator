@@ -24,7 +24,7 @@ import com.tt.invoicecreator.data.roomV2.entities.PaidV2
         InvoiceV2::class,
         PaidV2::class
     ],
-    version = 11,
+    version = 12,
     exportSchema = false
 )
 

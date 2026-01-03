@@ -155,9 +155,6 @@ fun InvoiceCreatorApp (
                     onClientChosenClick = {
                         viewModel.getInvoiceV2().client = it
                         navController.navigateUp()
-                    },
-                    onEditClientClicked = {
-                        // todo
                     }
                 )
             }

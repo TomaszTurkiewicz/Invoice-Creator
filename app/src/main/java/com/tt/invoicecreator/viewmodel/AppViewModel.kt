@@ -146,6 +146,12 @@ class AppViewModel(
         }
     }
 
+    fun updateClient(clientV2: ClientV2){
+        coroutine.launch {
+            clientRepositoryV2.updateClient(clientV2)
+        }
+    }
+
     fun insertWithIdInvoiceV2(invoiceV2: InvoiceV2) {
         coroutine.launch {
             invoiceRepositoryV2.insertWithId(invoiceV2)

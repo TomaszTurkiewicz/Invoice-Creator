@@ -13,4 +13,6 @@ interface ClientRepositoryV2 {
     suspend fun insertWithId(clientV2: ClientV2)
 
     suspend fun deleteAllClients()
+
+    suspend fun updateClient(clientV2: ClientV2)
 }

@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.tt.invoicecreator.data.roomV2.entities.ClientV2
 import com.tt.invoicecreator.ui.components.cards.CustomCardView
@@ -38,7 +39,8 @@ fun SingleRowClientV2(
                 BodyLargeText(
                     text = client.clientName,
                     modifier = Modifier
-                        .padding(5.dp)
+                        .padding(5.dp),
+                    fontWeight = if(client.clientInUse) FontWeight.Bold else FontWeight.Normal
                 )
                 BodyLargeText(
                     text = client.clientAddress1,

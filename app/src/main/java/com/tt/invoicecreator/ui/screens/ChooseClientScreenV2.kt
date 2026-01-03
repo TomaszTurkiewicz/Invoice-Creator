@@ -28,12 +28,23 @@ fun ChooseClientScreenV2(
     ignoredOnComposing: (AppBarState) -> Unit,
     navController: NavController,
     clientList:  List<ClientV2>?,
-    onClientChosenClick: (ClientV2) -> Unit,
-    onEditClientClicked: (ClientV2) -> Unit
+    onClientChosenClick: (ClientV2) -> Unit
 ) {
 
     val addClientAlertDialog = remember {
         mutableStateOf(false)
+    }
+
+    val editClientAlertDialog = remember {
+        mutableStateOf(false)
+    }
+
+    val tempClient = remember {
+        mutableStateOf(ClientV2())
+    }
+
+    val clientsInUse = clientList?.filter { it ->
+        it.clientInUse
     }
 
     LaunchedEffect(key1 = true) {
@@ -44,7 +55,6 @@ fun ChooseClientScreenV2(
                     Row {
                         IconButton(onClick = {
                             addClientAlertDialog.value = true
-//                            navController.navigate(InvoiceCreatorScreen.AddClientV2.name)
                         }) {
                             Icon(painter = painterResource(R.drawable.baseline_add_24), null)
                         }
@@ -65,24 +75,64 @@ fun ChooseClientScreenV2(
             .fillMaxSize(),
         contentAlignment = Alignment.Center)
     {
-        if(clientList.isNullOrEmpty()){
+        if(clientsInUse.isNullOrEmpty()){
             TitleLargeText(
                 text = "press + on top of the app"
             )
         }
         else{
             ListOfClientsV2(
-                list = clientList,
+                list = clientsInUse,
                 clientChosen = {
                     onClientChosenClick(it)
-//                    viewModel.getInvoiceV2().client = it
-//                    navController.navigateUp()
                 },
                 editClient = {
-                    onEditClientClicked(it)
+                    tempClient.value = it
+                    editClientAlertDialog.value = true
                 }
             )
         }
+    }
+
+    if(editClientAlertDialog.value){
+        AlertDialogFourInputTextsWithLabelAndTwoButtons(
+            title = "EDIT CLIENT",
+            labelOne = "Client name",
+            inputOne = tempClient.value.clientName,
+            labelTwo = "Client address line 1",
+            inputTwo = tempClient.value.clientAddress1,
+            labelThree = "Client address line 2",
+            inputThree = tempClient.value.clientAddress2,
+            labelFour = "Client city",
+            inputFour = tempClient.value.clientCity,
+            buttonTextOne = "UPDATE",
+            buttonTextTwo = "DELETE",
+            secondButtonEnabled = true,
+            onDismissRequest = {
+                editClientAlertDialog.value = false
+            },
+            firstButtonAction = { firstLine, secondLine, thirdLine, fourthLine ->
+//                tempClient.value.copy(
+//                    clientInUse = false
+//                )
+
+                viewModel.updateClient(tempClient.value.copy(clientInUse = false))
+                viewModel.saveClientV2(
+                    ClientV2(
+                        clientName = firstLine,
+                        clientAddress1 = secondLine,
+                        clientAddress2 = thirdLine,
+                        clientCity = fourthLine
+                    )
+                )
+            },
+            secondButtonAction = {
+                tempClient.value.copy(
+                    clientInUse = false
+                )
+                viewModel.updateClient(tempClient.value.copy(clientInUse = false))
+            }
+        )
     }
 
     if(addClientAlertDialog.value){

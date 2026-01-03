@@ -10,5 +10,6 @@ data class ClientV2 (
     var clientName: String = "",
     var clientAddress1: String = "",
     var clientAddress2: String = "",
-    var clientCity: String = ""
+    var clientCity: String = "",
+    var clientInUse: Boolean = true
 )
