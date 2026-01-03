@@ -15,8 +15,8 @@ import androidx.compose.ui.unit.dp
 import com.tt.invoicecreator.data.SharedPreferences
 import com.tt.invoicecreator.helpers.Currency
 import com.tt.invoicecreator.helpers.DecimalFormatter
-import com.tt.invoicecreator.ui.components.CurrencyChooser
 import com.tt.invoicecreator.ui.components.CustomButton
+import com.tt.invoicecreator.ui.components.InputCurrencyWithLabel
 import com.tt.invoicecreator.ui.components.InputDigitsWithLabel
 import com.tt.invoicecreator.ui.components.InputTextWithLabel
 import com.tt.invoicecreator.ui.components.cards.CustomCardView
@@ -44,6 +44,10 @@ fun AlertDialogItemWithCurrency(
     val chooser = viewModel.getInvoiceItemList().isEmpty()
 
     val alertDialog = remember {
+        mutableStateOf(false)
+    }
+
+    val alertDialogCurrencyPicker = remember {
         mutableStateOf(false)
     }
 
@@ -106,15 +110,25 @@ fun AlertDialogItemWithCurrency(
                     itemValueMut.value = decimalFormatter.cleanup(it)
                 }
 
-                CurrencyChooser(
+                InputCurrencyWithLabel(
+                    labelText = "CURRENCY",
                     selectedCurrency = currency.value,
-                    onCurrencySelected = {
-                        currency.value = it
-                        SharedPreferences.saveCurrency(context, it.name)
-                    },
                     chooser = chooser,
-                    alertDialog = alertDialog
+                    alertDialog = alertDialog,
+                    onCurrencyClicked = {
+                        alertDialogCurrencyPicker.value = true
+                    }
                 )
+
+//                CurrencyChooser(
+//                    selectedCurrency = currency.value,
+//                    onCurrencySelected = {
+//                        currency.value = it
+//                        SharedPreferences.saveCurrency(context, it.name)
+//                    },
+//                    chooser = chooser,
+//                    alertDialog = alertDialog
+//                )
 
                 CustomButton(
                     enabled = itemNameMut.value.trim().isNotEmpty() && itemValueMut.value.isNotEmpty() && itemValueMut.value.toDouble() != 0.0,
@@ -166,5 +180,17 @@ fun AlertDialogItemWithCurrency(
         ) {
             alertDialog.value = false
         }
+    }
+
+    if(alertDialogCurrencyPicker.value){
+        AlertDialogCurrencyPicker(
+            onCurrencySelected = {
+                currency.value = it
+                SharedPreferences.saveCurrency(context, it.name)
+            },
+            onDismissRequest = {
+                alertDialogCurrencyPicker.value = false
+            }
+        )
     }
 }

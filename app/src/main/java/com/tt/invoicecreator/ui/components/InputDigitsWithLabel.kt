@@ -6,12 +6,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.tt.invoicecreator.ui.components.texts.BodyLargeText
 import com.tt.invoicecreator.ui.components.texts.LabelMediumText
+import com.tt.invoicecreator.ui.theme.myColors
 
 @Composable
 fun InputDigitsWithLabel(
@@ -42,6 +44,12 @@ fun InputDigitsWithLabel(
             },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number
+            ),
+            colors = TextFieldDefaults.colors(
+                focusedTextColor = MaterialTheme.myColors.primaryDark,
+                unfocusedTextColor = MaterialTheme.myColors.primaryDark,
+                focusedContainerColor = MaterialTheme.myColors.material.primaryContainer,
+                unfocusedContainerColor = MaterialTheme.myColors.material.primaryContainer
             ),
             isError = isError,
             leadingIcon = leadingIcon,
