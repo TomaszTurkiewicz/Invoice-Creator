@@ -32,7 +32,7 @@ import com.tt.invoicecreator.data.roomV2.entities.PaidV2
 import com.tt.invoicecreator.helpers.FilterClients
 import com.tt.invoicecreator.helpers.FilterInvoices
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogAddMainUser
-import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogWatchAd
+import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogTitleMessageButton
 import com.tt.invoicecreator.ui.alert_dialogs.PrintInvoiceAlertDialogV2
 import com.tt.invoicecreator.ui.components.ListOfInvoicesV2
 import com.tt.invoicecreator.ui.components.cards.FilteredInvoicesCardView
@@ -245,11 +245,14 @@ fun InvoicesScreenV2(
     }
 
     if(watchAdAlertDialog.value){
-        AlertDialogWatchAd(
+        AlertDialogTitleMessageButton(
+            title = "WATCH ADD",
+            message = "This app is free to use. You don't have to pay anything. So please watch add to be able to add new invoice. Press button below WATCH ADD when it gets available.\nYou can also upgrade app to PRO version. PRO version has few features more. Such as: no need to watch adds, payment history, multiple items in one invoice, etc. Go to SETTINGS, press UPGRADE APP button and follow instruction if you wish to do it.",
+            buttonText = "WATCH ADD",
             onDismissRequest = {
                 watchAdAlertDialog.value = false
             },
-            adLoaded = adLoaded
+            buttonEnabled = adLoaded
         ){
             activity.showRewardedAd()
         }

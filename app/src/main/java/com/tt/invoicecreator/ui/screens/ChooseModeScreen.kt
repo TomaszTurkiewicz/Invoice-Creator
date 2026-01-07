@@ -50,7 +50,7 @@ fun ChooseModeScreen(
         ){
             Button(
                 onClick = {
-                    viewModel.setModePro(context,false)
+//                    viewModel.setModePro(context,false)
                     navController.navigate(InvoiceCreatorScreen.InvoicesV2.name)
                 }
             ) {
@@ -67,7 +67,7 @@ fun ChooseModeScreen(
         ){
             Button(
                 onClick = {
-                    viewModel.setModePro(context,true)
+//                    viewModel.setModePro(context,true)
                     navController.navigate(InvoiceCreatorScreen.InvoicesV2.name)
                 }
             ) {

@@ -38,17 +38,17 @@ object SharedPreferences {
         )
     }
 
-    fun savePROMode(context: Context, PROMode:Boolean){
-        val sp = context.getSharedPreferences("PRO_MODE", Context.MODE_PRIVATE)
-        sp.edit {
-            putBoolean("pro_mode", PROMode)
-        }
-    }
-
-    fun readPROMode(context: Context):Boolean{
-        val sp = context.getSharedPreferences("PRO_MODE", Context.MODE_PRIVATE)
-        return sp.getBoolean("pro_mode", false)
-    }
+//    fun savePROMode(context: Context, PROMode:Boolean){
+//        val sp = context.getSharedPreferences("PRO_MODE", Context.MODE_PRIVATE)
+//        sp.edit {
+//            putBoolean("pro_mode", PROMode)
+//        }
+//    }
+//
+//    fun readPROMode(context: Context):Boolean{
+//        val sp = context.getSharedPreferences("PRO_MODE", Context.MODE_PRIVATE)
+//        return sp.getBoolean("pro_mode", false)
+//    }
 
     fun saveCurrency(context: Context, currency:String){
         val sp = context.getSharedPreferences("CURRENCY", Context.MODE_PRIVATE)

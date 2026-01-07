@@ -17,6 +17,7 @@ playServicesAds = "24.7.0"
 roomRuntime = "2.8.3"
 runtimeLivedata = "1.9.4"
 navigationRuntimeAndroid = "2.9.5"
+sdk = "9.2.0"
 
 [libraries]
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanistSystemuicontroller" }
@@ -45,6 +46,7 @@ androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-navigation-runtime-android = { group = "androidx.navigation", name = "navigation-runtime-android", version.ref = "navigationRuntimeAndroid" }
 play-services-ads = { module = "com.google.android.gms:play-services-ads", version.ref = "playServicesAds" }
+sdk = { module = "io.qonversion.android.sdk:sdk", version.ref = "sdk" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

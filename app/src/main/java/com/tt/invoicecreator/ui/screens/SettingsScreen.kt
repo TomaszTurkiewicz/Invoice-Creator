@@ -33,6 +33,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
+import com.qonversion.android.sdk.Qonversion
+import com.qonversion.android.sdk.dto.QonversionError
+import com.qonversion.android.sdk.dto.entitlements.QEntitlement
+import com.qonversion.android.sdk.listeners.QonversionEntitlementsCallback
 import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.data.SharedPreferences
 import com.tt.invoicecreator.data.roomV2.backups.BackupManager
@@ -225,11 +230,66 @@ fun Settings(
                         modifier = Modifier
                             .fillMaxSize(),
                         onClick = {
-                            //todo
+                            if(!modePro){
+                                Qonversion.shared.purchase(
+                                    context.findActivity()!!,
+                                    viewModel.offerings.find { it.offeringId == "test" }?.products?.firstOrNull()!!,
+                                    object: QonversionEntitlementsCallback {
+                                        override fun onError(error: QonversionError) {
+                                            Toast.makeText(context, "Error: ${error.description}", Toast.LENGTH_LONG).show()
+                                            viewModel.updatePermissions()
+                                        }
+
+                                        override fun onSuccess(entitlements: Map<String, QEntitlement>) {
+                                            android.util.Log.d("Qonversion", "Success: ${entitlements.keys}")
+
+                                            val premiumEntitlement = entitlements["test"]
+
+                                            val anyActive = entitlements.values.any { it.isActive }
+
+                                            if (premiumEntitlement?.isActive == true || anyActive) {
+                                                val b = 1
+                                                viewModel.updatePermissions()
+                                                Toast.makeText(context, "Subscription successful", Toast.LENGTH_LONG).show()
+                                            }
+                                            else{
+                                                // If purchase worked but entitlement is missing, it might be a configuration delay.
+                                                // Force a permission update anyway to re-fetch from server.
+                                                viewModel.updatePermissions()
+                                                Toast.makeText(context, "Purchase complete. Updating status...", Toast.LENGTH_SHORT).show()
+                                            }
+                                        }
+
+                                    }
+
+                                )
+                            }
+                            else{
+
+                                viewModel.updatePermissions()
+                                // UNSUBSCRIBE LOGIC
+                                // We must open the Google Play Store to the specific subscription page
+                                try {
+                                    val intent = android.content.Intent(
+                                        android.content.Intent.ACTION_VIEW,
+                                        "https://play.google.com/store/account/subscriptions?sku=Plus&package=${context.packageName}".toUri()
+                                    )
+                                    context.startActivity(intent)
+                                } catch (e: Exception) {
+                                    // Fallback if Play Store app is not available
+                                    val intent = android.content.Intent(
+                                        android.content.Intent.ACTION_VIEW,
+                                        "https://play.google.com/store/account/subscriptions".toUri()
+                                    )
+                                    context.startActivity(intent)
+                                }
+
+   //                             Toast.makeText(context, "You are already subscribed", Toast.LENGTH_LONG).show()
+                            }
+
                         }
                     )
                 }
-
             }
         }
 
@@ -256,6 +316,7 @@ fun Settings(
 
 
     if (alertDialogUpdateUser.value) {
+        val a =1
         AlertDialogAddMainUser(
             title = "EDIT USER",
             user = user,
@@ -265,6 +326,16 @@ fun Settings(
             canBeDismissed = true
         )
     }
+}
+
+
+fun android.content.Context.findActivity(): android.app.Activity? {
+    var context = this
+    while (context is android.content.ContextWrapper) {
+        if (context is android.app.Activity) return context
+        context = context.baseContext
+    }
+    return null
 }
 
 //todo add upgrade button !!!

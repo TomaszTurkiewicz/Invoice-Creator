@@ -21,7 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.tt.invoicecreator.data.AppBarState
-import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogStar
+import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogTitleMessageButton
 import com.tt.invoicecreator.ui.theme.myColors
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -52,12 +52,6 @@ fun TopAppBarWithAction(
                             }
                         )
                 )
-//                Text(
-//                    text = "PRO",
-//                    style = MaterialTheme.typography.labelLarge,
-//                    modifier = Modifier
-//                        .padding(end = 10.dp),
-//                    textAlign = TextAlign.Center)
             }
 
             Text(
@@ -82,8 +76,16 @@ fun TopAppBarWithAction(
 )
 
     if(starAlertDialog.value){
-        AlertDialogStar {
-            starAlertDialog.value = false
+        AlertDialogTitleMessageButton(
+            title = "PREMIUM VERSION",
+            message = "This STAR represents PREMIUM access to all functionality of the app",
+            buttonText = "OK",
+            buttonEnabled = true,
+            onDismissRequest = {
+                starAlertDialog.value = false
+            }
+        ) {
+            // do nothing, just close the alert dialog
         }
     }
 }

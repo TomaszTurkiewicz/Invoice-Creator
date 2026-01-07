@@ -16,10 +16,14 @@ import com.tt.invoicecreator.ui.components.texts.TitleLargeText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AlertDialogStar(
-    onDismissRequest: () -> Unit
+fun AlertDialogTitleMessageButton(
+    title:String,
+    message:String,
+    buttonText:String,
+    onDismissRequest: () -> Unit,
+    buttonEnabled:Boolean,
+    buttonClicked: () -> Unit
 ) {
-
     BasicAlertDialog(
         onDismissRequest = {
             onDismissRequest()
@@ -33,24 +37,28 @@ fun AlertDialogStar(
                 TitleLargeText(
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally),
-                    text = "PREMIUM VERSION"
+                    text = title
                 )
                 BodyLargeText(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(10.dp),
-                    text = "This STAR represents PREMIUM access to all functionality of the app"
+                    text = message
                 )
                 CustomButton(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(10.dp),
                     onClick = {
+                        buttonClicked()
                         onDismissRequest()
                     },
-                    text = "OK"
+                    enabled = buttonEnabled,
+                    text = buttonText
                 )
             }
         }
     }
 }
+
+//todo przerobic na uniwersalny aleret dialog z title, message and button

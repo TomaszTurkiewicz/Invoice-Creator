@@ -1,13 +1,21 @@
 package com.tt.invoicecreator.viewmodel
 
-import android.content.Context
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
+import com.qonversion.android.sdk.Qonversion
+import com.qonversion.android.sdk.dto.QonversionError
+import com.qonversion.android.sdk.dto.entitlements.QEntitlement
+import com.qonversion.android.sdk.dto.offerings.QOffering
+import com.qonversion.android.sdk.dto.offerings.QOfferings
+import com.qonversion.android.sdk.listeners.QonversionEntitlementsCallback
+import com.qonversion.android.sdk.listeners.QonversionOfferingsCallback
 import com.tt.invoicecreator.data.AppUiState
 import com.tt.invoicecreator.data.InvoiceStatus
-import com.tt.invoicecreator.data.SharedPreferences
 import com.tt.invoicecreator.data.roomV2.dao.ClientDaoV2
 import com.tt.invoicecreator.data.roomV2.dao.InvoiceDaoV2
 import com.tt.invoicecreator.data.roomV2.dao.InvoiceItemDaoV2
@@ -39,6 +47,18 @@ class AppViewModel(
     invoiceDaoV2: InvoiceDaoV2,
     paidDaoV2: PaidDaoV2
 ) : ViewModel() {
+
+    var offerings by mutableStateOf<List<QOffering>>(emptyList())
+
+    var hasPremiumPermission by mutableStateOf(false)
+
+    var premiumEntitlement: QEntitlement? = null
+
+
+    init {
+        loadOfferings()
+        updatePermissions()
+    }
 
     private val itemRepositoryV2:OfflineItemRepositoryV2 = OfflineItemRepositoryV2(itemDaoV2)
     private val clientRepositoryV2:OfflineClientRepositoryV2 = OfflineClientRepositoryV2(clientDaoV2)
@@ -72,6 +92,49 @@ class AppViewModel(
     var calculateDueDate = true
 
     var chosenClientToFilterInvoices: ClientV2? = null
+
+    private fun loadOfferings(){
+        Qonversion.shared.offerings(object : QonversionOfferingsCallback{
+            override fun onError(error: QonversionError) {
+                android.util.Log.e("Qonversion","Error getting offerings: ${error.description}, code: ${error.code}")
+            }
+
+            override fun onSuccess(offerings: QOfferings) {
+                this@AppViewModel.offerings = offerings.availableOfferings
+            }
+        })
+
+        val a =1
+    }
+
+    fun updatePermissions(){
+        Qonversion.shared.checkEntitlements(object : QonversionEntitlementsCallback {
+            val b = 1
+            override fun onError(error: QonversionError) {
+                android.util.Log.e("Qonversion", "Error checking entitlements: ${error.description}, code: ${error.code}")
+                hasPremiumPermission = false
+
+                setModePro(hasPremiumPermission)
+
+                val c = 1
+            }
+
+            override fun onSuccess(entitlements: Map<String, QEntitlement>) {
+                val d = 1
+                android.util.Log.d("Qonversion", "Success: ${entitlements.keys}")
+                premiumEntitlement = entitlements["test"] // Replace "Plus" with your actual entitlement ID from Qonversion Dashboard
+                val anyActive = entitlements.values.any { it.isActive }
+                hasPremiumPermission = premiumEntitlement?.isActive == true || anyActive
+
+                setModePro(hasPremiumPermission)
+
+
+            }
+        }
+        )
+    }
+
+
 
     suspend fun getAllInvoicesDirectly():List<InvoiceV2>{
         return invoiceRepositoryV2.getAllInvoicesDirectly()
@@ -199,8 +262,7 @@ class AppViewModel(
         }
     }
 
-    fun setModePro(context: Context, boolean: Boolean){
-        SharedPreferences.savePROMode(context,boolean)
+    fun setModePro(boolean: Boolean){
         _uiState.update { currentState ->
             currentState.copy(
                 modePro = boolean

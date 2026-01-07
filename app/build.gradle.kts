@@ -14,8 +14,8 @@ android {
         applicationId = "com.tt.invoicecreator"
         minSdk = 26
         targetSdk = 36
-        versionCode = 3
-        versionName = "1.2"
+        versionCode = 6
+        versionName = "1.6"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -82,6 +82,9 @@ dependencies {
     implementation(libs.androidx.compose.material.icons.extended)
 
     implementation(libs.gson)
+
+    implementation (libs.sdk)
+
 
 
 }
