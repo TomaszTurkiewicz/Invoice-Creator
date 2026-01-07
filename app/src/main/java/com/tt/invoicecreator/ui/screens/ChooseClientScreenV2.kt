@@ -11,9 +11,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
-import com.tt.invoicecreator.InvoiceCreatorScreen
 import com.tt.invoicecreator.R
 import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.data.roomV2.entities.ClientV2
@@ -28,9 +28,12 @@ fun ChooseClientScreenV2(
     viewModel: AppViewModel,
     ignoredOnComposing: (AppBarState) -> Unit,
     navController: NavController,
+    navigatedFromSettings:Boolean,
     clientList:  List<ClientV2>?,
     onClientChosenClick: (ClientV2) -> Unit
 ) {
+
+    val context = LocalContext.current
 
     val addClientAlertDialog = remember {
         mutableStateOf(false)
@@ -50,7 +53,7 @@ fun ChooseClientScreenV2(
     LaunchedEffect(key1 = true) {
         ignoredOnComposing(
             AppBarState(
-                title = "CHOOSE CLIENT",
+                title = if(navigatedFromSettings) "CLIENTS DATABASE" else "CHOOSE CLIENT",
                 action = {
                     Row {
                         IconButton(onClick = {
@@ -58,11 +61,14 @@ fun ChooseClientScreenV2(
                         }) {
                             Icon(painter = painterResource(R.drawable.baseline_add_24), null)
                         }
-                        IconButton(onClick = {
-                            navController.navigate(InvoiceCreatorScreen.Settings.name)
-                        }) {
-                            Icon(painter = painterResource(R.drawable.baseline_settings_24), null)
-                        }
+//                        if(!navigatedFromSettings){
+//                            IconButton(onClick = {
+//                                navController.navigate(InvoiceCreatorScreen.Settings.name)
+//                            }) {
+//                                Icon(painter = painterResource(R.drawable.baseline_settings_24), null)
+//                            }
+//                        }
+
                     }
 
                 }
@@ -84,7 +90,12 @@ fun ChooseClientScreenV2(
             ListOfClientsV2(
                 list = clientsInUse,
                 clientChosen = {
-                    onClientChosenClick(it)
+                    if(!navigatedFromSettings){
+                        onClientChosenClick(it)
+                    } else {
+                        tempClient.value = it
+                        editClientAlertDialog.value = true
+                    }
                 },
                 editClient = {
                     tempClient.value = it

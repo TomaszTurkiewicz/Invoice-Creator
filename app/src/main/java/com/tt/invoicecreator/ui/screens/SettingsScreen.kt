@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Checklist
 import androidx.compose.material.icons.filled.CloudUpload
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Subscriptions
@@ -34,13 +35,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
+import androidx.navigation.NavController
 import com.qonversion.android.sdk.Qonversion
 import com.qonversion.android.sdk.dto.QonversionError
 import com.qonversion.android.sdk.dto.entitlements.QEntitlement
 import com.qonversion.android.sdk.listeners.QonversionEntitlementsCallback
+import com.tt.invoicecreator.InvoiceCreatorScreen
 import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.data.SharedPreferences
 import com.tt.invoicecreator.data.roomV2.backups.BackupManager
+import com.tt.invoicecreator.data.roomV2.entities.ClientV2
+import com.tt.invoicecreator.data.roomV2.entities.ItemV2
+import com.tt.invoicecreator.helpers.FilterClients
 import com.tt.invoicecreator.helpers.SettingsSection
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogAddMainUser
 import com.tt.invoicecreator.ui.components.CustomButton
@@ -57,7 +63,10 @@ import kotlinx.coroutines.withContext
 fun Settings(
     ignoredOnComposing: (AppBarState) -> Unit,
     modePro: Boolean,
-    viewModel: AppViewModel
+    viewModel: AppViewModel,
+    listOfClients: List<ClientV2>?,
+    listOfItems: List<ItemV2>?,
+    navController: NavController
 ) {
     val context = LocalContext.current
     val user = SharedPreferences.readUserDetails(context)
@@ -67,7 +76,15 @@ fun Settings(
         mutableStateOf<String?>(null)
     }
 
+    val itemListInUse = listOfItems?.filter {
+        it.inUse
+    }
+
+    viewModel.navigateFromSettings()
+
     var expandedSection by remember { mutableStateOf(SettingsSection.NONE) }
+
+    val clientsInUse = FilterClients.getInUse(listOfClients)
 
     LaunchedEffect(key1 = true) {
         ignoredOnComposing(
@@ -237,7 +254,7 @@ fun Settings(
                                     object: QonversionEntitlementsCallback {
                                         override fun onError(error: QonversionError) {
                                             Toast.makeText(context, "Error: ${error.description}", Toast.LENGTH_LONG).show()
-                                            viewModel.updatePermissions()
+                                            viewModel.updatePermissions(context)
                                         }
 
                                         override fun onSuccess(entitlements: Map<String, QEntitlement>) {
@@ -249,13 +266,13 @@ fun Settings(
 
                                             if (premiumEntitlement?.isActive == true || anyActive) {
                                                 val b = 1
-                                                viewModel.updatePermissions()
+                                                viewModel.updatePermissions(context)
                                                 Toast.makeText(context, "Subscription successful", Toast.LENGTH_LONG).show()
                                             }
                                             else{
                                                 // If purchase worked but entitlement is missing, it might be a configuration delay.
                                                 // Force a permission update anyway to re-fetch from server.
-                                                viewModel.updatePermissions()
+                                                viewModel.updatePermissions(context)
                                                 Toast.makeText(context, "Purchase complete. Updating status...", Toast.LENGTH_SHORT).show()
                                             }
                                         }
@@ -266,7 +283,7 @@ fun Settings(
                             }
                             else{
 
-                                viewModel.updatePermissions()
+                                viewModel.updatePermissions(context)
                                 // UNSUBSCRIBE LOGIC
                                 // We must open the Google Play Store to the specific subscription page
                                 try {
@@ -287,6 +304,80 @@ fun Settings(
    //                             Toast.makeText(context, "You are already subscribed", Toast.LENGTH_LONG).show()
                             }
 
+                        }
+                    )
+                }
+            }
+
+            ExpandableCard(
+                title = "CLIENTS",
+                icon = Icons.Default.Person,
+                isExpanded = expandedSection == SettingsSection.CLIENTS,
+                onExpandClick = {
+                    expandedSection = if(expandedSection == SettingsSection.CLIENTS) {
+                        SettingsSection.NONE
+                    } else {
+                        SettingsSection.CLIENTS
+                    }
+                }
+            ) {
+                Column{
+                    BodyLargeText(
+                        text = if(clientsInUse.isNullOrEmpty()){
+                            "You don't have any clients yet, press button below to add new client to your database"
+                        } else {
+                            if(clientsInUse.size == 1)
+                                "You have ${clientsInUse.size} client in your database, press button below to navigate to it"
+                            else
+                                "You have ${clientsInUse.size} clients in your database, press button below to navigate to it"
+                        },
+                        modifier = Modifier
+                            .padding(start = 10.dp, top = 5.dp, bottom = 10.dp, end = 10.dp)
+                    )
+                    CustomButton(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        text = "CLIENT DATABASE",
+                        onClick = {
+                            navController.navigate(InvoiceCreatorScreen.ChooseClientV2.name)
+                        }
+                    )
+                }
+
+
+            }
+
+            ExpandableCard(
+                title = "ITEMS",
+                icon = Icons.Default.Checklist,
+                isExpanded = expandedSection == SettingsSection.ITEMS,
+                onExpandClick = {
+                    expandedSection = if(expandedSection == SettingsSection.ITEMS) {
+                        SettingsSection.NONE
+                    } else {
+                        SettingsSection.ITEMS
+                    }
+                }
+            ) {
+                Column{
+                    BodyLargeText(
+                        text = if(itemListInUse.isNullOrEmpty()){
+                            "You don't have any items yet, press button below to add new item to your database"
+                        } else {
+                            if(itemListInUse.size == 1)
+                                "You have ${itemListInUse.size} item in your database, press button below to navigate to it"
+                            else
+                                "You have ${itemListInUse.size} items in your database, press button below to navigate to it"
+                        },
+                        modifier = Modifier
+                            .padding(start = 10.dp, top = 5.dp, bottom = 10.dp, end = 10.dp)
+                    )
+                    CustomButton(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        text = "ITEMS DATABASE",
+                        onClick = {
+                            navController.navigate(InvoiceCreatorScreen.ChooseItemV2.name)
                         }
                     )
                 }

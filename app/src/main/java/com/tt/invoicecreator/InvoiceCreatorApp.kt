@@ -10,6 +10,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -34,6 +35,10 @@ fun InvoiceCreatorApp (
     navController: NavHostController = rememberNavController(),
     activity: MainActivity
 ){
+    val context = LocalContext.current
+
+    viewModel.readModePro(context)
+
 
     val invoiceListV2 by viewModel.invoiceListV2.observeAsState()
 
@@ -88,7 +93,8 @@ fun InvoiceCreatorApp (
                         appBarState = it
                     },
                     navController = navController,
-                    itemList = itemList
+                    itemList = itemList,
+                    navigatedFromSettings = uiState.navigateFromSettings
                 )
             }
 
@@ -141,6 +147,7 @@ fun InvoiceCreatorApp (
                     },
                     navController = navController,
                     clientList = clientList,
+                    navigatedFromSettings = uiState.navigateFromSettings,
                     onClientChosenClick = {
                         viewModel.getInvoiceV2().client = it
                         navController.navigateUp()
@@ -154,7 +161,10 @@ fun InvoiceCreatorApp (
                         appBarState = it
                     },
                     uiState.modePro,
-                    viewModel = viewModel
+                    viewModel = viewModel,
+                    listOfClients = clientList,
+                    listOfItems = itemList,
+                    navController = navController
                 )
             }
 

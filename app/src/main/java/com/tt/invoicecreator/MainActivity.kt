@@ -25,6 +25,7 @@ class MainActivity : ComponentActivity() {
 
     private val viewModel:AppViewModel by viewModels {
         AppViewModelFactory(
+            (this.application),
             (this.application as InvoiceCreatorApplication).databaseV2.getItemDaoV2(),
             (this.application as InvoiceCreatorApplication).databaseV2.getClientDaoV2(),
             (this.application as InvoiceCreatorApplication).databaseV2.getInvoiceItemDaoV2(),

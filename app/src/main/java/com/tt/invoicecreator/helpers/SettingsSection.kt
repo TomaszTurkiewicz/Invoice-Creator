@@ -6,5 +6,9 @@ enum class SettingsSection {
     USER,
     BACKUP,
 
-    SUBSCRIBE_UNSUBSCRIBE
+    SUBSCRIBE_UNSUBSCRIBE,
+
+    CLIENTS,
+
+    ITEMS
 }

@@ -1,11 +1,13 @@
 package com.tt.invoicecreator.viewmodel
 
+import android.app.Application
+import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.qonversion.android.sdk.Qonversion
 import com.qonversion.android.sdk.dto.QonversionError
@@ -16,6 +18,7 @@ import com.qonversion.android.sdk.listeners.QonversionEntitlementsCallback
 import com.qonversion.android.sdk.listeners.QonversionOfferingsCallback
 import com.tt.invoicecreator.data.AppUiState
 import com.tt.invoicecreator.data.InvoiceStatus
+import com.tt.invoicecreator.data.SharedPreferences
 import com.tt.invoicecreator.data.roomV2.dao.ClientDaoV2
 import com.tt.invoicecreator.data.roomV2.dao.InvoiceDaoV2
 import com.tt.invoicecreator.data.roomV2.dao.InvoiceItemDaoV2
@@ -41,12 +44,13 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class AppViewModel(
+    application: Application,
     itemDaoV2: ItemDaoV2,
     clientDaoV2: ClientDaoV2,
     invoiceItemDaoV2: InvoiceItemDaoV2,
     invoiceDaoV2: InvoiceDaoV2,
     paidDaoV2: PaidDaoV2
-) : ViewModel() {
+) : AndroidViewModel(application) {
 
     var offerings by mutableStateOf<List<QOffering>>(emptyList())
 
@@ -57,7 +61,7 @@ class AppViewModel(
 
     init {
         loadOfferings()
-        updatePermissions()
+        updatePermissions(getApplication<Application>().applicationContext)
     }
 
     private val itemRepositoryV2:OfflineItemRepositoryV2 = OfflineItemRepositoryV2(itemDaoV2)
@@ -107,14 +111,17 @@ class AppViewModel(
         val a =1
     }
 
-    fun updatePermissions(){
+    fun updatePermissions(context: Context){
         Qonversion.shared.checkEntitlements(object : QonversionEntitlementsCallback {
             val b = 1
             override fun onError(error: QonversionError) {
                 android.util.Log.e("Qonversion", "Error checking entitlements: ${error.description}, code: ${error.code}")
                 hasPremiumPermission = false
 
-                setModePro(hasPremiumPermission)
+                setModePro(context,hasPremiumPermission)
+
+                //todo only for testing - delete it later
+                setModePro(context,true)
 
                 val c = 1
             }
@@ -126,7 +133,11 @@ class AppViewModel(
                 val anyActive = entitlements.values.any { it.isActive }
                 hasPremiumPermission = premiumEntitlement?.isActive == true || anyActive
 
-                setModePro(hasPremiumPermission)
+                setModePro(context,hasPremiumPermission)
+
+
+                //todo only for testing - delete it later
+                setModePro(context,true)
 
 
             }
@@ -262,10 +273,35 @@ class AppViewModel(
         }
     }
 
-    fun setModePro(boolean: Boolean){
+    fun setModePro(context: Context, boolean: Boolean){
         _uiState.update { currentState ->
             currentState.copy(
                 modePro = boolean
+            )
+        }
+        SharedPreferences.savePROMode(context, boolean)
+    }
+
+    fun readModePro(context: Context){
+        _uiState.update { currentState ->
+            currentState.copy(
+                modePro = SharedPreferences.readPROMode(context)
+            )
+        }
+    }
+
+    fun navigateFromSettings() {
+        _uiState.update { currentState ->
+            currentState.copy(
+                navigateFromSettings = true
+            )
+        }
+    }
+
+    fun navigateFromInvoices(){
+        _uiState.update { currentState ->
+            currentState.copy(
+                navigateFromSettings = false
             )
         }
     }

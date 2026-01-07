@@ -166,9 +166,13 @@ fun InvoicesScreenV2(
                             modifier = Modifier
                                 .aspectRatio(3f)
 
-                        ){
-                            viewModel.updateInvoiceStatus(InvoiceStatus.ALL)
-                            navController.navigate(InvoiceCreatorScreen.FilteredInvoicesV2.name)
+                        ) {
+                            if (
+                                invoiceListV2.isNotEmpty()
+                            ) {
+                                viewModel.updateInvoiceStatus(InvoiceStatus.ALL)
+                                navController.navigate(InvoiceCreatorScreen.FilteredInvoicesV2.name)
+                            }
                         }
                         FilteredInvoicesCardView(
                             header = "OVERDUE",
@@ -181,8 +185,16 @@ fun InvoicesScreenV2(
                             modifier = Modifier
                                 .aspectRatio(3f)
                         ){
-                            viewModel.updateInvoiceStatus(InvoiceStatus.OVERDUE)
-                            navController.navigate(InvoiceCreatorScreen.FilteredInvoicesV2.name)
+                            if(FilterInvoices.getOverdue(
+                                    invoiceListV2,
+                                    invoiceItemsCollection,
+                                    paidInvoicesCollection
+                                ).isNotEmpty()
+                            )
+                            {
+                                viewModel.updateInvoiceStatus(InvoiceStatus.OVERDUE)
+                                navController.navigate(InvoiceCreatorScreen.FilteredInvoicesV2.name)
+                            }
                         }
                         FilteredInvoicesCardView(
                             header = "NOT PAID",
@@ -195,8 +207,15 @@ fun InvoicesScreenV2(
                             modifier = Modifier
                                 .aspectRatio(3f)
                         ){
-                            viewModel.updateInvoiceStatus(InvoiceStatus.NOT_PAID)
-                            navController.navigate(InvoiceCreatorScreen.FilteredInvoicesV2.name)
+                            if(FilterInvoices.getNotPaid(
+                                    invoiceListV2,
+                                    invoiceItemsCollection,
+                                    paidInvoicesCollection
+                                ).isNotEmpty()
+                            ){
+                                viewModel.updateInvoiceStatus(InvoiceStatus.NOT_PAID)
+                                navController.navigate(InvoiceCreatorScreen.FilteredInvoicesV2.name)
+                            }
                         }
                         FilteredInvoicesCardView(
                             header = "BY CLIENT",

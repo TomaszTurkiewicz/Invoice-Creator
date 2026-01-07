@@ -104,15 +104,15 @@ fun PrintInvoiceAlertDialogV2(
                         text = "PRINT"
                     )
 
-                    CustomButton(
-                        onClick = {
-                            onDismissRequest()
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 10.dp, bottom = 10.dp),
-                        text = "DISMISS"
-                    )
+//                    CustomButton(
+//                        onClick = {
+//                            onDismissRequest()
+//                        },
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .padding(top = 10.dp, bottom = 10.dp),
+//                        text = "DISMISS"
+//                    )
                 }
             }
         }

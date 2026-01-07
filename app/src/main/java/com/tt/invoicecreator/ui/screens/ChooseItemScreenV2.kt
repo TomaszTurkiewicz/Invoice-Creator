@@ -13,7 +13,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
-import com.tt.invoicecreator.InvoiceCreatorScreen
 import com.tt.invoicecreator.R
 import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.data.roomV2.entities.InvoiceItemV2
@@ -29,7 +28,8 @@ fun ChooseItemScreenV2(
     viewModel: AppViewModel,
     ignoredOnComposing: (AppBarState) -> Unit,
     navController: NavController,
-    itemList: List<ItemV2>?
+    itemList: List<ItemV2>?,
+    navigatedFromSettings:Boolean
 ) {
     val itemListInUse = itemList?.filter {
         it.inUse
@@ -66,7 +66,7 @@ fun ChooseItemScreenV2(
     LaunchedEffect(key1 = true) {
         ignoredOnComposing(
             AppBarState(
-                title = "CHOOSE ITEM",
+                title = if(navigatedFromSettings) "ITEMS DATABASE" else "CHOOSE ITEM",
                 action = {
                     Row {
                         IconButton(onClick = {
@@ -75,11 +75,11 @@ fun ChooseItemScreenV2(
                         }) {
                             Icon(painter = painterResource(R.drawable.baseline_add_24), null)
                         }
-                        IconButton(onClick = {
-                            navController.navigate(InvoiceCreatorScreen.Settings.name)
-                        }) {
-                            Icon(painter = painterResource(R.drawable.baseline_settings_24), null)
-                        }
+//                        IconButton(onClick = {
+//                            navController.navigate(InvoiceCreatorScreen.Settings.name)
+//                        }) {
+//                            Icon(painter = painterResource(R.drawable.baseline_settings_24), null)
+//                        }
                     }
 
                 }
@@ -100,9 +100,14 @@ fun ChooseItemScreenV2(
             ListOfItemsV2(
                 list = tempItemList,
                 itemChosen = {
-                    itemV2Temp.value = it
+                    if(!navigatedFromSettings){
+                        itemV2Temp.value = it
 //                    viewModel.addItemToInvoice(it)
-                    alertDialog.value = true
+                        alertDialog.value = true
+                    }else{
+                        editItem.value = it
+                        editAlertDialog.value = true
+                    }
                 },
                 onEditClicked = {
                     editItem.value = it

@@ -7,7 +7,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -18,8 +17,6 @@ import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.CreditCard
 import androidx.compose.material.icons.filled.Work
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -35,7 +32,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -128,13 +124,13 @@ fun AddInvoiceScreenV2(
             AppBarState(
                 title = "ADD INVOICE",
                 action = {
-                    Row {
-                        IconButton(onClick = {
-                            navController.navigate(InvoiceCreatorScreen.Settings.name)
-                        }) {
-                            Icon(painter = painterResource(R.drawable.baseline_settings_24), null)
-                        }
-                    }
+//                    Row {
+//                        IconButton(onClick = {
+//                            navController.navigate(InvoiceCreatorScreen.Settings.name)
+//                        }) {
+//                            Icon(painter = painterResource(R.drawable.baseline_settings_24), null)
+//                        }
+//                    }
 
                 }
             )
@@ -143,6 +139,7 @@ fun AddInvoiceScreenV2(
 
     LaunchedEffect(key1 = true) {
         viewModel.cleanAdFlags()
+        viewModel.navigateFromInvoices()
     }
 
     LaunchedEffect(key1 = true) {
