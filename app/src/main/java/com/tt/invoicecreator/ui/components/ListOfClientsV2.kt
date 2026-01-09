@@ -9,10 +9,11 @@ import com.tt.invoicecreator.data.roomV2.entities.ClientV2
 
 @Composable
 fun ListOfClientsV2(
-    list:List<ClientV2>,
+    list:List<ClientV2>?,
     clientChosen: (ClientV2) -> Unit,
     editClient: (ClientV2) -> Unit
 ) {
+    if (list == null) return
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()

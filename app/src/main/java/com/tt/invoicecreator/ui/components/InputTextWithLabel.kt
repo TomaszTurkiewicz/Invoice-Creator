@@ -8,6 +8,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.tt.invoicecreator.ui.components.texts.LabelMediumText
 import com.tt.invoicecreator.ui.theme.myColors
@@ -16,6 +17,8 @@ import com.tt.invoicecreator.ui.theme.myColors
 fun InputTextWithLabel(
     labelText: String,
     inputText: String?,
+    focusedContainerColor: Color = MaterialTheme.myColors.material.primaryContainer,
+    unfocusedContainerColor: Color = MaterialTheme.myColors.material.primaryContainer,
     onValueChange: (String) -> Unit
 ) {
     Column(
@@ -33,8 +36,8 @@ fun InputTextWithLabel(
             colors = TextFieldDefaults.colors(
                 focusedTextColor = MaterialTheme.myColors.primaryDark,
                 unfocusedTextColor = MaterialTheme.myColors.primaryDark,
-                focusedContainerColor = MaterialTheme.myColors.material.primaryContainer,
-                unfocusedContainerColor = MaterialTheme.myColors.material.primaryContainer
+                focusedContainerColor = focusedContainerColor,
+                unfocusedContainerColor = unfocusedContainerColor
             ),
             onValueChange = {
                 onValueChange(it)

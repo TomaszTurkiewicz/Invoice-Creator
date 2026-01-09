@@ -1,10 +1,12 @@
 package com.tt.invoicecreator.ui.screens
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -19,6 +21,7 @@ import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.data.roomV2.entities.ClientV2
 import com.tt.invoicecreator.helpers.FilterClients
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogFourInputTextsWithLabelAndTwoButtons
+import com.tt.invoicecreator.ui.components.InputTextWithLabel
 import com.tt.invoicecreator.ui.components.ListOfClientsV2
 import com.tt.invoicecreator.ui.components.texts.TitleLargeText
 import com.tt.invoicecreator.viewmodel.AppViewModel
@@ -35,6 +38,10 @@ fun ChooseClientScreenV2(
 
     val context = LocalContext.current
 
+    val search = remember {
+        mutableStateOf("")
+    }
+
     val addClientAlertDialog = remember {
         mutableStateOf(false)
     }
@@ -48,6 +55,9 @@ fun ChooseClientScreenV2(
     }
 
     val clientsInUse = FilterClients.getInUse(clientList)
+
+    val clients = FilterClients.filterClients(clientsInUse, search.value)
+
 
 
     LaunchedEffect(key1 = true) {
@@ -87,21 +97,34 @@ fun ChooseClientScreenV2(
             )
         }
         else{
-            ListOfClientsV2(
-                list = clientsInUse,
-                clientChosen = {
-                    if(!navigatedFromSettings){
-                        onClientChosenClick(it)
-                    } else {
+            Column() {
+                if(clientsInUse.size>5){
+                    InputTextWithLabel(
+                        labelText = "SEARCH",
+                        inputText = search.value,
+                        focusedContainerColor = MaterialTheme.colorScheme.background,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.background,
+                        onValueChange = {
+                            search.value = it
+                        }
+                    )
+                }
+                ListOfClientsV2(
+                    list = clients,
+                    clientChosen = {
+                        if(!navigatedFromSettings){
+                            onClientChosenClick(it)
+                        } else {
+                            tempClient.value = it
+                            editClientAlertDialog.value = true
+                        }
+                    },
+                    editClient = {
                         tempClient.value = it
                         editClientAlertDialog.value = true
                     }
-                },
-                editClient = {
-                    tempClient.value = it
-                    editClientAlertDialog.value = true
-                }
-            )
+                )
+            }
         }
     }
 
