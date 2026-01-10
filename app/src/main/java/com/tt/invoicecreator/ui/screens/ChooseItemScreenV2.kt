@@ -1,10 +1,12 @@
 package com.tt.invoicecreator.ui.screens
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -19,6 +21,7 @@ import com.tt.invoicecreator.data.roomV2.entities.InvoiceItemV2
 import com.tt.invoicecreator.data.roomV2.entities.ItemV2
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogItemCountDiscountAndCommentsV2
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogItemWithCurrency
+import com.tt.invoicecreator.ui.components.InputTextWithLabel
 import com.tt.invoicecreator.ui.components.ListOfItemsV2
 import com.tt.invoicecreator.ui.components.texts.TitleLargeText
 import com.tt.invoicecreator.viewmodel.AppViewModel
@@ -63,6 +66,10 @@ fun ChooseItemScreenV2(
         }
     }
 
+    val search = remember {
+        mutableStateOf("")
+    }
+
     LaunchedEffect(key1 = true) {
         ignoredOnComposing(
             AppBarState(
@@ -97,23 +104,48 @@ fun ChooseItemScreenV2(
             )
         }
         else{
-            ListOfItemsV2(
-                list = tempItemList,
-                itemChosen = {
-                    if(!navigatedFromSettings){
-                        itemV2Temp.value = it
+            val searchList = if(search.value.isEmpty()){
+                tempItemList
+            }else {
+                tempItemList.filter {
+                    it.itemName.lowercase().contains(search.value.lowercase())||
+                            it.itemValue.toString().lowercase().contains(search.value.lowercase())
+                }
+            }
+            Column() {
+
+                if(tempItemList.size>5){
+                    InputTextWithLabel(
+                        labelText = "SEARCH",
+                        inputText = search.value,
+                        focusedContainerColor = MaterialTheme.colorScheme.background,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.background,
+                        onValueChange = {
+                            search.value = it
+                        }
+                    )
+                }
+
+                ListOfItemsV2(
+                    list = searchList,
+                    itemChosen = {
+                        if(!navigatedFromSettings){
+                            itemV2Temp.value = it
 //                    viewModel.addItemToInvoice(it)
-                        alertDialog.value = true
-                    }else{
+                            alertDialog.value = true
+                        }else{
+                            editItem.value = it
+                            editAlertDialog.value = true
+                        }
+                    },
+                    onEditClicked = {
                         editItem.value = it
                         editAlertDialog.value = true
                     }
-                },
-                onEditClicked = {
-                    editItem.value = it
-                    editAlertDialog.value = true
-                }
-            )
+                )
+            }
+
+
         }
     }
 
