@@ -121,9 +121,10 @@ class AppViewModel(
                 setModePro(context,hasPremiumPermission)
 
                 //todo only for testing - delete it later
-                setModePro(context,true)
+                setModePro(context,false)
 
                 val c = 1
+                finishInitialization()
             }
 
             override fun onSuccess(entitlements: Map<String, QEntitlement>) {
@@ -140,11 +141,27 @@ class AppViewModel(
                 setModePro(context,true)
 
 
+                finishInitialization()
             }
         }
         )
     }
 
+    private fun finishInitialization() {
+        _uiState.update { currentState ->
+            currentState.copy(
+                initializing = false
+            )
+        }
+    }
+
+    fun finishAnimation(){
+        _uiState.update { currentState ->
+            currentState.copy(
+                animation = false
+            )
+        }
+    }
 
 
     suspend fun getAllInvoicesDirectly():List<InvoiceV2>{

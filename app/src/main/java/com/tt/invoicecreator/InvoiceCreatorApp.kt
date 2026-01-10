@@ -23,6 +23,7 @@ import com.tt.invoicecreator.ui.screens.ChooseClientScreenV2
 import com.tt.invoicecreator.ui.screens.ChooseItemScreenV2
 import com.tt.invoicecreator.ui.screens.FilteredInvoicesByClientScreen
 import com.tt.invoicecreator.ui.screens.FilteredInvoicesScreen
+import com.tt.invoicecreator.ui.screens.Initializing
 import com.tt.invoicecreator.ui.screens.InvoiceInfoScreenV2
 import com.tt.invoicecreator.ui.screens.InvoicesByClientScreen
 import com.tt.invoicecreator.ui.screens.InvoicesScreenV2
@@ -59,21 +60,29 @@ fun InvoiceCreatorApp (
     Scaffold (
 
         topBar = {
-//            when(currentScreen){
-//                InvoiceCreatorScreen.FilteredInvoicesV2 -> {
-//                    TopAppBarWithCustomTitleAndAction(
-//                        appBarState = appBarState,
-//                        invoiceStatus = uiState.invoiceState
-//                    )
+            if(appBarState.title != "INITIALIZING") {
+                TopAppBarWithAction(
+                    appBarState = appBarState,
+                    modePro = uiState.modePro,
+                    initializing = uiState.initializing
+                )
+            }
+        }
+//            when(appBarState.title){
+//                "INITIALIZING"-> {
+////                    TopAppBarWithoutAction(
+////                        appBarState = appBarState
+////                    )
 //                }
 //                else -> {
-                    TopAppBarWithAction(
-                        appBarState = appBarState,
-                        modePro = uiState.modePro
-                    )
+//                    TopAppBarWithAction(
+//                        appBarState = appBarState,
+//                        modePro = uiState.modePro,
+//                        initializing = uiState.initializing
+//                    )
 //                }
 //            }
-        }
+//        }
     ) {
         innerPadding ->
 
@@ -82,9 +91,28 @@ fun InvoiceCreatorApp (
         NavHost(
             navController = navController,
 //            startDestination = InvoiceCreatorScreen.ChooseMode.name,
-            startDestination = InvoiceCreatorScreen.InvoicesV2.name,
+            startDestination = InvoiceCreatorScreen.InitializingApp.name,
             modifier = Modifier.padding(innerPadding)
         ) {
+
+            composable(route = InvoiceCreatorScreen.InitializingApp.name){
+                Initializing(
+                    viewModel = viewModel,
+                    animation = uiState.animation,
+                    ignoredOnComposing = {
+                        appBarState = it
+                    },
+                    initializing = uiState.initializing,
+//                    initializing = true,
+                    onInitializationFinished = {
+                        navController.navigate(InvoiceCreatorScreen.InvoicesV2.name){
+                            popUpTo(InvoiceCreatorScreen.InitializingApp.name){
+                                inclusive = true
+                            }
+                        }
+                    }
+                )
+            }
 
             composable(route = InvoiceCreatorScreen.ChooseItemV2.name) {
                 ChooseItemScreenV2(

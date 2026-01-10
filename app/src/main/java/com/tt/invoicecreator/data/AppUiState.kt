@@ -9,5 +9,7 @@ data class AppUiState(
     val invoiceV2: InvoiceV2 = InvoiceV2(),
     val paymentDay: String = "",
     val invoiceState: Enum<InvoiceStatus> = InvoiceStatus.ALL,
-    val navigateFromSettings: Boolean = false
+    val navigateFromSettings: Boolean = false,
+    val initializing: Boolean = true,
+    val animation: Boolean = true
 )
