@@ -1,16 +1,14 @@
 package com.tt.invoicecreator.ui.components
 
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
@@ -21,30 +19,39 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.delay
 
 @Composable
 fun InvoiceAnimatedIcon(
     onTwoCyclesFinished: () -> Unit = {}
 ) {
-    val infiniteTransition = rememberInfiniteTransition(label = "invoice")
 
     val currentOnFinished by rememberUpdatedState(newValue = onTwoCyclesFinished)
 
-    // Handle the 2-cycle timing (3.5s * 2 = 7s)
+
+    val progressAnimatable = remember { Animatable(0f) }
+
     LaunchedEffect(Unit) {
-        delay(7000L)
+        // --- Cycle 1 ---
+        progressAnimatable.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(durationMillis = 3500, easing = LinearEasing)
+        )
+
+        // --- Reset instantly ---
+        progressAnimatable.snapTo(0f)
+
+        // --- Cycle 2: Stop at 0.7f (Checkmark fully drawn) ---
+        // We calculate the time proportionally (70% of 3500ms)
+        progressAnimatable.animateTo(
+            targetValue = 0.7f,
+            animationSpec = tween(durationMillis = 2450, easing = LinearEasing)
+        )
+
+        // 2. Notify parent only after the second cycle is frozen
         currentOnFinished()
     }
-    val progress by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 3500, easing = LinearEasing),
-            repeatMode = RepeatMode.Restart
-        ),
-        label = "masterProgress"
-    )
+
+    val progress = progressAnimatable.value
 
     // Colors based on your description
     val lightBlue = Color(0xFFE3F2FD)
