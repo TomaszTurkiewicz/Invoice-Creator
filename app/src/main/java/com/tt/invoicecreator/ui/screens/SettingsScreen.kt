@@ -37,9 +37,8 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.navigation.NavController
 import com.qonversion.android.sdk.Qonversion
-import com.qonversion.android.sdk.dto.QonversionError
-import com.qonversion.android.sdk.dto.entitlements.QEntitlement
-import com.qonversion.android.sdk.listeners.QonversionEntitlementsCallback
+import com.qonversion.android.sdk.dto.QPurchaseResult
+import com.qonversion.android.sdk.listeners.QonversionPurchaseCallback
 import com.tt.invoicecreator.InvoiceCreatorScreen
 import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.data.SharedPreferences
@@ -247,43 +246,38 @@ fun Settings(
                         modifier = Modifier
                             .fillMaxSize(),
                         onClick = {
-                            if(!modePro){
+                            if(!modePro)
+                                // SUBSCRIBE LOGIC
+
                                 Qonversion.shared.purchase(
                                     context.findActivity()!!,
-                                    viewModel.offerings.find { it.offeringId == "test" }?.products?.firstOrNull()!!,
-                                    object: QonversionEntitlementsCallback {
-                                        override fun onError(error: QonversionError) {
-                                            Toast.makeText(context, "Error: ${error.description}", Toast.LENGTH_LONG).show()
-                                            viewModel.updatePermissions(context)
-                                        }
-
-                                        override fun onSuccess(entitlements: Map<String, QEntitlement>) {
-                                            android.util.Log.d("Qonversion", "Success: ${entitlements.keys}")
-
-                                            val premiumEntitlement = entitlements["test"]
-
-                                            val anyActive = entitlements.values.any { it.isActive }
-
-                                            if (premiumEntitlement?.isActive == true || anyActive) {
-                                                val b = 1
-                                                viewModel.updatePermissions(context)
-                                                Toast.makeText(context, "Subscription successful", Toast.LENGTH_LONG).show()
-                                            }
-                                            else{
-                                                // If purchase worked but entitlement is missing, it might be a configuration delay.
-                                                // Force a permission update anyway to re-fetch from server.
-                                                viewModel.updatePermissions(context)
-                                                Toast.makeText(context, "Purchase complete. Updating status...", Toast.LENGTH_SHORT).show()
+                                    viewModel.offerings?.products?.get(0)!!,
+                                    object : QonversionPurchaseCallback{
+                                        override fun onResult(result: QPurchaseResult) {
+                                            when{
+                                                result.isSuccessful -> {
+                                                    val premium = result.entitlements["test"]
+                                                    if(premium != null && premium.isActive){
+                                                        viewModel.updatePermissions(context)
+                                                    }
+                                                }
+                                                result.isCanceledByUser -> {
+                                                    Toast.makeText(context, "canceled by user", Toast.LENGTH_SHORT).show()
+                                                }
+                                                result.isPending -> {
+                                                    Toast.makeText(context, "is pending", Toast.LENGTH_SHORT).show()
+                                                }
+                                                else -> {
+                                                    Toast.makeText(context, "error: ${result.error?.description}", Toast.LENGTH_SHORT).show()
+                                                }
                                             }
                                         }
 
                                     }
-
                                 )
-                            }
                             else{
 
-                                viewModel.updatePermissions(context)
+//                                viewModel.updatePermissions(context)
                                 // UNSUBSCRIBE LOGIC
                                 // We must open the Google Play Store to the specific subscription page
                                 try {

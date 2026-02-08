@@ -1,5 +1,6 @@
 package com.tt.invoicecreator.data
 
+import com.qonversion.android.sdk.dto.entitlements.QEntitlement
 import com.tt.invoicecreator.data.roomV2.entities.InvoiceV2
 
 data class AppUiState(
@@ -11,5 +12,6 @@ data class AppUiState(
     val invoiceState: Enum<InvoiceStatus> = InvoiceStatus.ALL,
     val navigateFromSettings: Boolean = false,
     val initializing: Boolean = true,
-    val animation: Boolean = true
+    val animation: Boolean = true,
+    val entitlement:Map<String, QEntitlement>? = null
 )

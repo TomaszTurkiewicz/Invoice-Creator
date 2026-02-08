@@ -19,5 +19,7 @@ enum class InvoiceCreatorScreen(@StringRes val title:Int) {
 
     FilteredInvoicesByClient(title = R.string.filtered_invoices_by_client),
 
-    InitializingApp(title = R.string.initializing_app)
+    InitializingApp(title = R.string.initializing_app),
+
+
 }

@@ -18,7 +18,6 @@ import com.qonversion.android.sdk.listeners.QonversionEntitlementsCallback
 import com.qonversion.android.sdk.listeners.QonversionOfferingsCallback
 import com.tt.invoicecreator.data.AppUiState
 import com.tt.invoicecreator.data.InvoiceStatus
-import com.tt.invoicecreator.data.SharedPreferences
 import com.tt.invoicecreator.data.roomV2.dao.ClientDaoV2
 import com.tt.invoicecreator.data.roomV2.dao.InvoiceDaoV2
 import com.tt.invoicecreator.data.roomV2.dao.InvoiceItemDaoV2
@@ -52,7 +51,9 @@ class AppViewModel(
     paidDaoV2: PaidDaoV2
 ) : AndroidViewModel(application) {
 
-    var offerings by mutableStateOf<List<QOffering>>(emptyList())
+//    var offerings by mutableStateOf<List<QOffering>>(emptyList())
+    var offerings by mutableStateOf<QOffering?>(null)
+
 
     var hasPremiumPermission by mutableStateOf(false)
 
@@ -60,7 +61,7 @@ class AppViewModel(
 
 
     init {
-        loadOfferings()
+        loadOfferings(getApplication<Application>().applicationContext)
         updatePermissions(getApplication<Application>().applicationContext)
     }
 
@@ -84,8 +85,6 @@ class AppViewModel(
     private var invoiceV2 = InvoiceV2()
 
     private val coroutine = CoroutineScope(Dispatchers.Main)
-
-//    private val invoiceItems: ArrayList<InvoiceItemV2> = ArrayList()
     private val invoiceItems = mutableStateListOf<InvoiceItemV2>()
 
 
@@ -97,50 +96,35 @@ class AppViewModel(
 
     var chosenClientToFilterInvoices: ClientV2? = null
 
-    private fun loadOfferings(){
+    private fun loadOfferings(context: Context){
         Qonversion.shared.offerings(object : QonversionOfferingsCallback{
             override fun onError(error: QonversionError) {
                 android.util.Log.e("Qonversion","Error getting offerings: ${error.description}, code: ${error.code}")
             }
 
             override fun onSuccess(offerings: QOfferings) {
-                this@AppViewModel.offerings = offerings.availableOfferings
+                val mainOffering = offerings.main
+                    this@AppViewModel.offerings = mainOffering
             }
         })
 
-        val a =1
     }
 
     fun updatePermissions(context: Context){
         Qonversion.shared.checkEntitlements(object : QonversionEntitlementsCallback {
-            val b = 1
             override fun onError(error: QonversionError) {
                 android.util.Log.e("Qonversion", "Error checking entitlements: ${error.description}, code: ${error.code}")
                 hasPremiumPermission = false
-
                 setModePro(context,hasPremiumPermission)
-
-                //todo only for testing - delete it later
-                setModePro(context,false)
-
-                val c = 1
                 finishInitialization()
             }
 
             override fun onSuccess(entitlements: Map<String, QEntitlement>) {
-                val d = 1
                 android.util.Log.d("Qonversion", "Success: ${entitlements.keys}")
                 premiumEntitlement = entitlements["test"] // Replace "Plus" with your actual entitlement ID from Qonversion Dashboard
                 val anyActive = entitlements.values.any { it.isActive }
                 hasPremiumPermission = premiumEntitlement?.isActive == true || anyActive
-
                 setModePro(context,hasPremiumPermission)
-
-
-                //todo only for testing - delete it later
-                setModePro(context,true)
-
-
                 finishInitialization()
             }
         }
@@ -296,16 +280,16 @@ class AppViewModel(
                 modePro = boolean
             )
         }
-        SharedPreferences.savePROMode(context, boolean)
+//        SharedPreferences.savePROMode(context, boolean)
     }
 
-    fun readModePro(context: Context){
-        _uiState.update { currentState ->
-            currentState.copy(
-                modePro = SharedPreferences.readPROMode(context)
-            )
-        }
-    }
+//    fun readModePro(context: Context){
+//        _uiState.update { currentState ->
+//            currentState.copy(
+//                modePro = SharedPreferences.readPROMode(context)
+//            )
+//        }
+//    }
 
     fun navigateFromSettings() {
         _uiState.update { currentState ->

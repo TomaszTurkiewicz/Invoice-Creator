@@ -17,5 +17,6 @@
     <string name="invoices_by_client">INVOICES BY CLIENT</string>
     <string name="filtered_invoices_by_client">FILTERED INVOICES BY CLIENT</string>
     <string name="initializing_app">INITIALIZING</string>
+    <string name="test_screen">TEST SCREEN</string>
 
 </resources>

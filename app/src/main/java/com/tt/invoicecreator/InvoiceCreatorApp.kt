@@ -38,7 +38,7 @@ fun InvoiceCreatorApp (
 ){
     val context = LocalContext.current
 
-    viewModel.readModePro(context)
+    viewModel.hasPremiumPermission
 
 
     val invoiceListV2 by viewModel.invoiceListV2.observeAsState()
@@ -68,21 +68,6 @@ fun InvoiceCreatorApp (
                 )
             }
         }
-//            when(appBarState.title){
-//                "INITIALIZING"-> {
-////                    TopAppBarWithoutAction(
-////                        appBarState = appBarState
-////                    )
-//                }
-//                else -> {
-//                    TopAppBarWithAction(
-//                        appBarState = appBarState,
-//                        modePro = uiState.modePro,
-//                        initializing = uiState.initializing
-//                    )
-//                }
-//            }
-//        }
     ) {
         innerPadding ->
 
