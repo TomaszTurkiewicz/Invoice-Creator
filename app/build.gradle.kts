@@ -14,8 +14,8 @@ android {
         applicationId = "com.tt.invoicecreator"
         minSdk = 26
         targetSdk = 36
-        versionCode = 11
-        versionName = "1.11"
+        versionCode = 16
+        versionName = "1.16"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

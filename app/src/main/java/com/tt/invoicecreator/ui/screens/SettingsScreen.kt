@@ -246,9 +246,9 @@ fun Settings(
                         modifier = Modifier
                             .fillMaxSize(),
                         onClick = {
-                            if(!modePro)
-                                // SUBSCRIBE LOGIC
 
+                            if(!modePro){
+                                // SUBSCRIBE LOGIC
                                 Qonversion.shared.purchase(
                                     context.findActivity()!!,
                                     viewModel.offerings?.products?.get(0)!!,
@@ -275,6 +275,7 @@ fun Settings(
 
                                     }
                                 )
+                        }
                             else{
 
 //                                viewModel.updatePermissions(context)
@@ -401,7 +402,6 @@ fun Settings(
 
 
     if (alertDialogUpdateUser.value) {
-        val a =1
         AlertDialogAddMainUser(
             title = "EDIT USER",
             user = user,
@@ -422,8 +422,3 @@ fun android.content.Context.findActivity(): android.app.Activity? {
     }
     return null
 }
-
-//todo add upgrade button !!!
-// todo go to client base to edit
-// todo go to item base to edit
-// todo edit item from add invoice screen, change it to alert dialog :)

@@ -111,7 +111,7 @@ class AppViewModel(
     }
 
     fun updatePermissions(context: Context){
-        Qonversion.shared.checkEntitlements(object : QonversionEntitlementsCallback {
+        Qonversion.shared.restore(object : QonversionEntitlementsCallback {
             override fun onError(error: QonversionError) {
                 android.util.Log.e("Qonversion", "Error checking entitlements: ${error.description}, code: ${error.code}")
                 hasPremiumPermission = false
@@ -122,8 +122,7 @@ class AppViewModel(
             override fun onSuccess(entitlements: Map<String, QEntitlement>) {
                 android.util.Log.d("Qonversion", "Success: ${entitlements.keys}")
                 premiumEntitlement = entitlements["test"] // Replace "Plus" with your actual entitlement ID from Qonversion Dashboard
-                val anyActive = entitlements.values.any { it.isActive }
-                hasPremiumPermission = premiumEntitlement?.isActive == true || anyActive
+                hasPremiumPermission = premiumEntitlement?.isActive == true || entitlements.values.any { it.isActive }
                 setModePro(context,hasPremiumPermission)
                 finishInitialization()
             }
@@ -275,6 +274,7 @@ class AppViewModel(
     }
 
     fun setModePro(context: Context, boolean: Boolean){
+        this.hasPremiumPermission = boolean
         _uiState.update { currentState ->
             currentState.copy(
                 modePro = boolean

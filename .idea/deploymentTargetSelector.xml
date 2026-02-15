@@ -4,7 +4,7 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2026-01-01T12:14:18.431559100Z">
+        <DropdownSelection timestamp="2026-02-15T08:47:13.253046600Z">
           <Target type="DEFAULT_BOOT">
             <handle>
               <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\tturk\.android\avd\Medium_Phone_API_33.avd" />
@@ -23,6 +23,9 @@
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
       <SelectionState runConfigName="AlertDialogFourInputTextsWithLabelAndTwoButtonsPreview">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="ShowIt">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
