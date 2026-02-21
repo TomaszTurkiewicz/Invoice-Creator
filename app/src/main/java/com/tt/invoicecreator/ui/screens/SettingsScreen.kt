@@ -171,8 +171,15 @@ fun Settings(
                     BodyLargeText(
                         text = user.userCity ?: "",
                         modifier = Modifier
-                            .padding(start = 10.dp, top = 5.dp, bottom = 10.dp)
+                            .padding(start = 10.dp, top = 5.dp, bottom = if(user.vatNumber.isNullOrEmpty()) 10.dp else 5.dp)
                     )
+                    if(!user.vatNumber.isNullOrEmpty()){
+                        BodyLargeText(
+                            text = "VAT: ${user.vatNumber}",
+                            modifier = Modifier
+                                .padding(start = 10.dp, top = 5.dp, bottom = 10.dp)
+                        )
+                    }
                 }
             }
 
@@ -192,8 +199,6 @@ fun Settings(
             {
                 ExportImportDataCardView(
                     modePro = modePro,
-                    context = context,
-                    viewModel = viewModel,
                     importLauncher = importLauncher,
                     onExportClick =
                         {
@@ -258,7 +263,7 @@ fun Settings(
                                                 result.isSuccessful -> {
                                                     val premium = result.entitlements["test"]
                                                     if(premium != null && premium.isActive){
-                                                        viewModel.updatePermissions(context)
+                                                        viewModel.updatePermissions()
                                                     }
                                                 }
                                                 result.isCanceledByUser -> {

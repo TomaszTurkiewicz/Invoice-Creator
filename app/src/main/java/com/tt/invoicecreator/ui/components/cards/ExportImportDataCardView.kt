@@ -1,6 +1,5 @@
 package com.tt.invoicecreator.ui.components.cards
 
-import android.content.Context
 import android.net.Uri
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.compose.foundation.layout.Column
@@ -14,13 +13,10 @@ import androidx.compose.ui.unit.dp
 import com.tt.invoicecreator.ui.components.CustomButton
 import com.tt.invoicecreator.ui.components.texts.BodyLargeText
 import com.tt.invoicecreator.ui.components.texts.TitleLargeText
-import com.tt.invoicecreator.viewmodel.AppViewModel
 
 @Composable
 fun ExportImportDataCardView(
     modePro: Boolean,
-    context: Context,
-    viewModel: AppViewModel,
     importLauncher: ManagedActivityResultLauncher<Array<String>, Uri?>,
     onExportClick: () -> Unit
 ) {

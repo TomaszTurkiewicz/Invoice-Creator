@@ -21,7 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.tt.invoicecreator.ui.components.cards.CustomCardView
 import com.tt.invoicecreator.ui.components.texts.TitleMediumText
@@ -49,7 +48,7 @@ fun ExpandableCard(
         ) {
             // HEADER (Always Visible)
             Row(
-                modifier = Modifier.Companion
+                modifier = Modifier
                     .fillMaxWidth()
 //                    .clickable { onExpandClick() }
                     .padding(16.dp),
@@ -66,14 +65,13 @@ fun ExpandableCard(
                     Spacer(modifier = Modifier.width(16.dp))
 
                     TitleMediumText(
-                        text = title,
-                        fontWeight = FontWeight.Bold
+                        text = title
                     )
                 }
 
                 IconButton(
                     onClick = { onExpandClick() },
-                    modifier = Modifier.Companion.rotate(rotationState)
+                    modifier = Modifier.rotate(rotationState)
                 ) {
                     Icon(
                         imageVector = Icons.Default.KeyboardArrowDown,
@@ -84,7 +82,7 @@ fun ExpandableCard(
 
             AnimatedVisibility(visible = isExpanded) {
                 Column(
-                    modifier = Modifier.Companion
+                    modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = 16.dp, start = 16.dp, end = 16.dp, top = 8.dp)
                 ) {

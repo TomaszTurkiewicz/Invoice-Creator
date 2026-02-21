@@ -34,7 +34,7 @@ fun InvoiceItemComponent(
     }
     else
     {
-        Column() {
+        Column {
             if(itemInvoiceList.size<15){
                 BodyLargeTextWithCustomButton(
                     buttonText = "Add item to invoice",

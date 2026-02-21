@@ -112,7 +112,7 @@ fun ChooseItemScreenV2(
                             it.itemValue.toString().lowercase().contains(search.value.lowercase())
                 }
             }
-            Column() {
+            Column {
 
                 if(tempItemList.size>5){
                     InputTextWithLabel(

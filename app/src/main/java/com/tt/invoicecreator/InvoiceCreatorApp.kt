@@ -156,7 +156,6 @@ fun InvoiceCreatorApp (
                     ignoredOnComposing = {
                         appBarState = it
                     },
-                    navController = navController,
                     clientList = clientList,
                     navigatedFromSettings = uiState.navigateFromSettings,
                     onClientChosenClick = {

@@ -13,8 +13,7 @@ import com.tt.invoicecreator.ui.theme.myColors
 fun TitleMediumText(
     text: String,
     modifier: Modifier = Modifier,
-    textAlign: TextAlign = TextAlign.Start,
-    fontWeight: FontWeight = FontWeight.Normal
+    textAlign: TextAlign = TextAlign.Start
 ) {
     Text(
         text = text,
@@ -22,5 +21,5 @@ fun TitleMediumText(
         style = Typography.titleMedium,
         color = MaterialTheme.myColors.primaryDark,
         textAlign = textAlign,
-        fontWeight = fontWeight)
+        fontWeight = FontWeight.Bold)
 }

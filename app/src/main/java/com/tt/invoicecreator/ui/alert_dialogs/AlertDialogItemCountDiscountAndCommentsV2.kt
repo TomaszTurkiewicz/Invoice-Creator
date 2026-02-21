@@ -14,7 +14,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.tt.invoicecreator.data.SharedPreferences
 import com.tt.invoicecreator.data.roomV2.entities.ItemV2
 import com.tt.invoicecreator.helpers.DecimalFormatter
 import com.tt.invoicecreator.ui.components.CustomButton
@@ -40,6 +42,7 @@ fun AlertDialogItemCountDiscountAndCommentsV2(
     onButtonClicked:(item:ItemV2, count:String, discount:String, comment:String, isVat:Boolean, vat:String) -> Unit,
     onDeleteClicked:() -> Unit = {}
 ) {
+    val context = LocalContext.current
     val itemCount = remember {
         mutableStateOf(itemCount)
     }
@@ -60,11 +63,20 @@ fun AlertDialogItemCountDiscountAndCommentsV2(
         mutableStateOf(isVat)
     }
 
+    val user = remember {
+        mutableStateOf(SharedPreferences.readUserDetails(context))
+    }
+
+    val addVatNumberAlertDialog = remember {
+        mutableStateOf(false)
+    }
+
     BasicAlertDialog(
         onDismissRequest = {
             onDismissRequest()
         }
-    ) {
+    )
+    {
         CustomCardView {
             Column(
                 modifier = Modifier
@@ -146,35 +158,38 @@ fun AlertDialogItemCountDiscountAndCommentsV2(
                 }
 
                 if(isVat.value) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 10.dp)
-
-                    ) {
-                        InputDigitsWithLabel(
+                    if(user.value.vatNumber.isNullOrEmpty()){
+                        addVatNumberAlertDialog.value = true
+                    }else{
+                        Row(
                             modifier = Modifier
-                                .fillMaxWidth(0.8f),
-                            labelText = "VAT",
-                            inputText = initialVAT.value,
-                            isError = if (initialVAT.value == "") {
-                                true
-                            } else {
-                                initialVAT.value.toDouble() >= 100
-                            },
-                            errorText = if (initialVAT.value == "") {
-                                "not valid amount"
-                            } else {
-                                "too much"
-                            }
+                                .fillMaxWidth()
+                                .padding(top = 10.dp)
                         ) {
-                            initialVAT.value = decimalFormatter.cleanup(it)
+                            InputDigitsWithLabel(
+                                modifier = Modifier
+                                    .fillMaxWidth(0.8f),
+                                labelText = "VAT",
+                                inputText = initialVAT.value,
+                                isError = if (initialVAT.value == "") {
+                                    true
+                                } else {
+                                    initialVAT.value.toDouble() >= 100
+                                },
+                                errorText = if (initialVAT.value == "") {
+                                    "not valid amount"
+                                } else {
+                                    "too much"
+                                }
+                            ) {
+                                initialVAT.value = decimalFormatter.cleanup(it)
+                            }
+                            TitleLargeText(
+                                text = "%",
+                                modifier = Modifier
+                                    .align(Alignment.CenterVertically)
+                            )
                         }
-                        TitleLargeText(
-                            text = "%",
-                            modifier = Modifier
-                                .align(Alignment.CenterVertically)
-                        )
                     }
                 }
 
@@ -226,5 +241,21 @@ fun AlertDialogItemCountDiscountAndCommentsV2(
             }
         }
 
+    }
+
+    if(addVatNumberAlertDialog.value) {
+        AlertDialogAddVATNumber(
+            title = "ADD VAT NUMBER",
+            onDismissRequest = {
+                addVatNumberAlertDialog.value = false
+            },
+            saveVatNumber = {
+                user.value.vatNumber = it
+                SharedPreferences.saveUserDetails(context, user.value)
+            },
+            moveSwitch = {
+                isVat.value = false
+            }
+        )
     }
 }

@@ -270,7 +270,7 @@ fun AddInvoiceScreenV2(
                         navController.navigate(InvoiceCreatorScreen.ChooseItemV2.name)
                     },
                     onEditClicked = { index, itemInvoiceV2 ->
-                        indexToEdit.value = index
+                        indexToEdit.intValue = index
                         invoiceItemToEdit.value = itemInvoiceV2
                         editItemBeforeInsertingAlertDialog.value = true
                     }
@@ -439,7 +439,7 @@ fun AddInvoiceScreenV2(
             },
             onButtonClicked = { itemV2, itemCount, itemDiscount, itemComment, isVat, vat ->
                 viewModel.updateItemInInvoice(
-                    indexToEdit.value,
+                    indexToEdit.intValue,
                     invoiceItemToEdit.value.copy(
                         itemV2 = itemV2,
                         itemCount = itemCount.toDouble(),

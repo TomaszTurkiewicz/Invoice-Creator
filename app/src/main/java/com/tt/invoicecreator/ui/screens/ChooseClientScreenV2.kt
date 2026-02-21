@@ -13,9 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.navigation.NavController
 import com.tt.invoicecreator.R
 import com.tt.invoicecreator.data.AppBarState
 import com.tt.invoicecreator.data.roomV2.entities.ClientV2
@@ -30,13 +28,10 @@ import com.tt.invoicecreator.viewmodel.AppViewModel
 fun ChooseClientScreenV2(
     viewModel: AppViewModel,
     ignoredOnComposing: (AppBarState) -> Unit,
-    navController: NavController,
     navigatedFromSettings:Boolean,
     clientList:  List<ClientV2>?,
     onClientChosenClick: (ClientV2) -> Unit
 ) {
-
-    val context = LocalContext.current
 
     val search = remember {
         mutableStateOf("")
@@ -97,7 +92,7 @@ fun ChooseClientScreenV2(
             )
         }
         else{
-            Column() {
+            Column {
                 if(clientsInUse.size>5){
                     InputTextWithLabel(
                         labelText = "SEARCH",
@@ -135,7 +130,7 @@ fun ChooseClientScreenV2(
             inputOne = tempClient.value.clientName,
             labelTwo = "Client address line 1",
             inputTwo = tempClient.value.clientAddress1,
-            labelThree = "Client address line 2",
+            labelThree = "Client address line 2 (post code)",
             inputThree = tempClient.value.clientAddress2,
             labelFour = "Client city",
             inputFour = tempClient.value.clientCity,
@@ -174,7 +169,7 @@ fun ChooseClientScreenV2(
             title = "ADD NEW CLIENT",
             labelOne = "Client name",
             labelTwo = "Client address line 1",
-            labelThree = "Client address line 2",
+            labelThree = "Client address line 2 (post code)",
             labelFour = "Client city",
             buttonTextOne = "SAVE",
             secondButtonEnabled = false,

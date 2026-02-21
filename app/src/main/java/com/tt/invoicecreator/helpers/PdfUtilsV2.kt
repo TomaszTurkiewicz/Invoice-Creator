@@ -44,8 +44,8 @@ class PdfUtilsV2 {
         private const val MARGIN_TOP = 50f
         private const val TEXT_SMALL = 15f
         private const val TEXT_BIG = 30f
-        private const val SEPARATOR_LINE_Y = 140f
-        private const val HEAD_TOP = 300f
+        private const val SEPARATOR_LINE_Y = 140f + TEXT_SMALL*1.5f
+        private const val HEAD_TOP = 300f + TEXT_SMALL*1.5f
         private const val TABLE_HEIGHT = 60f
         private var i = 1
 
@@ -55,11 +55,11 @@ class PdfUtilsV2 {
             items:List<InvoiceItemV2>
         )
         {
+            i = 1
             val user = SharedPreferences.readUserDetails(context)
 
             val pdfDocument = PdfDocument()
             val paint = Paint()
-//            val decimalFormat = DecimalFormat("#.00")
             val pageInfo: PdfDocument.PageInfo? = PdfDocument.PageInfo.Builder(PAGE_WIDTH, PAGE_HEIGHT,1).create()
             val page = pdfDocument.startPage(pageInfo)
             val canvas = page.canvas
@@ -261,7 +261,7 @@ class PdfUtilsV2 {
             val boxTop = y
             val boxColor = Paint().apply {
                 color = context.getColor(R.color.light_gray_background)
-            } // Ensure this color exists or use Color.LTGRAY
+            } // Ensure this color exists or use Color.LIGHT GRAY
             // We estimate box height based on items. Base height 150 + 30 per item
             val listSize = paidList?.size ?: 0
             val boxHeight = 120f + (listSize * 30f)
@@ -1063,6 +1063,14 @@ class PdfUtilsV2 {
                 MARGIN_TOP +(TEXT_SMALL *4.5f),
                 paint
             )
+            if(!user.vatNumber.isNullOrEmpty()) {
+                canvas.drawText(
+                    "VAT ${user.vatNumber}",
+                    LEFT_MARGIN,
+                    MARGIN_TOP + (TEXT_SMALL * 6f),
+                    paint
+                )
+            }
         }
 
         @RequiresApi(Build.VERSION_CODES.Q)

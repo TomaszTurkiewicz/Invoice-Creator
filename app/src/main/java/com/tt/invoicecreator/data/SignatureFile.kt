@@ -7,11 +7,7 @@ import java.io.File
 class SignatureFile {
     companion object{
         fun getFilePath(context: Context):String{
-            return getOutputDirectory(context) + "/" + photoFileName()
-        }
-
-        private fun photoFileName(): String{
-            return "signature.jpg"
+            return getOutputDirectory(context) + "/signature.jpg"
         }
 
         private fun getOutputDirectory(context: Context):String{

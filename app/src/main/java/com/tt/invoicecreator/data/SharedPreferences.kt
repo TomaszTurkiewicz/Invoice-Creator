@@ -25,6 +25,7 @@ object SharedPreferences {
             putString("userAddressLine1",user.userAddressLine1)
             putString("userAddressLine2",user.userAddressLine2)
             putString("userCity",user.userCity)
+            putString("vatNumber",user.vatNumber)
         }
     }
 
@@ -34,7 +35,8 @@ object SharedPreferences {
             userName = sp.getString("userName",""),
             userAddressLine1 = sp.getString("userAddressLine1", ""),
             userAddressLine2 = sp.getString("userAddressLine2", ""),
-            userCity = sp.getString("userCity", "")
+            userCity = sp.getString("userCity", ""),
+            vatNumber = sp.getString("vatNumber", "")
         )
     }
 

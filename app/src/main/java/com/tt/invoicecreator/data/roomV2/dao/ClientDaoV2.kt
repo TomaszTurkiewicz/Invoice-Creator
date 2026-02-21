@@ -11,10 +11,10 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ClientDaoV2 {
 
-    @Insert(onConflict = OnConflictStrategy.Companion.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(clientV2: ClientV2)
 
-    @Update(onConflict = OnConflictStrategy.Companion.REPLACE)
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun update(clientV2: ClientV2)
 
     @Query("Select * from clientv2")
@@ -26,7 +26,7 @@ interface ClientDaoV2 {
     @Query("Select * from clientv2")
     suspend fun getClientsDirectly():List<ClientV2>
 
-    @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertWithId(clientV2: ClientV2)
 
     @Query("DELETE FROM clientV2")

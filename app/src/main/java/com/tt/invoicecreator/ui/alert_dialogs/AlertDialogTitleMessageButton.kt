@@ -60,5 +60,3 @@ fun AlertDialogTitleMessageButton(
         }
     }
 }
-
-//todo przerobic na uniwersalny aleret dialog z title, message and button

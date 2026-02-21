@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface InvoiceDaoV2 {
 
-    @Insert(onConflict = OnConflictStrategy.Companion.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(invoiceV2: InvoiceV2):Long
 
     @Query("Select * from invoicev2")
@@ -19,7 +19,7 @@ interface InvoiceDaoV2 {
     @Query("Select * from invoicev2")
     suspend fun getInvoicesDirectly():List<InvoiceV2>
 
-    @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertWithId(invoiceV2: InvoiceV2)
 
     @Query("DELETE FROM invoiceV2")

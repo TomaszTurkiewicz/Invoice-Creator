@@ -16,8 +16,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.tt.invoicecreator.data.SharedPreferences
 import com.tt.invoicecreator.helpers.User
-import com.tt.invoicecreator.ui.components.cards.CustomCardView
 import com.tt.invoicecreator.ui.components.InputTextWithLabel
+import com.tt.invoicecreator.ui.components.cards.CustomCardView
 import com.tt.invoicecreator.ui.components.texts.TitleLargeText
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -42,6 +42,10 @@ fun AlertDialogAddMainUser(
     val city = remember {
         mutableStateOf(user.userCity?:"")
     }
+    val vatNumber = remember {
+        mutableStateOf(user.vatNumber?:"")
+    }
+
     BasicAlertDialog(
         onDismissRequest = {
             if(canBeDismissed){
@@ -75,7 +79,7 @@ fun AlertDialogAddMainUser(
                     addressLine1.value = it
                 }
                 InputTextWithLabel(
-                    labelText = "Address line 2",
+                    labelText = "Address line 2 (post code)",
                     inputText = addressLine2.value
                 ) {
                     addressLine2.value = it
@@ -85,6 +89,12 @@ fun AlertDialogAddMainUser(
                     inputText = city.value
                 ) {
                     city.value = it
+                }
+                InputTextWithLabel(
+                    labelText = "VAT Number",
+                    inputText = vatNumber.value
+                ){
+                    vatNumber.value = it
                 }
 
                 Button(
@@ -96,7 +106,8 @@ fun AlertDialogAddMainUser(
                                 userName = name.value,
                                 userAddressLine1 = addressLine1.value,
                                 userAddressLine2 = addressLine2.value,
-                                userCity = city.value
+                                userCity = city.value,
+                                vatNumber = vatNumber.value
                             )
                         )
                         closeAlertDialog()

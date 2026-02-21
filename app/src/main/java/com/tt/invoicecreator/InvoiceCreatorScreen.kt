@@ -4,7 +4,6 @@ import androidx.annotation.StringRes
 
 enum class InvoiceCreatorScreen(@StringRes val title:Int) {
     ChooseItemV2(title = R.string.choose_item_v2),
-    ChooseMode(title = R.string.choose_mode),
     InvoicesV2(title = R.string.invoicesV2),
     AddInvoiceV2(title = R.string.add_invoiceV2),
     ChooseClientV2(title = R.string.choose_client_v2),

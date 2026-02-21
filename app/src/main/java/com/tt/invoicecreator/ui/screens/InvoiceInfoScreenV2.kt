@@ -22,7 +22,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -98,11 +97,6 @@ fun InvoiceInfoScreenV2(
     val invoiceGrossValue = remember(invoiceItemListV2) {
         InvoiceValueCalculator.calculateV2(invoiceItemListV2)
     }
-
-    val invoiceValue = remember {
-        mutableDoubleStateOf(InvoiceValueCalculator.calculateV2(invoiceItemListV2))
-    }
-
 
     val paidListV2 = remember(paidInvoicesCollection, invoiceV2) {
         paidInvoicesCollection?.filter { it.invoiceId == invoiceV2.invoiceId } ?: emptyList()

@@ -1,7 +1,6 @@
 package com.tt.invoicecreator.viewmodel
 
 import android.app.Application
-import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -61,8 +60,8 @@ class AppViewModel(
 
 
     init {
-        loadOfferings(getApplication<Application>().applicationContext)
-        updatePermissions(getApplication<Application>().applicationContext)
+        loadOfferings()
+        updatePermissions()
     }
 
     private val itemRepositoryV2:OfflineItemRepositoryV2 = OfflineItemRepositoryV2(itemDaoV2)
@@ -96,7 +95,7 @@ class AppViewModel(
 
     var chosenClientToFilterInvoices: ClientV2? = null
 
-    private fun loadOfferings(context: Context){
+    private fun loadOfferings(){
         Qonversion.shared.offerings(object : QonversionOfferingsCallback{
             override fun onError(error: QonversionError) {
                 android.util.Log.e("Qonversion","Error getting offerings: ${error.description}, code: ${error.code}")
@@ -110,12 +109,12 @@ class AppViewModel(
 
     }
 
-    fun updatePermissions(context: Context){
+    fun updatePermissions(){
         Qonversion.shared.restore(object : QonversionEntitlementsCallback {
             override fun onError(error: QonversionError) {
                 android.util.Log.e("Qonversion", "Error checking entitlements: ${error.description}, code: ${error.code}")
                 hasPremiumPermission = false
-                setModePro(context,hasPremiumPermission)
+                setModePro(hasPremiumPermission)
                 finishInitialization()
             }
 
@@ -123,7 +122,7 @@ class AppViewModel(
                 android.util.Log.d("Qonversion", "Success: ${entitlements.keys}")
                 premiumEntitlement = entitlements["test"] // Replace "Plus" with your actual entitlement ID from Qonversion Dashboard
                 hasPremiumPermission = premiumEntitlement?.isActive == true || entitlements.values.any { it.isActive }
-                setModePro(context,hasPremiumPermission)
+                setModePro(hasPremiumPermission)
                 finishInitialization()
             }
         }
@@ -244,11 +243,6 @@ class AppViewModel(
         }
     }
 
-    fun deleteInvoiceItemV2(invoiceItemV2: InvoiceItemV2) {
-        invoiceItems.remove(invoiceItemV2)
-
-    }
-
     fun insertWithIdPaidV2(paidV2: PaidV2) {
         coroutine.launch {
             paidRepositoryV2.insertWithId(paidV2)
@@ -273,24 +267,14 @@ class AppViewModel(
         }
     }
 
-    fun setModePro(context: Context, boolean: Boolean){
+    fun setModePro(boolean: Boolean){
         this.hasPremiumPermission = boolean
         _uiState.update { currentState ->
             currentState.copy(
                 modePro = boolean
             )
         }
-//        SharedPreferences.savePROMode(context, boolean)
     }
-
-//    fun readModePro(context: Context){
-//        _uiState.update { currentState ->
-//            currentState.copy(
-//                modePro = SharedPreferences.readPROMode(context)
-//            )
-//        }
-//    }
-
     fun navigateFromSettings() {
         _uiState.update { currentState ->
             currentState.copy(

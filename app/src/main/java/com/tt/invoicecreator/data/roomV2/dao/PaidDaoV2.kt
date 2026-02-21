@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface PaidDaoV2 {
 
-    @Insert(onConflict = OnConflictStrategy.Companion.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(paidV2: PaidV2)
 
     @Query("Select * from PaidV2")
@@ -19,7 +19,7 @@ interface PaidDaoV2 {
     @Query("Select * from PaidV2")
     suspend fun getPaidDirectly():List<PaidV2>
 
-    @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertWithId(paidV2: PaidV2)
 
     @Query("DELETE FROM paidV2")

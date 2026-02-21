@@ -41,7 +41,8 @@ fun InputTextWithLabel(
             ),
             onValueChange = {
                 onValueChange(it)
-            }
+            },
+            singleLine = true
         )
     }
 }

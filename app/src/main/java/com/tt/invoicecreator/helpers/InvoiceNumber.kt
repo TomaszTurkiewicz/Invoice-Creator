@@ -13,7 +13,7 @@ object InvoiceNumber {
         val currentMonthAndYear = DateAndTime.monthAndYear(time)
         var invoiceNumber = 1
 
-        val invoicesNew = invoices?.filter { it ->
+        val invoicesNew = invoices?.filter {
             val monthAndYear = DateAndTime.monthAndYear(it.time)
             monthAndYear.month == currentMonthAndYear.month && monthAndYear.year == currentMonthAndYear.year
         }

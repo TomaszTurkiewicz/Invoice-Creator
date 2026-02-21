@@ -38,9 +38,7 @@ fun TopAppBarWithAction(
 
     TopAppBar(
     title = {
-        Row(
-
-        ) {
+        Row {
             if(!initializing){
                 if(modePro){
                     Icon(

@@ -79,7 +79,7 @@ fun AlertDialogItemWithCurrency(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            Column() {
+            Column {
                 TitleLargeText(
                     text = title,
                     modifier = Modifier

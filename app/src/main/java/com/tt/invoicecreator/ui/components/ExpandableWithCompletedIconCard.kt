@@ -23,7 +23,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.tt.invoicecreator.ui.components.cards.CustomCardView
 import com.tt.invoicecreator.ui.components.texts.TitleMediumText
@@ -88,8 +87,7 @@ fun ExpandableWithCompletedIconCard(
                     Spacer(modifier = Modifier.width(16.dp))
 
                     TitleMediumText(
-                        text = title,
-                        fontWeight = FontWeight.Bold
+                        text = title
                     )
                 }
 

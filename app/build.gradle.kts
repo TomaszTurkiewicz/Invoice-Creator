@@ -33,8 +33,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlinOptions {
-        jvmTarget = "11"
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+        }
     }
     buildFeatures {
         compose = true
@@ -74,6 +76,8 @@ dependencies {
     // Firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
+    implementation(libs.firebase.storage)
+    implementation(libs.firebase.auth)
 
     //Admob
     implementation(libs.play.services.ads)
@@ -84,6 +88,8 @@ dependencies {
     implementation(libs.gson)
 
     implementation (libs.sdk)
+
+
 
 
 
