@@ -10,14 +10,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.tt.invoicecreator.helpers.DateAndTime
 import com.tt.invoicecreator.ui.components.texts.BodyLargeText
-import com.tt.invoicecreator.viewmodel.AppViewModel
 
 @Composable
 fun InvoiceNumberAndDateComponent(
     modePro: Boolean,
-    viewModel: AppViewModel,
+    dueDate: Long?,
     time: MutableLongState,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+
 )
 {
     Column(
@@ -49,9 +49,10 @@ fun InvoiceNumberAndDateComponent(
                     modifier = Modifier
                         .padding(5.dp)
                 )
-                if (viewModel.getInvoiceV2().dueDate != null) {
+  //             if (viewModel.getInvoiceV2().dueDate != null) {
+               if (dueDate != null) {
                     BodyLargeText(
-                        text = DateAndTime.convertLongToDate(viewModel.getInvoiceV2().dueDate!!),
+                        text = DateAndTime.convertLongToDate(dueDate),
                         modifier = Modifier
                             .padding(5.dp)
                     )

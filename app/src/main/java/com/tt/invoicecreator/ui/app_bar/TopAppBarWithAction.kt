@@ -71,7 +71,7 @@ fun TopAppBarWithAction(
     actions = {
         appBarState.action?.invoke(this)
     },
-    colors = TopAppBarDefaults.mediumTopAppBarColors(
+    colors = TopAppBarDefaults.topAppBarColors(
         containerColor = MaterialTheme.myColors.primaryLight,
         titleContentColor = MaterialTheme.myColors.primaryDark,
         actionIconContentColor = MaterialTheme.myColors.primaryDark

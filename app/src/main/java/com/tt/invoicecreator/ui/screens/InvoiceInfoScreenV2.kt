@@ -14,7 +14,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -155,7 +155,7 @@ fun InvoiceInfoScreenV2(
             }
 
             Spacer(modifier = Modifier.padding(8.dp))
-            Divider(color = Color.LightGray.copy(alpha = 0.5f))
+            HorizontalDivider(color = Color.LightGray.copy(alpha = 0.5f))
             Spacer(modifier = Modifier.padding(8.dp))
 
             // DATES SECTION
@@ -231,7 +231,7 @@ fun InvoiceInfoScreenV2(
                         formatter = formatter
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    Divider(color =  Color.Gray.copy(alpha = 0.3f))
+                    HorizontalDivider(color =  Color.Gray.copy(alpha = 0.3f))
                     Spacer(modifier = Modifier.height(8.dp))
 
                     FinancialRowItem(

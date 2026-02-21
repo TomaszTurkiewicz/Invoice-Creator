@@ -67,4 +67,15 @@ object SharedPreferences {
         return Currency.entries.find { it.name == currencyName } ?: Currency.GBP
     }
 
+    fun saveDueDate(context: Context, dueDate:Boolean){
+        val sp = context.getSharedPreferences("DUE_DATE", Context.MODE_PRIVATE)
+        sp.edit {
+            putBoolean("due_date", dueDate)
+        }
+    }
+
+    fun readDueDate(context: Context):Boolean{
+        val sp = context.getSharedPreferences("DUE_DATE", Context.MODE_PRIVATE)
+        return sp.getBoolean("due_date", false)
+    }
 }

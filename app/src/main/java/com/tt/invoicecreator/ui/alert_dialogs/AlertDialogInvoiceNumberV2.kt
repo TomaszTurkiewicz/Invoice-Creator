@@ -16,15 +16,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.tt.invoicecreator.data.SharedPreferences
 import com.tt.invoicecreator.data.roomV2.entities.InvoiceV2
 import com.tt.invoicecreator.helpers.DateAndTime
 import com.tt.invoicecreator.helpers.DecimalFormatter
 import com.tt.invoicecreator.helpers.InvoiceDueDate
 import com.tt.invoicecreator.helpers.InvoiceNumber
 import com.tt.invoicecreator.ui.components.CustomButton
-import com.tt.invoicecreator.ui.components.cards.CustomCardView
 import com.tt.invoicecreator.ui.components.InputDigitsWithLabel
+import com.tt.invoicecreator.ui.components.cards.CustomCardView
 import com.tt.invoicecreator.ui.components.texts.BodyLargeText
 import com.tt.invoicecreator.ui.components.texts.TitleLargeText
 import com.tt.invoicecreator.ui.theme.myColors
@@ -37,9 +39,10 @@ fun AlertDialogInvoiceNumberV2(
     onDismissRequest: () -> Unit,
     viewModel: AppViewModel,
     modePro: Boolean,
-    listOfThisMonthAndYearInvoices: List<InvoiceV2>?
+    listOfThisMonthAndYearInvoices: List<InvoiceV2>?,
+    changeDueDate: (Long?) -> Unit
 ) {
-
+    val context = LocalContext.current
 
     val availableNumbers = remember {
         mutableListOf<Int>()
@@ -50,13 +53,14 @@ fun AlertDialogInvoiceNumberV2(
         mutableStateOf(viewModel.getInvoiceV2().invoiceNumber.toString())
     }
     val dueDateActive = remember {
-        mutableStateOf(true)
+        mutableStateOf(SharedPreferences.readDueDate(context))
     }
     val dueDateString = remember {
         mutableStateOf(
             DateAndTime.getDifferenceInDays(
                 viewModel.getInvoiceV2().time,
-                viewModel.getInvoiceV2().dueDate ?: viewModel.getInvoiceV2().time
+//                viewModel.getInvoiceV2().dueDate ?: viewModel.getInvoiceV2().time
+                viewModel.getInvoiceV2().dueDate ?: InvoiceDueDate.getDueDate(viewModel.getInvoiceV2().time, 14)
             ).toString()
         )
     }
@@ -65,7 +69,8 @@ fun AlertDialogInvoiceNumberV2(
             InvoiceDueDate.getDueDate(
                 viewModel.getInvoiceV2().time,DateAndTime.getDifferenceInDays(
                     viewModel.getInvoiceV2().time,
-                    viewModel.getInvoiceV2().dueDate ?: viewModel.getInvoiceV2().time
+//                    viewModel.getInvoiceV2().dueDate ?: viewModel.getInvoiceV2().time
+                    viewModel.getInvoiceV2().dueDate ?: InvoiceDueDate.getDueDate(viewModel.getInvoiceV2().time, 14)
             ))
         )
     }
@@ -191,6 +196,7 @@ fun AlertDialogInvoiceNumberV2(
                                 checked = dueDateActive.value,
                                 onCheckedChange = {
                                     dueDateActive.value = it
+                                    SharedPreferences.saveDueDate(context, it)
                                 },
                                 colors = SwitchDefaults.colors(
                                     checkedThumbColor = MaterialTheme.myColors.primaryDark,
@@ -231,8 +237,10 @@ fun AlertDialogInvoiceNumberV2(
                         viewModel.calculateDueDate = false
                         if (dueDateActive.value) {
                             viewModel.getInvoiceV2().dueDate = dueDateLong.longValue
+                            changeDueDate(dueDateLong.longValue)
                         } else {
                             viewModel.getInvoiceV2().dueDate = null
+                            changeDueDate(null)
                         }
                         onDismissRequest()
                     },

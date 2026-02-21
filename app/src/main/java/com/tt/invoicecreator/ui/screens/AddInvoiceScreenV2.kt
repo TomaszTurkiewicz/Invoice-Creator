@@ -115,6 +115,11 @@ fun AddInvoiceScreenV2(
         mutableIntStateOf(0)
     }
 
+    // Add this near 'val time'
+    val dueDate = remember {
+        mutableStateOf<Long?>(viewModel.getInvoiceV2().dueDate)
+    }
+
 
     val context = LocalContext.current
     viewModel.paymentMethod = SharedPreferences.readPaymentMethod(context) ?: ""
@@ -152,7 +157,10 @@ fun AddInvoiceScreenV2(
         }
 
         if (viewModel.calculateDueDate && modePro) {
-            viewModel.getInvoiceV2().dueDate = InvoiceDueDate.getDueDate(time.longValue)
+            if(SharedPreferences.readDueDate(context)){
+                viewModel.getInvoiceV2().dueDate = InvoiceDueDate.getDueDate(time.longValue)
+                dueDate.value = InvoiceDueDate.getDueDate(time.longValue)
+            }
         }
     }
 
@@ -198,7 +206,7 @@ fun AddInvoiceScreenV2(
             {
                 InvoiceNumberAndDateComponent(
                     modePro = modePro,
-                    viewModel = viewModel,
+                    dueDate = dueDate.value, // Pass the state value here
                     time = time
                 )
                 {
@@ -401,6 +409,9 @@ fun AddInvoiceScreenV2(
                 val invoiceMAY = DateAndTime.monthAndYear(invoiceV2.time)
                 val currentMAY = DateAndTime.monthAndYear(time.longValue)
                 invoiceMAY.year == currentMAY.year && invoiceMAY.month == currentMAY.month
+            },
+            changeDueDate = {
+                dueDate.value = it
             }
         )
     }

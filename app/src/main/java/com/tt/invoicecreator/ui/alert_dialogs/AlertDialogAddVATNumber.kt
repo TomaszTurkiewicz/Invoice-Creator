@@ -10,9 +10,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.tt.invoicecreator.data.SharedPreferences
 import com.tt.invoicecreator.ui.components.CustomButton
 import com.tt.invoicecreator.ui.components.InputTextWithLabel
 import com.tt.invoicecreator.ui.components.cards.CustomCardView
@@ -28,11 +26,6 @@ fun AlertDialogAddVATNumber(
 ) {
     val vatNumber = remember {
         mutableStateOf("")
-    }
-
-    val context = LocalContext.current
-    val user = remember {
-        mutableStateOf(SharedPreferences.readUserDetails(context))
     }
 
     BasicAlertDialog(
