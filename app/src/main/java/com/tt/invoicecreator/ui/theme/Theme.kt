@@ -1,11 +1,11 @@
 package com.tt.invoicecreator.ui.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.staticCompositionLocalOf
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -38,18 +38,20 @@ private val LightMyColorScheme = CustomColorsPalette(
 val LocalColors = staticCompositionLocalOf { LightMyColorScheme }
 @Composable
 fun InvoiceCreatorTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    darkTheme: Boolean = false,
     // Dynamic color is available on Android 12+
     content: @Composable () -> Unit
 ) {
     val systemsUiController = rememberSystemUiController()
-    val colors = when{
-        darkTheme -> {
-            DarkMyColorScheme
-        }
-        else -> {
-            LightMyColorScheme
-        }
+    // 3. This will now always pick LightMyColorScheme because darkTheme is false
+    val colors = if (darkTheme) DarkMyColorScheme else LightMyColorScheme
+
+    // 4. Update the Status Bar color to always be the Light version
+    SideEffect {
+        systemsUiController.setStatusBarColor(
+            color = colors.primaryDark,
+            darkIcons = true
+        )
     }
     CompositionLocalProvider(LocalColors provides colors) {
         MaterialTheme(
