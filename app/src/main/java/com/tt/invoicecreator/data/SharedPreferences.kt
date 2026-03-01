@@ -8,7 +8,7 @@ import com.tt.invoicecreator.helpers.User
 object SharedPreferences {
     fun readPaymentMethod(context:Context):String?{
         val sp = context.getSharedPreferences("Payment Method", Context.MODE_PRIVATE)
-        return sp.getString("Payment Method", "no payment method specified yet")
+        return sp.getString("Payment Method", null)
     }
 
     fun savePaymentMethod(context: Context, paymentMethod:String){

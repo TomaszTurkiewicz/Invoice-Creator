@@ -19,3 +19,27 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Room specific rules
+-keep class * extends androidx.room.RoomDatabase
+-keep class androidx.room.RoomDatabase { *; }
+-keep class androidx.room.Entity { *; }
+-keep class androidx.room.Dao { *; }
+
+# Gson - prevents shrinking of your data classes (Invoices, Items, etc)
+-keep class com.tt.invoicecreator.data.roomV2.entities.** { *; }
+-keep class com.tt.invoicecreator.data.roomV2.backups.** { *; }
+-keepattributes Signature, *Annotation*, EnclosingMethod, InnerClasses
+-dontwarn sun.misc.Unsafe
+-keep class sun.misc.Unsafe { *; }
+
+# Qonversion
+-keep class io.qonversion.android.sdk.** { *; }
+
+# Firebase & Play Services
+-keep class com.google.firebase.** { *; }
+-keep class com.google.android.gms.** { *; }
+
+# Firebase specific optimization bypass
+-keepattributes SourceFile, LineNumberTable
+-keep public class com.google.firebase.provider.FirebaseInitProvider

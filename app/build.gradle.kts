@@ -14,21 +14,46 @@ android {
         applicationId = "com.tt.invoicecreator"
         minSdk = 26
         targetSdk = 36
-        versionCode = 17
-        versionName = "1.17"
+        versionCode = 21
+        versionName = "1.21"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        ndk {
+            debugSymbolLevel = "FULL"
+        }
+
     }
+
+
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+
+            isShrinkResources = true
+
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
     }
+
+    // ADD THIS BLOCK TO REMOVE THE NATIVE CODE WARNING
+    @Suppress("UnstableApiUsage")
+    androidResources {
+        generateLocaleConfig = false
+
+    }
+
+    packaging {
+        // This is the correct place for extractNativeLibs
+        jniLibs {
+            useLegacyPackaging = false
+        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -65,7 +90,6 @@ dependencies {
 
     //Room database
     implementation (libs.androidx.room.runtime)
-    annotationProcessor (libs.androidx.room.compiler)
     implementation (libs.androidx.room.ktx)
     implementation (libs.androidx.runtime.livedata)
     ksp (libs.androidx.room.compiler)

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -61,6 +62,7 @@ import com.tt.invoicecreator.ui.components.ExpandableWithCompletedIconCard
 import com.tt.invoicecreator.ui.components.InvoiceItemComponent
 import com.tt.invoicecreator.ui.components.InvoiceNumberAndDateComponent
 import com.tt.invoicecreator.ui.components.texts.BodyLargeText
+import com.tt.invoicecreator.ui.theme.myColors
 import com.tt.invoicecreator.viewmodel.AppViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -299,11 +301,11 @@ fun AddInvoiceScreenV2(
                             AddInvoiceSection.PAYMENT_METHOD
                         }
                 },
-                isCompleted = viewModel.paymentMethod != "no payment method specified yet"
+                isCompleted = viewModel.paymentMethod.isNotEmpty()
             )
             {
                 BodyLargeText(
-                    text = viewModel.paymentMethod,
+                    text = viewModel.paymentMethod.ifEmpty { "Payment Method not specified yet!" },
                     modifier = Modifier
                         .padding(5.dp)
                         .clickable(
@@ -333,32 +335,54 @@ fun AddInvoiceScreenV2(
                 if (file.exists()) {
                     val options = BitmapFactory.Options()
                     options.inPreferredConfig = Bitmap.Config.ARGB_8888
-                    image.value = BitmapFactory.decodeFile(file.path, options)
-                    val imageBitmap = image.value
-                    if (imageBitmap != null) {
+                    val bitmap = BitmapFactory.decodeFile(file.path, options)
+                    if (bitmap != null) {
                         Box(
                             modifier = Modifier
-                                .fillMaxWidth(),
+                                .fillMaxWidth()
+                                // 1. Set the container background to match the app theme
+                                .background(MaterialTheme.myColors.material.primaryContainer)
+                                .padding(10.dp),
                             contentAlignment = Alignment.Center
                         ) {
                             Image(
+                                bitmap = bitmap.asImageBitmap(),
+                                contentDescription = "Signature",
                                 modifier = Modifier
-                                    .clickable(
-                                        onClick = {
-                                            invoiceSignatureAlertDialog.value = true
-                                        }
-                                    ),
-                                bitmap = imageBitmap.asImageBitmap(),
-                                contentDescription = ""
+                                    .height(100.dp)
+                                    .clickable { invoiceSignatureAlertDialog.value = true }
                             )
                         }
                     }
+
+//                    image.value = BitmapFactory.decodeFile(file.path, options)
+//                    val imageBitmap = image.value
+//                    if (imageBitmap != null) {
+//                        Box(
+//                            modifier = Modifier
+//                                .fillMaxWidth()
+//                                .background(MaterialTheme.colorScheme.background),
+//                            contentAlignment = Alignment.Center
+//                        ) {
+//                            Image(
+//                                modifier = Modifier
+//                                    .clickable(
+//                                        onClick = {
+//                                            invoiceSignatureAlertDialog.value = true
+//                                        }
+//                                    ),
+//                                bitmap = imageBitmap.asImageBitmap(),
+//                                contentDescription = ""
+//                            )
+//                        }
+//                    }
 
                 } else {
                     BodyLargeText(
                         text = "Create signature",
                         modifier = Modifier
                             .fillMaxWidth()
+                            .background(MaterialTheme.colorScheme.background)
                             .clickable(
                                 onClick = {
                                     invoiceSignatureAlertDialog.value = true

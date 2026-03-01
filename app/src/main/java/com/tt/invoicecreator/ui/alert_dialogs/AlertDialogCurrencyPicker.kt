@@ -69,6 +69,3 @@ fun AlertDialogCurrencyPicker(
         }
     }
 }
-
-
-// TODO in first place

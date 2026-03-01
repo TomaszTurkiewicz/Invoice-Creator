@@ -25,7 +25,7 @@ fun AlertDialogPaymentMethod(
 ) {
     val context = LocalContext.current
     val paymentMethod = remember {
-        mutableStateOf(SharedPreferences.readPaymentMethod(context))
+        mutableStateOf(SharedPreferences.readPaymentMethod(context) ?: "")
     }
     BasicAlertDialog(
         onDismissRequest = {
@@ -52,9 +52,9 @@ fun AlertDialogPaymentMethod(
                     paymentMethod.value = it
                 }
                 CustomButton(
-                    enabled = paymentMethod.value?.trim()!!.isNotEmpty(),
+                    enabled = paymentMethod.value.trim().isNotEmpty(),
                     onClick = {
-                        SharedPreferences.savePaymentMethod(context, paymentMethod.value!!)
+                        SharedPreferences.savePaymentMethod(context, paymentMethod.value)
                         onDismissRequest()
                     },
                     modifier = Modifier

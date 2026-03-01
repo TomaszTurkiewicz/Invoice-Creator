@@ -272,7 +272,8 @@ fun Settings(
                         SettingsSection.SUBSCRIBE_UNSUBSCRIBE
                     }
                 }
-            ){
+            )
+            {
                 Column {
                     BodyLargeText(
                         text = if(modePro) "Unsubscribing means that You will be able still use this app but without some important features. Are You sure You want to do this?" else "Subscribing means You will gain access to additional features this app offers. Subscription is not for free, but it's worth it.",
@@ -353,7 +354,8 @@ fun Settings(
                         SettingsSection.CLIENTS
                     }
                 }
-            ) {
+            )
+            {
                 Column{
                     BodyLargeText(
                         text = if(clientsInUse.isNullOrEmpty()){
@@ -391,7 +393,8 @@ fun Settings(
                         SettingsSection.ITEMS
                     }
                 }
-            ) {
+            )
+            {
                 Column{
                     BodyLargeText(
                         text = if(itemListInUse.isNullOrEmpty()){
