@@ -1,5 +1,9 @@
 package com.tt.invoicecreator.ui.screens
 
+import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
+import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -36,6 +40,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.navigation.NavController
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import com.qonversion.android.sdk.Qonversion
 import com.qonversion.android.sdk.dto.QPurchaseResult
 import com.qonversion.android.sdk.listeners.QonversionPurchaseCallback
@@ -47,7 +53,9 @@ import com.tt.invoicecreator.data.roomV2.entities.ClientV2
 import com.tt.invoicecreator.data.roomV2.entities.ItemV2
 import com.tt.invoicecreator.helpers.FilterClients
 import com.tt.invoicecreator.helpers.SettingsSection
+import com.tt.invoicecreator.helpers.rememberGoogleSignInLauncher
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogAddMainUser
+import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogTitleMessageButton
 import com.tt.invoicecreator.ui.components.CustomButton
 import com.tt.invoicecreator.ui.components.ExpandableCard
 import com.tt.invoicecreator.ui.components.cards.ExportImportDataCardView
@@ -67,11 +75,30 @@ fun Settings(
     listOfItems: List<ItemV2>?,
     navController: NavController
 ) {
+    val auth = Firebase.auth
     val context = LocalContext.current
+    var firebaseUser by remember {
+        mutableStateOf(auth.currentUser)
+    }
+
+    val googleSignInLauncher = rememberGoogleSignInLauncher(
+        onSignInSuccess = {
+            firebaseUser = auth.currentUser
+            Toast.makeText(context,"Account linked ",Toast.LENGTH_LONG).show()
+        },
+        onSignInError = {error ->
+            Toast.makeText(context,error,Toast.LENGTH_LONG).show()
+        }
+
+    )
     val user = SharedPreferences.readUserDetails(context)
     val scope = rememberCoroutineScope()
 
     val loadingStatus = remember {
+        mutableStateOf<String?>(null)
+    }
+
+    val finalResultDialog = remember {
         mutableStateOf<String?>(null)
     }
 
@@ -101,7 +128,7 @@ fun Settings(
             scope.launch(Dispatchers.IO) {
                 try {
                     loadingStatus.value = "Preparing import..."
-                    BackupManager.importDatabaseFromJson(
+                    BackupManager.importDatabaseFromUri(
                         context,
                         selectedUri,
                         viewModel
@@ -185,7 +212,7 @@ fun Settings(
 
 
             ExpandableCard(
-                title = "CHANGING DEVICE",
+                title = "CLOUD SYNC & BACKUP",
                 icon = Icons.Default.CloudUpload,
                 isExpanded = expandedSection == SettingsSection.BACKUP,
                 onExpandClick = {
@@ -199,32 +226,38 @@ fun Settings(
             {
                 ExportImportDataCardView(
                     modePro = modePro,
-                    importLauncher = importLauncher,
-                    onExportClick =
-                        {
-                            scope.launch(Dispatchers.IO)
-                            {
-                                try {
-                                    loadingStatus.value = "Starting export..."
-                                    BackupManager.exportDatabaseToJson(
-                                        context,
-                                        viewModel
-                                    ) { statusText ->
-                                        scope.launch(Dispatchers.Main) {
-                                            loadingStatus.value = statusText
-                                        }
-                                    }
-                                } catch (e: Exception) {
-                                    e.printStackTrace()
-                                    withContext(Dispatchers.Main) {
-                                        Toast.makeText(context, "Export failed", Toast.LENGTH_SHORT)
-                                            .show()
-                                    }
-                                } finally {
+                    firebaseUser = firebaseUser,
+                    onLinkAccountClicked = {
+                        googleSignInLauncher()
+                    },
+                    onExportClick = {
+                        scope.launch {
+                            BackupManager.uploadToCloud(viewModel,context){
+                                status ->
+                                if(status.contains("Successful") || status.contains("Failed") || status.contains("Error")){
                                     loadingStatus.value = null
+                                    finalResultDialog.value = status
+                                }
+                                else {
+                                    loadingStatus.value = status
                                 }
                             }
                         }
+
+                    },
+                    onImportClicked = {
+                        scope.launch {
+                            BackupManager.downloadAndClearCloud(viewModel,context) {
+                                status ->
+                                if (status.contains("Successful") || status.contains("Failed") || status.contains("Error")) {
+                                    loadingStatus.value = null
+                                    finalResultDialog.value = status
+                                } else {
+                                    loadingStatus.value = status
+                                }
+                            }
+                        }
+                    }
                 )
             }
 
@@ -287,15 +320,15 @@ fun Settings(
                                 // UNSUBSCRIBE LOGIC
                                 // We must open the Google Play Store to the specific subscription page
                                 try {
-                                    val intent = android.content.Intent(
-                                        android.content.Intent.ACTION_VIEW,
+                                    val intent = Intent(
+                                        Intent.ACTION_VIEW,
                                         "https://play.google.com/store/account/subscriptions?sku=Plus&package=${context.packageName}".toUri()
                                     )
                                     context.startActivity(intent)
                                 } catch (e: Exception) {
                                     // Fallback if Play Store app is not available
-                                    val intent = android.content.Intent(
-                                        android.content.Intent.ACTION_VIEW,
+                                    val intent = Intent(
+                                        Intent.ACTION_VIEW,
                                         "https://play.google.com/store/account/subscriptions".toUri()
                                     )
                                     context.startActivity(intent)
@@ -416,13 +449,28 @@ fun Settings(
             canBeDismissed = true
         )
     }
+
+    if(finalResultDialog.value != null) {
+        AlertDialogTitleMessageButton(
+            title = "Cloud Transfer",
+            message = finalResultDialog.value!!,
+            buttonText = "OK",
+            onDismissRequest = {
+                finalResultDialog.value = null
+            },
+            buttonEnabled = true,
+            buttonClicked = {
+                // do nothing
+            }
+        )
+    }
 }
 
 
-fun android.content.Context.findActivity(): android.app.Activity? {
+fun Context.findActivity(): Activity? {
     var context = this
-    while (context is android.content.ContextWrapper) {
-        if (context is android.app.Activity) return context
+    while (context is ContextWrapper) {
+        if (context is Activity) return context
         context = context.baseContext
     }
     return null

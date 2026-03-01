@@ -14,8 +14,8 @@ android {
         applicationId = "com.tt.invoicecreator"
         minSdk = 26
         targetSdk = 36
-        versionCode = 16
-        versionName = "1.16"
+        versionCode = 17
+        versionName = "1.17"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -78,6 +78,7 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.storage)
     implementation(libs.firebase.auth)
+    implementation(libs.play.services.auth)
 
     //Admob
     implementation(libs.play.services.ads)

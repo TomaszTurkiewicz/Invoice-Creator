@@ -14,8 +14,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.tt.invoicecreator.data.SharedPreferences
 import com.tt.invoicecreator.ui.components.CustomButton
-import com.tt.invoicecreator.ui.components.cards.CustomCardView
 import com.tt.invoicecreator.ui.components.InputTextWithLabel
+import com.tt.invoicecreator.ui.components.cards.CustomCardView
 import com.tt.invoicecreator.ui.components.texts.TitleLargeText
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,7 +46,8 @@ fun AlertDialogPaymentMethod(
 
                 InputTextWithLabel(
                     labelText = "NEW PAYMENT METHOD",
-                    inputText = paymentMethod.value
+                    inputText = paymentMethod.value,
+                    singleLine = false,
                 ) {
                     paymentMethod.value = it
                 }

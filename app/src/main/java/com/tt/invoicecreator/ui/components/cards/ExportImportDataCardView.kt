@@ -1,7 +1,5 @@
 package com.tt.invoicecreator.ui.components.cards
 
-import android.net.Uri
-import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -10,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.google.firebase.auth.FirebaseUser
 import com.tt.invoicecreator.ui.components.CustomButton
 import com.tt.invoicecreator.ui.components.texts.BodyLargeText
 import com.tt.invoicecreator.ui.components.texts.TitleLargeText
@@ -17,54 +16,75 @@ import com.tt.invoicecreator.ui.components.texts.TitleLargeText
 @Composable
 fun ExportImportDataCardView(
     modePro: Boolean,
-    importLauncher: ManagedActivityResultLauncher<Array<String>, Uri?>,
-    onExportClick: () -> Unit
+    firebaseUser: FirebaseUser?,
+    onLinkAccountClicked: () -> Unit,
+    onExportClick: () -> Unit,
+    onImportClicked: () -> Unit
 ) {
 
         Column {
             TitleLargeText(
-                text = "CHANGING DEVICE?",
+                text = "CLOUD BACKUP & SYNC",
                 modifier = Modifier
                     .padding(bottom = 30.dp)
                     .fillMaxWidth(),
                 textAlign = TextAlign.Center
             )
+            val description = if(modePro){
+                "Your data is backed up to your private cloud storage using your Google account. " +
+                        "Click EXPORT to upload. On your new device, click IMPORT to restore your data. " +
+                        "The cloud copy is automatically deleted after a successful import."
+            }
+            else{
+                "Exporting and importing data is a Pro feature. Upgrade to use secure Cloud Sync with your Google account."
+            }
             BodyLargeText(
-                text = "You can export and import your entire database. Click EXPORT to create BACKUP file. Send it to Your new device. Install app on Your new device, go to settings and hit IMPORT button. Locate BACKUP file and select it. All data will be restored.",
+                text = description,
                 modifier = Modifier
                     .padding(bottom = 30.dp)
                     .fillMaxWidth()
             )
             if(modePro){
-                BodyLargeText(
-                    text = "When installing this app at Your new device make sure to import database before creating any new client or invoice. Importing BACKUP file will remove any existing data.",
-                    modifier = Modifier
-                        .padding(bottom = 30.dp)
-                        .fillMaxWidth(),
-                    color = MaterialTheme.colorScheme.error
-                )
+                if(firebaseUser == null){
+                    BodyLargeText(
+                        text = "To use Cloud Sync, please link Google Account first.",
+                        modifier = Modifier.padding(bottom = 10.dp),
+                        color = MaterialTheme.colorScheme.error
+                    )
+                    CustomButton(
+                        text = "LINK GOOGLE ACCOUNT",
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = { onLinkAccountClicked()}
+                    )
+                } else{
+                    // PRO and Linked - Show real actions
+                    BodyLargeText(
+                        text = "Linked as: ${firebaseUser.email}",
+                        modifier = Modifier.padding(bottom = 15.dp).fillMaxWidth(),
+                        textAlign = TextAlign.Center
+                    )
 
-                CustomButton(
-                    text = "EXPORT DATA (BACKUP)",
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    onClick = {
-                        onExportClick()
-//                        BackupManager.exportDatabaseToJson(context, viewModel)
-                    }
-                )
+                    BodyLargeText(
+                        text = "Warning: Importing will remove any existing data on this device.",
+                        modifier = Modifier.padding(bottom = 20.dp).fillMaxWidth(),
+                        color = MaterialTheme.colorScheme.error
+                    )
 
-                CustomButton(
-                    text = "IMPORT DATA (RESTORE)",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 30.dp),
-                    onClick = {
-                        importLauncher.launch(arrayOf("application/json"))
-                    }
-                )
-            }
-            else{
+                    CustomButton(
+                        text = "EXPORT DATA (UPLOAD)",
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {onExportClick()}
+                    )
+
+                    CustomButton(
+                        text = "IMPORT DATA (RESTORE)",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 20.dp),
+                        onClick = {onImportClicked()}
+                    )
+                }
+            }else{
                 BodyLargeText(
                     text = "You have to be an active subscriber to use this feature.",
                     modifier = Modifier
@@ -73,7 +93,5 @@ fun ExportImportDataCardView(
                     color = MaterialTheme.colorScheme.error
                 )
             }
-
         }
-
     }

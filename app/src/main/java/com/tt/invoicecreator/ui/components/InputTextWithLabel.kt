@@ -17,9 +17,11 @@ import com.tt.invoicecreator.ui.theme.myColors
 fun InputTextWithLabel(
     labelText: String,
     inputText: String?,
+    singleLine: Boolean = true,
     focusedContainerColor: Color = MaterialTheme.myColors.material.primaryContainer,
     unfocusedContainerColor: Color = MaterialTheme.myColors.material.primaryContainer,
     onValueChange: (String) -> Unit
+
 ) {
     Column(
         modifier = Modifier
@@ -42,7 +44,7 @@ fun InputTextWithLabel(
             onValueChange = {
                 onValueChange(it)
             },
-            singleLine = true
+            singleLine = singleLine
         )
     }
 }
