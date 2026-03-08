@@ -66,16 +66,7 @@ fun ChooseClientScreenV2(
                         }) {
                             Icon(painter = painterResource(R.drawable.baseline_add_24), null)
                         }
-//                        if(!navigatedFromSettings){
-//                            IconButton(onClick = {
-//                                navController.navigate(InvoiceCreatorScreen.Settings.name)
-//                            }) {
-//                                Icon(painter = painterResource(R.drawable.baseline_settings_24), null)
-//                            }
-//                        }
-
                     }
-
                 }
             )
         )

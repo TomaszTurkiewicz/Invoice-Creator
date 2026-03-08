@@ -27,14 +27,15 @@ fun SingleRowClientV2(
     ) {
         Row(
             modifier = Modifier
+                .clickable{
+                    clientChosen(client)
+                }
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ){
             Column(
                 modifier = Modifier
-                    .clickable{
-                        clientChosen(client)
-                    }
+
             ) {
                 BodyLargeText(
                     text = client.clientName,
