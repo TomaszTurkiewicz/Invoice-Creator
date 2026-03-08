@@ -332,11 +332,13 @@ fun AddInvoiceScreenV2(
                                 bitmap = bitmap.asImageBitmap(),
                                 contentDescription = "Signature",
                                 modifier = Modifier
-                                    .height(100.dp)
+                                    .fillMaxWidth()
+                                    .height(120.dp)
                                     .clickable {
                                     //    invoiceSignatureAlertDialog.value = true
                                     navController.navigate(InvoiceCreatorScreen.SignatureScreen.name)
-                                    }
+                                    },
+                                contentScale = androidx.compose.ui.layout.ContentScale.Fit
                             )
                         }
                     }

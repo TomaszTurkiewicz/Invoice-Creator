@@ -112,7 +112,12 @@ fun SignatureScreen(
                 text = "SUBMIT",
                 onClick = {
 
-                    val bitmap = createBitmap(1200, 600, Bitmap.Config.ARGB_8888)
+                    val bounds = capturingViewBounds.value ?: return@CustomButton
+
+                    val bitmapWidth = 1600
+                    val bitmapHeight = 800
+
+                    val bitmap = createBitmap(bitmapWidth, bitmapHeight, Bitmap.Config.ARGB_8888)
 
                     bitmap.applyCanvas {
                         drawColor(android.graphics.Color.WHITE)
@@ -125,11 +130,21 @@ fun SignatureScreen(
                             strokeJoin = android.graphics.Paint.Join.ROUND
                             isAntiAlias = true
                         }
+                        val scaleX = bitmapWidth.toFloat() / bounds.width
+                        val scaleY = bitmapHeight.toFloat() / bounds.height
 
                         path.forEach { pathState ->
+                            val matrix = android.graphics.Matrix()
+                            matrix.postScale(scaleX, scaleY)
+
+                            val androidPath = pathState.path.asAndroidPath()
+                            androidPath.transform(matrix)
+
                             paint.color = pathState.color.toArgb()
                             paint.strokeWidth = pathState.stroke
-                            drawPath(pathState.path.asAndroidPath(), paint)
+                            drawPath(androidPath, paint)
+
+
                         }
                     }
 
