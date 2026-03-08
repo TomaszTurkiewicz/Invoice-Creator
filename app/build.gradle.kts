@@ -91,6 +91,7 @@ dependencies {
     //Room database
     implementation (libs.androidx.room.runtime)
     implementation (libs.androidx.room.ktx)
+    implementation (libs.androidx.runtime.livedata)
     ksp (libs.androidx.room.compiler)
 
     //Theme and my palette
