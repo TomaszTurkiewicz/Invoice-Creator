@@ -55,7 +55,6 @@ import com.tt.invoicecreator.helpers.PdfUtilsV2
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogInvoiceNumberV2
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogItemCountDiscountAndCommentsV2
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogPaymentMethod
-import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogSignature
 import com.tt.invoicecreator.ui.components.ClientComponent
 import com.tt.invoicecreator.ui.components.CustomButton
 import com.tt.invoicecreator.ui.components.ExpandableWithCompletedIconCard
@@ -95,14 +94,6 @@ fun AddInvoiceScreenV2(
         mutableStateOf(false)
     }
 
-    val invoiceSignatureAlertDialog = remember {
-        mutableStateOf(false)
-    }
-
-    val image = remember {
-        mutableStateOf<Bitmap?>(null)
-    }
-
     var expandableSection by remember { mutableStateOf(AddInvoiceSection.NONE) }
 
     val editItemBeforeInsertingAlertDialog = remember {
@@ -119,7 +110,7 @@ fun AddInvoiceScreenV2(
 
     // Add this near 'val time'
     val dueDate = remember {
-        mutableStateOf<Long?>(viewModel.getInvoiceV2().dueDate)
+        mutableStateOf(viewModel.getInvoiceV2().dueDate)
     }
 
 
@@ -131,14 +122,6 @@ fun AddInvoiceScreenV2(
             AppBarState(
                 title = "ADD INVOICE",
                 action = {
-//                    Row {
-//                        IconButton(onClick = {
-//                            navController.navigate(InvoiceCreatorScreen.Settings.name)
-//                        }) {
-//                            Icon(painter = painterResource(R.drawable.baseline_settings_24), null)
-//                        }
-//                    }
-
                 }
             )
         )
@@ -350,7 +333,10 @@ fun AddInvoiceScreenV2(
                                 contentDescription = "Signature",
                                 modifier = Modifier
                                     .height(100.dp)
-                                    .clickable { invoiceSignatureAlertDialog.value = true }
+                                    .clickable {
+                                    //    invoiceSignatureAlertDialog.value = true
+                                    navController.navigate(InvoiceCreatorScreen.SignatureScreen.name)
+                                    }
                             )
                         }
                     }
@@ -385,7 +371,8 @@ fun AddInvoiceScreenV2(
                             .background(MaterialTheme.colorScheme.background)
                             .clickable(
                                 onClick = {
-                                    invoiceSignatureAlertDialog.value = true
+//                                    invoiceSignatureAlertDialog.value = true
+                                    navController.navigate(InvoiceCreatorScreen.SignatureScreen.name)
                                 }
                             ),
                         textAlign = TextAlign.Center
@@ -448,13 +435,6 @@ fun AddInvoiceScreenV2(
         )
     }
 
-    if (invoiceSignatureAlertDialog.value) {
-        AlertDialogSignature(
-            onDismissRequest = {
-                invoiceSignatureAlertDialog.value = false
-            }
-        )
-    }
     if (editItemBeforeInsertingAlertDialog.value) {
         AlertDialogItemCountDiscountAndCommentsV2(
             title = "EDIT ITEM",

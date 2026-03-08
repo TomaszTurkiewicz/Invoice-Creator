@@ -27,6 +27,7 @@ import com.tt.invoicecreator.ui.screens.InvoiceInfoScreenV2
 import com.tt.invoicecreator.ui.screens.InvoicesByClientScreen
 import com.tt.invoicecreator.ui.screens.InvoicesScreenV2
 import com.tt.invoicecreator.ui.screens.Settings
+import com.tt.invoicecreator.ui.screens.SignatureScreen
 import com.tt.invoicecreator.viewmodel.AppViewModel
 
 @Composable
@@ -109,16 +110,6 @@ fun InvoiceCreatorApp (
                 )
             }
 
-//            composable(route = InvoiceCreatorScreen.ChooseMode.name) {
-//                ChooseModeScreen(
-//                    viewModel = viewModel,
-//                    ignoredOnComposing = {
-//                        appBarState = it
-//                    },
-//                    navController = navController
-//                )
-//            }
-
             composable(route = InvoiceCreatorScreen.InvoicesV2.name) {
                 InvoicesScreenV2(
                     viewModel = viewModel,
@@ -162,6 +153,15 @@ fun InvoiceCreatorApp (
                         viewModel.getInvoiceV2().client = it
                         navController.navigateUp()
                     }
+                )
+            }
+
+            composable(route = InvoiceCreatorScreen.SignatureScreen.name) {
+                SignatureScreen(
+                    ignoredOnComposing = {
+                        appBarState = it
+                    },
+                    navController = navController
                 )
             }
 

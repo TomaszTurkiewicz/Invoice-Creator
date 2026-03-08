@@ -20,5 +20,8 @@ enum class InvoiceCreatorScreen(@StringRes val title:Int) {
 
     InitializingApp(title = R.string.initializing_app),
 
+    SignatureScreen(title = R.string.signature_screen)
+
+
 
 }
