@@ -13,4 +13,6 @@ interface InvoiceRepositoryV2 {
     suspend fun insertWithId(invoiceV2: InvoiceV2)
 
     suspend fun deleteAllInvoices()
+
+    suspend fun updateInvoice(invoiceV2: InvoiceV2)
 }

@@ -4,6 +4,7 @@ import com.qonversion.android.sdk.dto.entitlements.QEntitlement
 import com.tt.invoicecreator.data.roomV2.entities.InvoiceV2
 
 data class AppUiState(
+    val invoiceCanceled: Boolean = false,
     val rewardedAppLoaded: Boolean = false,
     val rewardedAdWatched: Boolean = false,
     val modePro: Boolean = false,

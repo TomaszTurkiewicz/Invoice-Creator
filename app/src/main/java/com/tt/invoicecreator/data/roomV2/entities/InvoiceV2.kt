@@ -12,5 +12,6 @@ data class InvoiceV2 (
     var client: ClientV2 = ClientV2(),
     var time:Long = 0L,
     var invoiceNumber:Int = 0,
-    var dueDate:Long? = null
+    var dueDate:Long? = null,
+    var isCanceled:Boolean = false,
 )

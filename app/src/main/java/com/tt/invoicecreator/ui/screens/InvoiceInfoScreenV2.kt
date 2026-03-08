@@ -14,6 +14,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -61,6 +62,7 @@ import kotlinx.coroutines.withContext
 
 @Composable
 fun InvoiceInfoScreenV2(
+    invoiceCanceled:Boolean,
     invoiceV2: InvoiceV2,
     ignoredOnComposing:(AppBarState) -> Unit,
     viewModel: AppViewModel,
@@ -147,11 +149,40 @@ fun InvoiceInfoScreenV2(
 
                 // STATUS BADGE
                 StatusBadge(
+                    isCanceled = invoiceCanceled,
                     isPaidInFull = isPaidInFull,
                     remaining = invoiceGrossValue - amountPaid,
                     currency = currency,
                     formatter = formatter
                 )
+
+                if(!isPaidInFull){
+                    Spacer(modifier = Modifier.padding(12.dp))
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                    ) {
+                        Checkbox(
+                            checked = invoiceCanceled,
+                            onCheckedChange = { newValue ->
+                               scope.launch {
+                                   invoiceV2.isCanceled = newValue
+                                   viewModel.updateInvoiceV2(invoiceV2)
+                                   viewModel.updateInvoiceV2inRoom(invoiceV2)
+                               }
+                            }
+                        )
+                        Spacer(modifier = Modifier.padding(4.dp))
+                        Text(
+                            text = if(invoiceCanceled) "Invoice canceled" else "Cancel invoice?",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = if (invoiceV2.isCanceled) Color.Red else MaterialTheme.colorScheme.onSurface,
+                            fontWeight = if (invoiceV2.isCanceled) FontWeight.Bold else FontWeight.Normal
+                        )
+                    }
+
+                }
             }
 
             Spacer(modifier = Modifier.padding(8.dp))

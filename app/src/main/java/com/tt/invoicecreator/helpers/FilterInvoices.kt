@@ -10,7 +10,11 @@ object FilterInvoices {
         itemList: List<InvoiceItemV2>,
         paidList: List<PaidV2>?
     ): List<InvoiceV2> {
-        val overdue = invoiceList.filter {
+        val notCanceled = invoiceList.filter {
+            !it.isCanceled
+        }
+
+        val overdue = notCanceled.filter {
             val paid = paidList?.filter { paid ->
                 paid.invoiceId == it.invoiceId
             }
@@ -32,7 +36,11 @@ object FilterInvoices {
         itemList: List<InvoiceItemV2>,
         paidList: List<PaidV2>?
     ): List<InvoiceV2> {
-        val notPaid = invoiceList.filter {
+        val notCanceled = invoiceList.filter {
+            !it.isCanceled
+        }
+
+        val notPaid = notCanceled.filter {
             val paid = paidList?.filter { paid ->
                 paid.invoiceId == it.invoiceId
             }

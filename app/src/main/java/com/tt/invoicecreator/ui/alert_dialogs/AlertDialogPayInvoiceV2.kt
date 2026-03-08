@@ -28,6 +28,7 @@ import com.tt.invoicecreator.helpers.DecimalFormatter
 import com.tt.invoicecreator.helpers.InvoiceValueCalculator
 import com.tt.invoicecreator.ui.components.CustomButton
 import com.tt.invoicecreator.ui.components.InputDigitsWithLabel
+import com.tt.invoicecreator.ui.components.InputTextWithLabel
 import com.tt.invoicecreator.ui.components.cards.CustomCardView
 import com.tt.invoicecreator.ui.components.texts.BodyLargeText
 import com.tt.invoicecreator.ui.components.texts.TitleLargeText
@@ -125,9 +126,7 @@ fun AlertDialogPayInvoiceV2(
                     }
             )
 
-            InputDigitsWithLabel(
-                modifier = Modifier
-                    .fillMaxWidth(),
+            InputTextWithLabel(
                 labelText = "COMMENTS",
                 inputText = comments.value
             ) {

@@ -193,6 +193,12 @@ class AppViewModel(
         }
     }
 
+    fun updateInvoiceV2inRoom(invoiceV2: InvoiceV2){
+        coroutine.launch {
+            invoiceRepositoryV2.updateInvoice(invoiceV2)
+        }
+    }
+
     fun saveClientV2(clientV2: ClientV2){
         coroutine.launch {
             clientRepositoryV2.insertClient(clientV2)
@@ -326,7 +332,8 @@ class AppViewModel(
     fun updateInvoiceV2(invoiceV2: InvoiceV2){
         _uiState.update { currentState ->
             currentState.copy(
-                invoiceV2 = invoiceV2
+                invoiceV2 = invoiceV2,
+                invoiceCanceled = invoiceV2.isCanceled
             )
         }
     }

@@ -16,5 +16,7 @@ class OfflineInvoiceRepositoryV2 (private val invoiceDaoV2: InvoiceDaoV2) : Invo
     override suspend fun insertWithId(invoiceV2: InvoiceV2) = invoiceDaoV2.insertWithId(invoiceV2)
 
     override suspend fun deleteAllInvoices() = invoiceDaoV2.deleteAll()
+    override suspend fun updateInvoice(invoiceV2: InvoiceV2) = invoiceDaoV2.update(invoiceV2)
+
 
 }

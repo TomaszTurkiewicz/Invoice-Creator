@@ -17,20 +17,33 @@ import com.tt.invoicecreator.ui.theme.myColors
 
 @Composable
 fun StatusBadge(
+    isCanceled: Boolean,
     isPaidInFull: Boolean,
     remaining: Double,
     currency: Currency,
     formatter: CurrencyFormatter
 ) {
     val backgroundColor =
-        if (isPaidInFull) MaterialTheme.myColors.success else MaterialTheme.colorScheme.errorContainer
-    val contentColor = if (isPaidInFull) Color.White else MaterialTheme.colorScheme.error
+        if(isCanceled){
+            MaterialTheme.myColors.primaryLight
+        }else{
+            if (isPaidInFull) MaterialTheme.myColors.success else MaterialTheme.colorScheme.errorContainer
+        }
+
+    val contentColor =
+        if(isCanceled){
+            MaterialTheme.myColors.material.background
+        }else{
+            if (isPaidInFull) Color.White else MaterialTheme.colorScheme.error
+        }
+
     val text = if (isPaidInFull) "PAID IN FULL" else "UNPAID (${
-        formatter.format(
-            remaining,
-            currency
-        )
-    } remaining)"
+                formatter.format(
+                    remaining,
+                    currency
+                )
+            } remaining)"
+
 
     Surface(
         color = backgroundColor,

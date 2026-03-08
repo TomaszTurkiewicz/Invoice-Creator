@@ -1,7 +1,6 @@
 package com.tt.invoicecreator.data.roomV2.backups
 
 import android.content.Context
-import android.net.Uri
 import android.util.Base64
 import android.widget.Toast
 import com.google.firebase.Firebase
@@ -11,14 +10,10 @@ import com.google.gson.Gson
 import com.tt.invoicecreator.data.SharedPreferences
 import com.tt.invoicecreator.data.SignatureFile
 import com.tt.invoicecreator.viewmodel.AppViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import java.io.BufferedReader
 import java.io.File
-import java.io.InputStreamReader
 
 object BackupManager {
 
@@ -178,41 +173,41 @@ object BackupManager {
         }
     }
 
-    fun importDatabaseFromUri(
-        context: Context,
-        uri: Uri,
-        viewModel: AppViewModel,
-        onProgress: (String?) -> Unit
-    ){
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                onProgress("Reading File...")
-                val content = StringBuilder()
-                context.contentResolver.openInputStream(uri)?.use {inputStream ->
-                    BufferedReader(InputStreamReader(inputStream)).use { reader ->
-                        var line:String? = reader.readLine()
-                        while( line != null){
-                            content.append(line)
-                            line = reader.readLine()
-                        }
-                        }
-                }
-
-                val backupData = Gson().fromJson(content.toString(), BackupData::class.java)
-                performRestore(context, backupData, viewModel, onProgress)
-
-            }catch (e: Exception) {
-                e.printStackTrace()
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(
-                        context,
-                        "Import Failed: ${e.localizedMessage}",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-            }
-        }
-    }
+//    fun importDatabaseFromUri(
+//        context: Context,
+//        uri: Uri,
+//        viewModel: AppViewModel,
+//        onProgress: (String?) -> Unit
+//    ){
+//        CoroutineScope(Dispatchers.IO).launch {
+//            try {
+//                onProgress("Reading File...")
+//                val content = StringBuilder()
+//                context.contentResolver.openInputStream(uri)?.use {inputStream ->
+//                    BufferedReader(InputStreamReader(inputStream)).use { reader ->
+//                        var line:String? = reader.readLine()
+//                        while( line != null){
+//                            content.append(line)
+//                            line = reader.readLine()
+//                        }
+//                        }
+//                }
+//
+//                val backupData = Gson().fromJson(content.toString(), BackupData::class.java)
+//                performRestore(context, backupData, viewModel, onProgress)
+//
+//            }catch (e: Exception) {
+//                e.printStackTrace()
+//                withContext(Dispatchers.Main) {
+//                    Toast.makeText(
+//                        context,
+//                        "Import Failed: ${e.localizedMessage}",
+//                        Toast.LENGTH_LONG
+//                    ).show()
+//                }
+//            }
+//        }
+//    }
 
     private fun convertFileToBase64(filePath: String): String? {
         val file = File(filePath)

@@ -180,6 +180,7 @@ fun InvoiceCreatorApp (
 
             composable(route = InvoiceCreatorScreen.InvoiceInfoV2.name) {
                 InvoiceInfoScreenV2(
+                    invoiceCanceled = uiState.invoiceCanceled,
                     invoiceV2 = uiState.invoiceV2,
                     ignoredOnComposing = {
                         appBarState = it

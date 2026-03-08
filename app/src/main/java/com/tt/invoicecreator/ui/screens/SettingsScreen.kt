@@ -4,10 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
-import android.net.Uri
 import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -62,9 +59,7 @@ import com.tt.invoicecreator.ui.components.cards.ExportImportDataCardView
 import com.tt.invoicecreator.ui.components.texts.BodyLargeText
 import com.tt.invoicecreator.ui.theme.myColors
 import com.tt.invoicecreator.viewmodel.AppViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @Composable
 fun Settings(
@@ -121,34 +116,34 @@ fun Settings(
         )
     }
 
-    val importLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.OpenDocument()
-    ) { uri: Uri? ->
-        uri?.let { selectedUri ->
-            scope.launch(Dispatchers.IO) {
-                try {
-                    loadingStatus.value = "Preparing import..."
-                    BackupManager.importDatabaseFromUri(
-                        context,
-                        selectedUri,
-                        viewModel
-                    ) { statusText ->
-                        scope.launch(Dispatchers.Main) {
-                            loadingStatus.value = statusText
-                        }
-
-                    }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(context, "Import failed", Toast.LENGTH_SHORT).show()
-                    }
-                } finally {
-                    loadingStatus.value = null
-                }
-            }
-        }
-    }
+//    val importLauncher = rememberLauncherForActivityResult(
+//        contract = ActivityResultContracts.OpenDocument()
+//    ) { uri: Uri? ->
+//        uri?.let { selectedUri ->
+//            scope.launch(Dispatchers.IO) {
+//                try {
+//                    loadingStatus.value = "Preparing import..."
+//                    BackupManager.importDatabaseFromUri(
+//                        context,
+//                        selectedUri,
+//                        viewModel
+//                    ) { statusText ->
+//                        scope.launch(Dispatchers.Main) {
+//                            loadingStatus.value = statusText
+//                        }
+//
+//                    }
+//                } catch (e: Exception) {
+//                    e.printStackTrace()
+//                    withContext(Dispatchers.Main) {
+//                        Toast.makeText(context, "Import failed", Toast.LENGTH_SHORT).show()
+//                    }
+//                } finally {
+//                    loadingStatus.value = null
+//                }
+//            }
+//        }
+//    }
 
     val alertDialogUpdateUser = remember {
         mutableStateOf(false)
