@@ -54,6 +54,7 @@ import com.tt.invoicecreator.helpers.SettingsSection
 import com.tt.invoicecreator.helpers.rememberGoogleSignInLauncher
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogAddMainUser
 import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogTitleMessageButton
+import com.tt.invoicecreator.ui.alert_dialogs.AlertDialogWarning
 import com.tt.invoicecreator.ui.components.CustomButton
 import com.tt.invoicecreator.ui.components.ExpandableCard
 import com.tt.invoicecreator.ui.components.cards.ExportImportDataCardView
@@ -93,6 +94,10 @@ fun Settings(
 
     val loadingStatus = remember {
         mutableStateOf<String?>(null)
+    }
+
+    val deleteAccountAlertDialog = remember {
+        mutableStateOf(false)
     }
 
     val finalResultDialog = remember {
@@ -228,30 +233,7 @@ fun Settings(
                         googleSignInLauncher()
                     },
                     onDeleteAccountClicked = {
-                        scope.launch {
-                        firebaseUser?.let { user ->
-                            try {
-                                loadingStatus.value = "Deleting cloud data..."
-
-                                val storage = Firebase.storage.reference
-                                val userId = user.uid
-
-                                storage.child("backups/$userId/database.json").delete().await()
-
-                                user.delete().await()
-
-                                Firebase.auth.signOut()
-                                firebaseUser = null
-
-                                loadingStatus.value = null
-                                finalResultDialog.value = "Account and cloud data successfully deleted"
-                            }
-                            catch (e:Exception){
-                                loadingStatus.value = null
-                                finalResultDialog.value = "Error: ${e.localizedMessage}"
-                            }
-                        }
-                        }
+                        deleteAccountAlertDialog.value = true
                     },
                     onExportClick = {
                         scope.launch {
@@ -464,6 +446,47 @@ fun Settings(
         }
     }
 
+
+    if(deleteAccountAlertDialog.value){
+        AlertDialogWarning(
+            message = "Are you sure you want to delete your account?",
+            onDismissRequest = {
+                deleteAccountAlertDialog.value = false
+            },
+            buttonText = "DELETE",
+            buttonClicked = {
+                scope.launch {
+                    firebaseUser?.let { user ->
+                        try {
+                            loadingStatus.value = "Deleting cloud data..."
+
+                            val storage = Firebase.storage.reference
+                            val userId = user.uid
+
+                            storage.child("backups/$userId/database.json").delete().await()
+
+                            user.delete().await()
+
+                            Firebase.auth.signOut()
+                            firebaseUser = null
+
+                            loadingStatus.value = null
+                            finalResultDialog.value = "Account and cloud data successfully deleted"
+                        }
+                        catch (e:Exception){
+                            user.delete().await()
+
+                            Firebase.auth.signOut()
+                            firebaseUser = null
+
+                            loadingStatus.value = null
+                            finalResultDialog.value = "Account and cloud data successfully deleted"
+                        }
+                    }
+                }
+            }
+        )
+    }
 
     if (alertDialogUpdateUser.value) {
         AlertDialogAddMainUser(
