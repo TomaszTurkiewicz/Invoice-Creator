@@ -5,6 +5,13 @@ import com.tt.invoicecreator.data.roomV2.entities.InvoiceV2
 import com.tt.invoicecreator.data.roomV2.entities.PaidV2
 
 object FilterInvoices {
+
+    fun getCancelled(
+        invoiceList: List<InvoiceV2>
+    ): List<InvoiceV2> {
+        return invoiceList.filter { it.isCanceled }
+    }
+
     fun getOverdue(
         invoiceList: List<InvoiceV2>,
         itemList: List<InvoiceItemV2>,

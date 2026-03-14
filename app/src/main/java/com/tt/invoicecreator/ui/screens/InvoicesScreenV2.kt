@@ -1,12 +1,12 @@
 package com.tt.invoicecreator.ui.screens
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -156,15 +156,15 @@ fun InvoicesScreenV2(
                 else{
                     Column(
                         modifier = Modifier
-                            .fillMaxSize(),
-                        verticalArrangement = Arrangement.SpaceEvenly
+                            .fillMaxSize()
+                            .verticalScroll(rememberScrollState())
                     ) {
                         FilteredInvoicesCardView(
                             header = "ALL INVOICES",
                             message = "number of all invoices:",
                             count = invoiceListV2.size,
                             modifier = Modifier
-                                .aspectRatio(3f)
+//                                .aspectRatio(3f)
 
                         ) {
                             if (
@@ -183,7 +183,7 @@ fun InvoicesScreenV2(
                                 paidInvoicesCollection
                             ).size,
                             modifier = Modifier
-                                .aspectRatio(3f)
+//                                .aspectRatio(3f)
                         ){
                             if(FilterInvoices.getOverdue(
                                     invoiceListV2,
@@ -205,7 +205,7 @@ fun InvoicesScreenV2(
                                 paidInvoicesCollection
                             ).size,
                             modifier = Modifier
-                                .aspectRatio(3f)
+//                                .aspectRatio(3f)
                         ){
                             if(FilterInvoices.getNotPaid(
                                     invoiceListV2,
@@ -222,11 +222,26 @@ fun InvoicesScreenV2(
                             message = "number of clients:",
                             count = clientsWithInvoices?.size ?: 0,
                             modifier = Modifier
-                                .aspectRatio(3f)
+//                                .aspectRatio(3f)
                         ){  if(clientsWithInvoices.isNullOrEmpty()){
                             //do not do anything
                         }else{
                             navController.navigate(InvoiceCreatorScreen.InvoicesByClient.name)
+                        }
+
+                        }
+
+                        FilteredInvoicesCardView(
+                            header = "CANCELLED",
+                            message = "number of cancelled:",
+                            count = FilterInvoices.getCancelled(invoiceListV2).size,
+                            modifier = Modifier
+//                                .aspectRatio(3f)
+                        ){  if(FilterInvoices.getCancelled(invoiceListV2).isEmpty()){
+                            //do not do anything
+                        }else{
+                            viewModel.updateInvoiceStatus(InvoiceStatus.CANCELLED)
+                            navController.navigate(InvoiceCreatorScreen.FilteredInvoicesV2.name)
                         }
 
                         }

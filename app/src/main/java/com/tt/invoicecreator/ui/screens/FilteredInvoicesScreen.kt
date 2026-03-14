@@ -54,6 +54,7 @@ fun FilteredInvoicesScreen(
                     InvoiceStatus.ALL -> "ALL INVOICES"
                     InvoiceStatus.OVERDUE -> "OVERDUE INVOICES"
                     InvoiceStatus.NOT_PAID -> "NOT PAID INVOICES"
+                    InvoiceStatus.CANCELLED -> "CANCELLED INVOICES"
                     else -> "ALL INVOICES"
                 },
                 action = {
