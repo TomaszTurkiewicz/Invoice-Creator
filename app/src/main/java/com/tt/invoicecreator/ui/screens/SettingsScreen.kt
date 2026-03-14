@@ -39,6 +39,7 @@ import androidx.core.net.toUri
 import androidx.navigation.NavController
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
+import com.google.firebase.storage.storage
 import com.qonversion.android.sdk.Qonversion
 import com.qonversion.android.sdk.dto.QPurchaseResult
 import com.qonversion.android.sdk.listeners.QonversionPurchaseCallback
@@ -60,6 +61,7 @@ import com.tt.invoicecreator.ui.components.texts.BodyLargeText
 import com.tt.invoicecreator.ui.theme.myColors
 import com.tt.invoicecreator.viewmodel.AppViewModel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 @Composable
 fun Settings(
@@ -224,6 +226,32 @@ fun Settings(
                     firebaseUser = firebaseUser,
                     onLinkAccountClicked = {
                         googleSignInLauncher()
+                    },
+                    onDeleteAccountClicked = {
+                        scope.launch {
+                        firebaseUser?.let { user ->
+                            try {
+                                loadingStatus.value = "Deleting cloud data..."
+
+                                val storage = Firebase.storage.reference
+                                val userId = user.uid
+
+                                storage.child("backups/$userId/database.json").delete().await()
+
+                                user.delete().await()
+
+                                Firebase.auth.signOut()
+                                firebaseUser = null
+
+                                loadingStatus.value = null
+                                finalResultDialog.value = "Account and cloud data successfully deleted"
+                            }
+                            catch (e:Exception){
+                                loadingStatus.value = null
+                                finalResultDialog.value = "Error: ${e.localizedMessage}"
+                            }
+                        }
+                        }
                     },
                     onExportClick = {
                         scope.launch {

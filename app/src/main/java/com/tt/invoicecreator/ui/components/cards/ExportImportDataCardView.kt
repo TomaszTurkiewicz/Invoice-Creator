@@ -17,6 +17,7 @@ import com.tt.invoicecreator.ui.components.texts.TitleLargeText
 fun ExportImportDataCardView(
     modePro: Boolean,
     firebaseUser: FirebaseUser?,
+    onDeleteAccountClicked: () -> Unit,
     onLinkAccountClicked: () -> Unit,
     onExportClick: () -> Unit,
     onImportClicked: () -> Unit
@@ -82,6 +83,16 @@ fun ExportImportDataCardView(
                             .fillMaxWidth()
                             .padding(top = 20.dp),
                         onClick = {onImportClicked()}
+                    )
+                    CustomButton(
+                        text = "DELETE CLOUD DATA & UNLINK",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 40.dp),
+                        makeItWarning = true,
+                        onClick = {
+                            onDeleteAccountClicked()
+                        }
                     )
                 }
             }else{
