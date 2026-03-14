@@ -14,11 +14,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -163,22 +164,29 @@ fun InvoiceInfoScreenV2(
                         modifier = Modifier
                             .padding(horizontal = 16.dp)
                     ) {
-                        Checkbox(
-                            checked = invoiceCanceled,
-                            onCheckedChange = { newValue ->
-                               scope.launch {
-                                   invoiceV2.isCanceled = newValue
-                                   viewModel.updateInvoiceV2(invoiceV2)
-                                   viewModel.updateInvoiceV2inRoom(invoiceV2)
-                               }
-                            }
-                        )
-                        Spacer(modifier = Modifier.padding(4.dp))
                         Text(
                             text = if(invoiceCanceled) "Invoice canceled" else "Cancel invoice?",
                             style = MaterialTheme.typography.bodyMedium,
                             color = if (invoiceV2.isCanceled) Color.Red else MaterialTheme.colorScheme.onSurface,
                             fontWeight = if (invoiceV2.isCanceled) FontWeight.Bold else FontWeight.Normal
+                        )
+                        Spacer(modifier = Modifier.padding(4.dp))
+                        Switch(
+                            checked = invoiceCanceled,
+                            onCheckedChange = { newValue ->
+                                scope.launch {
+                                    invoiceV2.isCanceled = newValue
+                                    viewModel.updateInvoiceV2(invoiceV2)
+                                    viewModel.updateInvoiceV2inRoom(invoiceV2)
+                                }
+                            },
+                            modifier = Modifier.padding(start = 20.dp),
+                            colors = SwitchDefaults.colors(
+                                checkedThumbColor = MaterialTheme.myColors.primaryDark,
+                                checkedTrackColor = MaterialTheme.myColors.primaryLight,
+                                uncheckedThumbColor = MaterialTheme.myColors.material.outline,
+                                uncheckedTrackColor = MaterialTheme.myColors.material.surfaceVariant
+                            )
                         )
                     }
 
@@ -313,7 +321,8 @@ fun InvoiceInfoScreenV2(
                 CustomButton(
                     onClick = { payAlertDialog.value = true },
                     modifier = Modifier.fillMaxWidth(),
-                    text = "REGISTER PAYMENT"
+                    text = "REGISTER PAYMENT",
+                    enabled = !invoiceCanceled
                 )
                 Spacer(modifier = Modifier.height(12.dp))
             }

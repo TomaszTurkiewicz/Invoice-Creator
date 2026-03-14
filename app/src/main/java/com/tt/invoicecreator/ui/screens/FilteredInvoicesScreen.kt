@@ -77,6 +77,8 @@ fun FilteredInvoicesScreen(
         )
     }
 
+    //todo add filtering when list size bigger than 10
+
     ListOfInvoicesV2(
         invoiceStatus = invoiceStatus,
         itemList = invoiceItemsCollection!!,
